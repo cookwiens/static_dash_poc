@@ -7,17 +7,17 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: #f7f7f7;
+            background: black;
             margin: 0;
             padding: 40px;
-            color: #333;
+            color: #707a83;
         }
         h1 {
-            text-align: center;
+            text-align: left;
             margin-bottom: 40px;
         }
         .container {
-            max-width: 700px;
+            max-width: 800px;
             margin: 0 auto;
         }
         .card {
@@ -31,24 +31,33 @@
             display: inline-block;
             margin-top: 10px;
             padding: 10px 15px;
-            background: #0366d6;
+            background: #f3711b;
             color: white;
             text-decoration: none;
             border-radius: 5px;
         }
         a.button:hover {
-            background: #024f9c;
+            background: #707a83;
         }
     </style>
 </head>
 <body>
-    <h1>Proof of Concept: Static Dashboard website with Bokeh standalone dashboards</h1>
+    <div style="text-align: center; width: 100%;">
+        <img src="logos/cropped_logo.png" style="width: 5in;">
+    </div>
+    
+    
+    <h1>Proof-of-Concept</h1>
+    <h3>Static Dashboard website with Bokeh standalone dashboards</h3>
+    
     <div class="container">
 
         <div class="card">
             <h2>Example</h2>
-            <p>This link goes to a standalone bokeh dashboard.</p>
-            <a class="button" href="dashboards/example.html">Open respiratory illness dashboard</a>
+            <p>These links go to stand-alone dashboards. The first is a Bokeh dashboard. The second a Plotly choropleth map.</p>
+            <a class="button" href="dashboards/bokeh_example.html">Open respiratory illness dashboard</a>
+            <br>
+            <a class="button" href="dashboards/plotly_example1.html">Choropleth map made in plotly</a>
         </div>
     </div>
 </body>
