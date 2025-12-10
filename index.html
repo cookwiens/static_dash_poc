@@ -90,8 +90,8 @@ body {
   padding: 0.3rem 0.6rem;
   font-size: 0.85rem;
   cursor: pointer;
-  border-radius: 6px;
-  border: 1px solid #ccc;
+  /* border-radius: 6px; */
+  /* border: 1px solid #ccc; */
   background: #f4f4f4;
   white-space: nowrap;
 }
@@ -100,7 +100,12 @@ body {
 .indicator-card input:checked + label {
   background: #1776bc;
   color: #fff;
-  border-color: #1776bc;
+  /* border-color: #1776bc; */
+}
+
+.indicator-card h3 {
+  color: #707a83;
+  font-weight: bold;
 }
 
 /* Tab content area */
@@ -164,17 +169,14 @@ body {
        Indicator Card 1
   =================================================== -->
   <div class="indicator-card">
+    <h3>Number of complex things per 100,000 residents.</h3>
     <input type="radio" name="tab1" id="tab1-status" checked>
-    <label for="tab1-status">Current Status</label>
     <input type="radio" name="tab1" id="tab1-trend">
-    <label for="tab1-trend">Trend</label>
     <input type="radio" name="tab1" id="tab1-info">
-    <label for="tab1-info">Information</label>
-
     <!-- Tab Content -->
     <div class="content">
       <div id="content-status" class="tab-content">
-        <p class="stat-number">23</p>
+        <p class="stat-number">23 things</p>
       </div>
 
       <div id="content-trend" class="tab-content">
@@ -188,6 +190,9 @@ body {
         <p>This indicator tracks the number of hot days in a calendar year.</p>
       </div>
     </div>
+    <label for="tab1-status">Current Status</label>
+    <label for="tab1-trend">Trend</label>
+    <label for="tab1-info">Information</label>
   </div>
 
   <!-- Duplicate indicator-card blocks as needed -->
@@ -198,12 +203,11 @@ body {
        Indicator Card 2
   =================================================== -->
   <div class="indicator-card">
+    <h3>Another Indicator. This one seems to have quite a long name. Perhaps too long!</h3>
     <input type="radio" name="tab2" id="tab2-status" checked>
-    <label for="tab2-status">Current Status</label>
     <input type="radio" name="tab2" id="tab2-trend">
-    <label for="tab2-trend">Trend</label>
     <input type="radio" name="tab2" id="tab2-info">
-    <label for="tab2-info">Information</label>
+    
 
     <!-- Tab Content -->
     <div class="content">
@@ -222,6 +226,9 @@ body {
         <p>This indicator tracks the number of cases processed in the last 30 days.</p>
       </div>
     </div>
+    <label for="tab2-status">Current Status</label>
+    <label for="tab2-trend">Trend</label>
+    <label for="tab2-info">Information</label>
   </div>
   <!-- Duplicate indicator-card blocks as needed -->
 
@@ -231,6 +238,7 @@ body {
        Indicator Card 3
   =================================================== -->
   <div class="indicator-card">
+    <h3>A third indicator</h3>
     <input type="radio" name="tab3" id="tab3-status" checked>
     <label for="tab3-status">Current Status</label>
     <input type="radio" name="tab3" id="tab3-trend">
