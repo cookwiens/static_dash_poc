@@ -1,151 +1,261 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard</title>
 
-.dashboard-title {
+<style>
+/* -------------------------------------------------------
+   Global Styles
+------------------------------------------------------- */
+body {
+  margin: 0;
+  font-family: sans-serif;
+  background: #ffffff;
+  color: #333;
+  line-height: 1.4;
+}
+
+/* -------------------------------------------------------
+   Sticky Header
+------------------------------------------------------- */
+.header {
+  position: sticky;
+  top: 0;
+  background: #ffffff;
+  border-bottom: 3px solid #1776bc;
+  padding: 0.75rem 1rem;
+  z-index: 1000;
+
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 0.75rem 1rem;
-  background: #a0ddfc;           /* light gray */
-  border-radius: 12px;
-  border: 1px solid #ddd;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.08);
 }
 
-.dashboard-title img {
+.header img {
   width: 40px;
   height: 40px;
   object-fit: contain;
 }
 
-.dashboard-title h1 {
-  color: #f3711b;
+.header h1 {
   margin: 0;
   font-size: 1.4rem;
 }
 
-
-body {
-    font-family: Arial, sans-serif;
+/* -------------------------------------------------------
+   Dashboard grid
+------------------------------------------------------- */
+.dashboard {
+  padding: 1rem;
+  display: grid;
+  gap: 1rem;
 }
 
-.indicator {
-    border: 1px solid #ccc;
-    padding: 16px;
-    margin-bottom: 20px;
-    border-radius: 6px;
-    background: #fdfdfd;
+@media (min-width: 700px) {
+  .dashboard {
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  }
 }
 
-.indicator h3 {
-    margin-top: 0;
+/* -------------------------------------------------------
+   Indicator Card
+------------------------------------------------------- */
+.indicator-card {
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  padding: 1rem;
 }
 
+/* -------------------------------------------------------
+   Tabs
+   (compact single-line tabs)
+------------------------------------------------------- */
 .tabs {
-    display: flex;
-    border-bottom: 1px solid #ddd;
-    margin-bottom: 0px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
 }
 
-.tab {
-    padding: 8px 24px;
-    cursor: pointer;
-    /* border: 1px solid #ccc; */
-    border: none;
-    background: #f4f4f4;
-    margin-right: 4px;
-    /* border-radius: 6px 6px 0 0; */
-    user-select: none;
+/* Hide the radio buttons */
+.tabs input {
+  display: none;
 }
 
-.tab.active {
-    background: #a0ddfc;
-    /* border-bottom: 1px solid white; */
-    font-weight: bold;
+.tabs label {
+  padding: 0.3rem 0.6rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background: #f4f4f4;
+  white-space: nowrap;
 }
 
-.content {
-    display: none;
-    padding: 14px;
-    border: none;
-    /* border: 1px solid #ccc; */
-    border-radius: 0 6px 6px 6px;
-    background: white;
+/* Active tab styling */
+.tabs input:checked + label {
+  background: #1776bc;
+  color: #fff;
+  border-color: #1776bc;
+}
+
+/* Tab content area */
+.tab-content {
+  display: none;
+  font-size: 0.95rem;
+  border-top: 1px solid #eee;
+  padding-top: 0.75rem;
 }
 
 .content.visible {
-    display: block;
+        display: block;
+  }
+
+/* Show the correct content */
+#tab1-status:checked ~ .content #content-status,
+#tab1-trend:checked  ~ .content #content-trend,
+#tab1-info:checked   ~ .content #content-info {
+  display: block;
+}
+
+#tab2-status:checked ~ .content #content-status,
+#tab2-trend:checked  ~ .content #content-trend,
+#tab2-info:checked   ~ .content #content-info {
+  display: block;
+}
+
+/* -------------------------------------------------------
+   Trend sparkline (SVG auto-scales)
+------------------------------------------------------- */
+.sparkline {
+  width: 100%;
+  height: 40px;
+}
+
+.stat-number {
+  font-size: 2rem;
+  font-weight: bold;
+  text-align: center;
 }
 </style>
-</head>
-<body>
-
-<div class="dashboard-title">
-  <img src="resources/Environmental Health Icon.png" alt="Icon">
-  <h1>Climate & Environmental Health</h1>
-</div>
-
-<!-- INDICATOR TEMPLATE -->
-<div class="indicator" data-ind="1">
-    <h3>Indicator 1</h3>
-
-    <div class="tabs">
-        <div class="tab active" data-target="current">Current Status</div>
-        <div class="tab" data-target="target">Target</div>
-        <div class="tab" data-target="notes">Notes</div>
-    </div>
-
-    <div class="content current visible">Indicator 1 — Current Status content...</div>
-    <div class="content target">Indicator 1 — Target content...</div>
-    <div class="content notes">Indicator 1 — Notes content...</div>
-</div>
-
-<div class="indicator" data-ind="2">
-    <h3>Indicator 2</h3>
-
-    <div class="tabs">
-        <div class="tab active" data-target="current">Current Status</div>
-        <div class="tab" data-target="target">Target</div>
-        <div class="tab" data-target="notes">Notes</div>
-    </div>
-
-    <div class="content current visible">Indicator 2 — Current Status content...</div>
-    <div class="content target">Indicator 2 — Target content...</div>
-    <div class="content notes">Indicator 2 — Notes content...</div>
-</div>
-
-<div class="indicator" data-ind="3">
-    <h3>Indicator 3</h3>
-
-    <div class="tabs">
-        <div class="tab active" data-target="current">Current Status</div>
-        <div class="tab" data-target="target">Target</div>
-        <div class="tab" data-target="notes">Notes</div>
-    </div>
-
-    <div class="content current visible">Indicator 3 — Current Status content...</div>
-    <div class="content target">Indicator 3 — Target content...</div>
-    <div class="content notes">Indicator 3 — Notes content...</div>
-</div>
 
 <script>
 document.querySelectorAll(".indicator").forEach(indicator => {
-    const tabs = indicator.querySelectorAll(".tab");
+    const radios = indicator.querySelectorAll("input[type=radio]");
     const contents = indicator.querySelectorAll(".content");
 
-    tabs.forEach(tab => {
-        tab.addEventListener("click", () => {
-            tabs.forEach(t => t.classList.remove("active"));
+    radios.forEach(radio => {
+        radio.addEventListener("change", () => {
             contents.forEach(c => c.classList.remove("visible"));
-
-            tab.classList.add("active");
-            indicator.querySelector("." + tab.dataset.target).classList.add("visible");
+            indicator.querySelector("." + radio.value).classList.add("visible");
         });
     });
 });
 </script>
+
+
+</head>
+
+<body>
+
+<!-- =======================================================
+     Sticky Header
+======================================================= -->
+<div class="header">
+  <img src="logo.png" alt="Logo">
+  <h1>Your Program Dashboard</h1>
+</div>
+
+<!-- =======================================================
+     Main Dashboard Grid
+======================================================= -->
+<div class="dashboard">
+
+  <!-- ===================================================
+       Indicator Card 1
+  =================================================== -->
+  <div class="indicator-card">
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <input type="radio" name="tab1" id="tab1-status" checked>
+      <label for="tab1-status">Current Status</label>
+
+      <input type="radio" name="tab1" id="tab1-trend">
+      <label for="tab1-trend">Trend</label>
+
+      <input type="radio" name="tab1" id="tab1-info">
+      <label for="tab1-info">Information</label>
+    </div>
+
+    <!-- Tab Content -->
+    <div class="content">
+      <div id="content-status" class="tab-content">
+        <p class="stat-number">243</p>
+      </div>
+
+      <div id="content-trend" class="tab-content">
+        <svg viewBox="0 0 100 30" class="sparkline">
+          <polyline fill="none" stroke="#1776bc" stroke-width="2"
+            points="0,20 20,15 40,18 60,10 80,12 100,5"/>
+        </svg>
+      </div>
+
+      <div id="content-info" class="tab-content">
+        <p>This indicator tracks the number of cases processed in the last 30 days.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Duplicate indicator-card blocks as needed -->
+
+
+
+    <!-- ===================================================
+       Indicator Card 2
+  =================================================== -->
+  <div class="indicator-card">
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <input type="radio" name="tab2" id="tab2-status" checked>
+      <label for="tab2-status">Current Status</label>
+
+      <input type="radio" name="tab2" id="tab2-trend">
+      <label for="tab2-trend">Trend</label>
+
+      <input type="radio" name="tab2" id="tab2-info">
+      <label for="tab2-info">Information</label>
+    </div>
+
+    <!-- Tab Content -->
+    <div class="content">
+      <div id="content-status" class="tab-content">
+        <p class="stat-number">243</p>
+      </div>
+
+      <div id="content-trend" class="tab-content">
+        <svg viewBox="0 0 100 30" class="sparkline">
+          <polyline fill="none" stroke="#1776bc" stroke-width="2"
+            points="0,20 20,15 40,18 60,10 80,12 100,5"/>
+        </svg>
+      </div>
+
+      <div id="content-info" class="tab-content">
+        <p>This indicator tracks the number of cases processed in the last 30 days.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Duplicate indicator-card blocks as needed -->
+
+</div>
 
 </body>
 </html>
