@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard</title>
+<title>Climate and Health</title>
 
 <style>
 /* -------------------------------------------------------
@@ -23,7 +23,7 @@ body {
 .header {
   position: sticky;
   top: 0;
-  background: #ffffff;
+  background: #a0ddfc;
   border-bottom: 3px solid #1776bc;
   padding: 0.75rem 1rem;
   z-index: 1000;
@@ -82,11 +82,11 @@ body {
 }
 
 /* Hide the radio buttons */
-.tabs input {
+.indicator-card input {
   display: none;
 }
 
-.tabs label {
+.indicator-card label {
   padding: 0.3rem 0.6rem;
   font-size: 0.85rem;
   cursor: pointer;
@@ -97,7 +97,7 @@ body {
 }
 
 /* Active tab styling */
-.tabs input:checked + label {
+.indicator-card input:checked + label {
   background: #1776bc;
   color: #fff;
   border-color: #1776bc;
@@ -107,13 +107,9 @@ body {
 .tab-content {
   display: none;
   font-size: 0.95rem;
-  border-top: 1px solid #eee;
+  /* border-top: 1px solid #eee; */
   padding-top: 0.75rem;
 }
-
-.content.visible {
-        display: block;
-  }
 
 /* Show the correct content */
 #tab1-status:checked ~ .content #content-status,
@@ -121,12 +117,17 @@ body {
 #tab1-info:checked   ~ .content #content-info {
   display: block;
 }
-
 #tab2-status:checked ~ .content #content-status,
 #tab2-trend:checked  ~ .content #content-trend,
 #tab2-info:checked   ~ .content #content-info {
   display: block;
 }
+#tab3-status:checked ~ .content #content-status,
+#tab3-trend:checked  ~ .content #content-trend,
+#tab3-info:checked   ~ .content #content-info {
+  display: block;
+}
+
 
 /* -------------------------------------------------------
    Trend sparkline (SVG auto-scales)
@@ -142,22 +143,6 @@ body {
   text-align: center;
 }
 </style>
-
-<script>
-document.querySelectorAll(".indicator").forEach(indicator => {
-    const radios = indicator.querySelectorAll("input[type=radio]");
-    const contents = indicator.querySelectorAll(".content");
-
-    radios.forEach(radio => {
-        radio.addEventListener("change", () => {
-            contents.forEach(c => c.classList.remove("visible"));
-            indicator.querySelector("." + radio.value).classList.add("visible");
-        });
-    });
-});
-</script>
-
-
 </head>
 
 <body>
@@ -166,8 +151,8 @@ document.querySelectorAll(".indicator").forEach(indicator => {
      Sticky Header
 ======================================================= -->
 <div class="header">
-  <img src="logo.png" alt="Logo">
-  <h1>Your Program Dashboard</h1>
+  <img src="resources/Environmental Health Icon.png" alt="Logo">
+  <h1>Climate & Environmental Health Dashboard</h1>
 </div>
 
 <!-- =======================================================
@@ -179,23 +164,17 @@ document.querySelectorAll(".indicator").forEach(indicator => {
        Indicator Card 1
   =================================================== -->
   <div class="indicator-card">
-
-    <!-- Tabs -->
-    <div class="tabs">
-      <input type="radio" name="tab1" id="tab1-status" checked>
-      <label for="tab1-status">Current Status</label>
-
-      <input type="radio" name="tab1" id="tab1-trend">
-      <label for="tab1-trend">Trend</label>
-
-      <input type="radio" name="tab1" id="tab1-info">
-      <label for="tab1-info">Information</label>
-    </div>
+    <input type="radio" name="tab1" id="tab1-status" checked>
+    <label for="tab1-status">Current Status</label>
+    <input type="radio" name="tab1" id="tab1-trend">
+    <label for="tab1-trend">Trend</label>
+    <input type="radio" name="tab1" id="tab1-info">
+    <label for="tab1-info">Information</label>
 
     <!-- Tab Content -->
     <div class="content">
       <div id="content-status" class="tab-content">
-        <p class="stat-number">243</p>
+        <p class="stat-number">23</p>
       </div>
 
       <div id="content-trend" class="tab-content">
@@ -206,32 +185,25 @@ document.querySelectorAll(".indicator").forEach(indicator => {
       </div>
 
       <div id="content-info" class="tab-content">
-        <p>This indicator tracks the number of cases processed in the last 30 days.</p>
+        <p>This indicator tracks the number of hot days in a calendar year.</p>
       </div>
     </div>
-
   </div>
 
   <!-- Duplicate indicator-card blocks as needed -->
 
 
 
-    <!-- ===================================================
+<!-- ===================================================
        Indicator Card 2
   =================================================== -->
   <div class="indicator-card">
-
-    <!-- Tabs -->
-    <div class="tabs">
-      <input type="radio" name="tab2" id="tab2-status" checked>
-      <label for="tab2-status">Current Status</label>
-
-      <input type="radio" name="tab2" id="tab2-trend">
-      <label for="tab2-trend">Trend</label>
-
-      <input type="radio" name="tab2" id="tab2-info">
-      <label for="tab2-info">Information</label>
-    </div>
+    <input type="radio" name="tab2" id="tab2-status" checked>
+    <label for="tab2-status">Current Status</label>
+    <input type="radio" name="tab2" id="tab2-trend">
+    <label for="tab2-trend">Trend</label>
+    <input type="radio" name="tab2" id="tab2-info">
+    <label for="tab2-info">Information</label>
 
     <!-- Tab Content -->
     <div class="content">
@@ -241,7 +213,7 @@ document.querySelectorAll(".indicator").forEach(indicator => {
 
       <div id="content-trend" class="tab-content">
         <svg viewBox="0 0 100 30" class="sparkline">
-          <polyline fill="none" stroke="#1776bc" stroke-width="2"
+          <polyline fill="none" stroke="#1776bc" stroke-width="3"
             points="0,20 20,15 40,18 60,10 80,12 100,5"/>
         </svg>
       </div>
@@ -250,10 +222,42 @@ document.querySelectorAll(".indicator").forEach(indicator => {
         <p>This indicator tracks the number of cases processed in the last 30 days.</p>
       </div>
     </div>
-
   </div>
-
   <!-- Duplicate indicator-card blocks as needed -->
+
+
+
+  <!-- ===================================================
+       Indicator Card 3
+  =================================================== -->
+  <div class="indicator-card">
+    <input type="radio" name="tab3" id="tab3-status" checked>
+    <label for="tab3-status">Current Status</label>
+    <input type="radio" name="tab3" id="tab3-trend">
+    <label for="tab3-trend">Trend</label>
+    <input type="radio" name="tab3" id="tab3-info">
+    <label for="tab3-info">Information</label>
+
+    <!-- Tab Content -->
+    <div class="content">
+      <div id="content-status" class="tab-content">
+        <p class="stat-number">2 per 100,000</p>
+      </div>
+
+      <div id="content-trend" class="tab-content">
+        <svg viewBox="0 0 100 30" class="sparkline">
+          <polyline fill="none" stroke="#1776bc" stroke-width="4"
+            points="0,20 20,15 40,18 60,10 80,12 100,5"/>
+        </svg>
+      </div>
+
+      <div id="content-info" class="tab-content">
+        <p>This indicator tracks the a rate of some sort.</p>
+      </div>
+    </div>
+  </div>
+  <!-- Duplicate indicator-card blocks as needed -->
+
 
 </div>
 
