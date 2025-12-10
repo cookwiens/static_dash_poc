@@ -1,10 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>static dashboard proof of concept</title>
 <style>
+
 .dashboard-title {
   display: flex;
   align-items: center;
@@ -30,210 +28,124 @@
 
 
 body {
-  font-family: sans-serif;
-  padding: 1rem;
-  display: grid;
-  gap: 1rem;
+    font-family: Arial, sans-serif;
 }
 
-/* Card */
-.indicator-card {
-  border: 1px solid #ccc;
-  border-radius: 12px;
-  padding: 1rem;
-  background: white;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+.indicator {
+    border: 1px solid #ccc;
+    padding: 16px;
+    margin-bottom: 20px;
+    border-radius: 6px;
+    background: #fdfdfd;
+}
+
+.indicator h3 {
+    margin-top: 0;
 }
 
 .tabs {
-  display: grid;
+    display: flex;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 0px;
 }
 
-/* Hide radios */
-.tabs input {
-  display: none;
+.tab {
+    padding: 8px 24px;
+    cursor: pointer;
+    /* border: 1px solid #ccc; */
+    border: none;
+    background: #f4f4f4;
+    margin-right: 4px;
+    /* border-radius: 6px 6px 0 0; */
+    user-select: none;
 }
 
-/* Tab labels */
-.tabs label {
-  padding: 0.4rem 0.6rem;
-  border: 1px solid #ddd;
-  margin-right: -1px;
-  cursor: pointer;
-  background: #f7f7f7;
-  font-size: 0.9rem;
+.tab.active {
+    background: #a0ddfc;
+    /* border-bottom: 1px solid white; */
+    font-weight: bold;
 }
 
-/* Tab label layout */
-.tabs label:first-of-type {
-  border-radius: 8px 0 0 0;
-}
-.tabs label:last-of-type {
-  border-radius: 0 8px 0 0;
-}
-
-/* Content area */
-.tab-content {
-  grid-column: 1 / -1;
-  border: 1px solid #ddd;
-  border-top: none;
-  padding: 0.75rem;
-  display: none;
-  border-radius: 0 0 8px 8px;
+.content {
+    display: none;
+    padding: 14px;
+    border: none;
+    /* border: 1px solid #ccc; */
+    border-radius: 0 6px 6px 6px;
+    background: white;
 }
 
-/* Show the content when corresponding radio is checked */
-#t1-desc:checked ~ #c1-desc,
-#t1-stat:checked  ~ #c1-stat,
-#t1-trend:checked ~ #c1-trend {
-  display: block;
-}
-#t2-desc:checked ~ #c2-desc,
-#t2-stat:checked  ~ #c2-stat,
-#t2-trend:checked ~ #c2-trend {
-  display: block;
-}
-#t3-desc:checked ~ #c3-desc,
-#t3-stat:checked  ~ #c3-stat,
-#t3-trend:checked ~ #c3-trend {
-  display: block;
-}
-
-/* Highlight active tab */
-#t1-desc:checked + label,
-#t1-stat:checked  + label,
-#t1-trend:checked + label {
-  background: #fff;
-  border-bottom-color: white;
-}
-#t2-desc:checked + label,
-#t2-stat:checked  + label,
-#t2-trend:checked + label {
-  background: #fff;
-  border-bottom-color: white;
-}
-#t3-desc:checked + label,
-#t3-stat:checked  + label,
-#t3-trend:checked + label {
-  background: #fff;
-  border-bottom-color: white;
-}
-
-/* Trend sparkline */
-.sparkline {
-  width: 100%;
-  height: 40px;
-}
-.stat-number {
-  font-size: 2rem;
-  font-weight: bold;
-  text-align: center;
+.content.visible {
+    display: block;
 }
 </style>
 </head>
 <body>
+
 <div class="dashboard-title">
   <img src="resources/Environmental Health Icon.png" alt="Icon">
   <h1>Climate & Environmental Health</h1>
 </div>
 
-<div class="indicator-card">
-  <h3>Number of Unbearably Hot Days</h3>
-  <div class="tabs">
-    
+<!-- INDICATOR TEMPLATE -->
+<div class="indicator" data-ind="1">
+    <h3>Indicator 1</h3>
 
-    <input type="radio" name="tab1" id="t1-stat">
-    <label for="t1-stat">Current Status</label>
+    <div class="tabs">
+        <div class="tab active" data-target="current">Current Status</div>
+        <div class="tab" data-target="target">Target</div>
+        <div class="tab" data-target="notes">Notes</div>
+    </div>
 
-    <input type="radio" name="tab1" id="t1-trend">
-    <label for="t1-trend">Trend</label>
-
-    <input type="radio" name="tab1" id="t1-desc" checked>
-    <label for="t1-desc">Information</label>
-    <div class="tab-content" id="c1-desc">
-      <p>This indicator measures the number of days that are unbearably hot.</p>
-      <p>Data Source: National Oceanic and Atmospheric Administration</p>
-    </div>
-    <div class="tab-content" id="c1-stat">
-      <p class="stat-number">43 Days</p>
-    </div>
-    <div class="tab-content" id="c1-trend">
-      <svg viewBox="0 0 100 30" class="sparkline">
-        <polyline fill="none" stroke="currentColor" 
-          points="0,20 20,10 40,12 60,6 80,8 100,4" />
-      </svg>
-    </div>
-  </div>
+    <div class="content current visible">Indicator 1 — Current Status content...</div>
+    <div class="content target">Indicator 1 — Target content...</div>
+    <div class="content notes">Indicator 1 — Notes content...</div>
 </div>
 
+<div class="indicator" data-ind="2">
+    <h3>Indicator 2</h3>
 
-
-<div class="indicator-card">
-  <h3>Mosquito- and tick-borne incidents investigated</h3>
-  <div class="tabs">
-    
-
-    <input type="radio" name="tab2" id="t2-stat">
-    <label for="t2-stat">Current Status</label>
-
-    <input type="radio" name="tab2" id="t2-trend">
-    <label for="t2-trend">Trend</label>
-
-    <input type="radio" name="tab2" id="t2-desc" checked>
-    <label for="t2-desc">Information</label>
-    <div class="tab-content" id="c2-desc">
-      <p>The number of disease investigations for mosquito- and tick-borne
-        diseases could rise as a consequence of warming climate.</p>
-      <p>Data Source: EpiTrax electronic disease surveillance system, Kansas
-        Department of Health & Environment.,
-      </p>
+    <div class="tabs">
+        <div class="tab active" data-target="current">Current Status</div>
+        <div class="tab" data-target="target">Target</div>
+        <div class="tab" data-target="notes">Notes</div>
     </div>
-    <div class="tab-content" id="c2-stat">
-      <p class="stat-number">43 Days</p>
-    </div>
-    <div class="tab-content" id="c2-trend">
-      <svg viewBox="0 0 100 30" class="sparkline">
-        <polyline fill="none" stroke="currentColor" 
-          points="0,20 20,10 40,12 60,6 80,8 100,4" />
-      </svg>
-    </div>
-  </div>
+
+    <div class="content current visible">Indicator 2 — Current Status content...</div>
+    <div class="content target">Indicator 2 — Target content...</div>
+    <div class="content notes">Indicator 2 — Notes content...</div>
 </div>
 
+<div class="indicator" data-ind="3">
+    <h3>Indicator 3</h3>
 
-
-
-
-<div class="indicator-card">
-  <h3>Emergency Visits for a Terrible disease</h3>
-  <div class="tabs">
-    
-
-    <input type="radio" name="tab3" id="t3-stat">
-    <label for="t3-stat">Current Status</label>
-
-    <input type="radio" name="tab3" id="t3-trend">
-    <label for="t3-trend">Trend</label>
-
-    <input type="radio" name="tab3" id="t3-desc" checked>
-    <label for="t3-desc">Information</label>
-    <div class="tab-content" id="c3-desc">
-      <p>This indicator measures the number of days that are unbearably hot.</p>
-      <p>Data Source: CDC's Electronic Surveillance System for the Early 
-        Notification of Community-based Epidemics (ESSENCE). </p>
+    <div class="tabs">
+        <div class="tab active" data-target="current">Current Status</div>
+        <div class="tab" data-target="target">Target</div>
+        <div class="tab" data-target="notes">Notes</div>
     </div>
-    <div class="tab-content" id="c3-stat">
-      <p class="stat-number">3 per 100,000 residents</p>
-    </div>
-    <div class="tab-content" id="c3-trend">
-      <svg viewBox="0 0 100 30" class="sparkline">
-        <polyline fill="none" stroke="currentColor" 
-          points="0,20 20,10 40,12 60,6 80,8 100,4" />
-      </svg>
-    </div>
-  </div>
+
+    <div class="content current visible">Indicator 3 — Current Status content...</div>
+    <div class="content target">Indicator 3 — Target content...</div>
+    <div class="content notes">Indicator 3 — Notes content...</div>
 </div>
 
+<script>
+document.querySelectorAll(".indicator").forEach(indicator => {
+    const tabs = indicator.querySelectorAll(".tab");
+    const contents = indicator.querySelectorAll(".content");
+
+    tabs.forEach(tab => {
+        tab.addEventListener("click", () => {
+            tabs.forEach(t => t.classList.remove("active"));
+            contents.forEach(c => c.classList.remove("visible"));
+
+            tab.classList.add("active");
+            indicator.querySelector("." + tab.dataset.target).classList.add("visible");
+        });
+    });
+});
+</script>
 
 </body>
 </html>
