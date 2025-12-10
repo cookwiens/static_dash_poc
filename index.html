@@ -4,84 +4,236 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>static dashboard proof of concept</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: black;
-            margin: 0;
-            padding: 40px;
-            color: #707a83;
-        }
-        footer {
-            background-image: url('resources/thin.jpg'); /* Replace with the actual path to your image */
-            background-size: cover; /* Covers the entire footer area */
-            background-position: center; /* Centers the image */
-            background-repeat: no-repeat; /* Prevents the image from repeating */
-            color: magenta; /* Text color for better contrast with the background */
-            padding: 20px; /* Add some padding for content inside the footer */
-            text-align: center; /* Center the text within the footer */
-            font-size: 48px;
-            min-height: 150px; /* Optional: Set a minimum height for the footer */
-        }
-        h1 {
-            text-align: left;
-            margin-bottom: 40px;
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        .card {
-            background: white;
-            padding: 20px;
-            margin-bottom: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        a.button {
-            display: inline-block;
-            margin-top: 10px;
-            padding: 10px 15px;
-            background: #f3711b;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-        }
-        a.button:hover {
-            background: #707a83;
-        }
-    </style>
+<style>
+.dashboard-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: #a0ddfc;           /* light gray */
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+}
+
+.dashboard-title img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+.dashboard-title h1 {
+  color: #f3711b;
+  margin: 0;
+  font-size: 1.4rem;
+}
+
+
+body {
+  font-family: sans-serif;
+  padding: 1rem;
+  display: grid;
+  gap: 1rem;
+}
+
+/* Card */
+.indicator-card {
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  padding: 1rem;
+  background: white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.tabs {
+  display: grid;
+}
+
+/* Hide radios */
+.tabs input {
+  display: none;
+}
+
+/* Tab labels */
+.tabs label {
+  padding: 0.4rem 0.6rem;
+  border: 1px solid #ddd;
+  margin-right: -1px;
+  cursor: pointer;
+  background: #f7f7f7;
+  font-size: 0.9rem;
+}
+
+/* Tab label layout */
+.tabs label:first-of-type {
+  border-radius: 8px 0 0 0;
+}
+.tabs label:last-of-type {
+  border-radius: 0 8px 0 0;
+}
+
+/* Content area */
+.tab-content {
+  grid-column: 1 / -1;
+  border: 1px solid #ddd;
+  border-top: none;
+  padding: 0.75rem;
+  display: none;
+  border-radius: 0 0 8px 8px;
+}
+
+/* Show the content when corresponding radio is checked */
+#t1-desc:checked ~ #c1-desc,
+#t1-stat:checked  ~ #c1-stat,
+#t1-trend:checked ~ #c1-trend {
+  display: block;
+}
+#t2-desc:checked ~ #c2-desc,
+#t2-stat:checked  ~ #c2-stat,
+#t2-trend:checked ~ #c2-trend {
+  display: block;
+}
+#t3-desc:checked ~ #c3-desc,
+#t3-stat:checked  ~ #c3-stat,
+#t3-trend:checked ~ #c3-trend {
+  display: block;
+}
+
+/* Highlight active tab */
+#t1-desc:checked + label,
+#t1-stat:checked  + label,
+#t1-trend:checked + label {
+  background: #fff;
+  border-bottom-color: white;
+}
+#t2-desc:checked + label,
+#t2-stat:checked  + label,
+#t2-trend:checked + label {
+  background: #fff;
+  border-bottom-color: white;
+}
+#t3-desc:checked + label,
+#t3-stat:checked  + label,
+#t3-trend:checked + label {
+  background: #fff;
+  border-bottom-color: white;
+}
+
+/* Trend sparkline */
+.sparkline {
+  width: 100%;
+  height: 40px;
+}
+.stat-number {
+  font-size: 2rem;
+  font-weight: bold;
+  text-align: center;
+}
+</style>
 </head>
 <body>
-    <div style="text-align: center; width: 100%;">
-        <img src="logos/cropped_logo.png" style="width: 5in;">
-    </div>
-    
-    
-    <h1>Proof-of-Concept</h1>
-    <h3>Static Dashboard website with Bokeh standalone dashboards</h3>
-    
-    <div class="container">
+<div class="dashboard-title">
+  <img src="resources/Environmental Health Icon.png" alt="Icon">
+  <h1>Climate & Environmental Health</h1>
+</div>
 
-        <div class="card">
-            <h2>Example</h2>
-            <p>These links go to stand-alone dashboards. The first is a Bokeh dashboard. The second a Plotly choropleth map.</p>
-            <a class="button" href="dashboards/bokeh_example.html">Open respiratory illness dashboard</a>
-            <br>
-            <a class="button" href="dashboards/plotly_example1.html">Choropleth map made in plotly</a>
-            <br>
-            <p>Some lovely emblems:</p>
-            <img src="resources/A Place for Everyone Housing Plan.png" style="width: 1in;">
-            <img src="resources/Access to Health Services.png" style="width: 1in;">
-            <img src="resources/Anti-Poverty.png" style="width: 1in;">
-            <img src="resources/Behavioral Health.png" style="width: 1in;">
-            <img src="resources/Birth Outcomes.png" style="width: 1in;">
-            <img src="resources/Food Security.png" style="width: 1in;">
-            
-        </div>
+<div class="indicator-card">
+  <h3>Number of Unbearably Hot Days</h3>
+  <div class="tabs">
+    
+
+    <input type="radio" name="tab1" id="t1-stat">
+    <label for="t1-stat">Current Status</label>
+
+    <input type="radio" name="tab1" id="t1-trend">
+    <label for="t1-trend">Trend</label>
+
+    <input type="radio" name="tab1" id="t1-desc" checked>
+    <label for="t1-desc">Information</label>
+    <div class="tab-content" id="c1-desc">
+      <p>This indicator measures the number of days that are unbearably hot.</p>
+      <p>Data Source: National Oceanic and Atmospheric Administration</p>
     </div>
-    <footer>
-        <p>footer things</p>
-    </footer>
+    <div class="tab-content" id="c1-stat">
+      <p class="stat-number">43 Days</p>
+    </div>
+    <div class="tab-content" id="c1-trend">
+      <svg viewBox="0 0 100 30" class="sparkline">
+        <polyline fill="none" stroke="currentColor" 
+          points="0,20 20,10 40,12 60,6 80,8 100,4" />
+      </svg>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="indicator-card">
+  <h3>Mosquito- and tick-borne incidents investigated</h3>
+  <div class="tabs">
+    
+
+    <input type="radio" name="tab2" id="t2-stat">
+    <label for="t2-stat">Current Status</label>
+
+    <input type="radio" name="tab2" id="t2-trend">
+    <label for="t2-trend">Trend</label>
+
+    <input type="radio" name="tab2" id="t2-desc" checked>
+    <label for="t2-desc">Information</label>
+    <div class="tab-content" id="c2-desc">
+      <p>The number of disease investigations for mosquito- and tick-borne
+        diseases could rise as a consequence of warming climate.</p>
+      <p>Data Source: EpiTrax electronic disease surveillance system, Kansas
+        Department of Health & Environment.,
+      </p>
+    </div>
+    <div class="tab-content" id="c2-stat">
+      <p class="stat-number">43 Days</p>
+    </div>
+    <div class="tab-content" id="c2-trend">
+      <svg viewBox="0 0 100 30" class="sparkline">
+        <polyline fill="none" stroke="currentColor" 
+          points="0,20 20,10 40,12 60,6 80,8 100,4" />
+      </svg>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="indicator-card">
+  <h3>Emergency Visits for a Terrible disease</h3>
+  <div class="tabs">
+    
+
+    <input type="radio" name="tab3" id="t3-stat">
+    <label for="t3-stat">Current Status</label>
+
+    <input type="radio" name="tab3" id="t3-trend">
+    <label for="t3-trend">Trend</label>
+
+    <input type="radio" name="tab3" id="t3-desc" checked>
+    <label for="t3-desc">Information</label>
+    <div class="tab-content" id="c3-desc">
+      <p>This indicator measures the number of days that are unbearably hot.</p>
+      <p>Data Source: CDC's Electronic Surveillance System for the Early 
+        Notification of Community-based Epidemics (ESSENCE). </p>
+    </div>
+    <div class="tab-content" id="c3-stat">
+      <p class="stat-number">3 per 100,000 residents</p>
+    </div>
+    <div class="tab-content" id="c3-trend">
+      <svg viewBox="0 0 100 30" class="sparkline">
+        <polyline fill="none" stroke="currentColor" 
+          points="0,20 20,10 40,12 60,6 80,8 100,4" />
+      </svg>
+    </div>
+  </div>
+</div>
+
+
 </body>
 </html>
