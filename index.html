@@ -1,273 +1,46 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Climate and Health</title>
-
-<style>
-/* -------------------------------------------------------
-   Global Styles
-------------------------------------------------------- */
-body {
-  margin: 0;
-  font-family: sans-serif;
-  background: #ffffff;
-  color: #333;
-  line-height: 1.4;
-}
-
-/* -------------------------------------------------------
-   Sticky Header
-------------------------------------------------------- */
-.header {
-  position: sticky;
-  top: 0;
-  background: #a0ddfc;
-  border-bottom: 3px solid #1776bc;
-  padding: 0.75rem 1rem;
-  z-index: 1000;
-
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.header img {
-  width: 40px;
-  height: 40px;
-  object-fit: contain;
-}
-
-.header h1 {
-  margin: 0;
-  font-size: 1.4rem;
-}
-
-/* -------------------------------------------------------
-   Dashboard grid
-------------------------------------------------------- */
-.dashboard {
-  padding: 1rem;
-  display: grid;
-  gap: 1rem;
-}
-
-@media (min-width: 700px) {
-  .dashboard {
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  }
-}
-
-/* -------------------------------------------------------
-   Indicator Card
-------------------------------------------------------- */
-.indicator-card {
-  border: 1px solid #ddd;
-  border-radius: 12px;
-  background: #fff;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  padding: 1rem;
-}
-
-/* -------------------------------------------------------
-   Tabs
-   (compact single-line tabs)
-------------------------------------------------------- */
-.tabs {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 0.75rem;
-}
-
-/* Hide the radio buttons */
-.indicator-card input {
-  display: none;
-}
-
-.indicator-card label {
-  padding: 0.3rem 0.6rem;
-  font-size: 0.85rem;
-  cursor: pointer;
-  /* border-radius: 6px; */
-  /* border: 1px solid #ccc; */
-  background: #f4f4f4;
-  white-space: nowrap;
-}
-
-/* Active tab styling */
-.indicator-card input:checked + label {
-  background: #1776bc;
-  color: #fff;
-  /* border-color: #1776bc; */
-}
-
-.indicator-card h3 {
-  color: #707a83;
-  font-weight: bold;
-}
-
-/* Tab content area */
-.tab-content {
-  display: none;
-  font-size: 0.95rem;
-  /* border-top: 1px solid #eee; */
-  padding-top: 0.75rem;
-}
-
-/* Show the correct content */
-#tab1-status:checked ~ .content #content-status,
-#tab1-trend:checked  ~ .content #content-trend,
-#tab1-info:checked   ~ .content #content-info {
-  display: block;
-}
-#tab2-status:checked ~ .content #content-status,
-#tab2-trend:checked  ~ .content #content-trend,
-#tab2-info:checked   ~ .content #content-info {
-  display: block;
-}
-#tab3-status:checked ~ .content #content-status,
-#tab3-trend:checked  ~ .content #content-trend,
-#tab3-info:checked   ~ .content #content-info {
-  display: block;
-}
-
-
-/* -------------------------------------------------------
-   Trend sparkline (SVG auto-scales)
-------------------------------------------------------- */
-.sparkline {
-  width: 100%;
-  height: 40px;
-}
-
-.stat-number {
-  font-size: 2rem;
-  font-weight: bold;
-  text-align: center;
-}
-</style>
+    <meta charset="utf-8">
+    <title>Lawrence-Douglas County Health Indicator Dashboard</title>
+    <link rel="stylesheet" href="css/dashboard.css">
 </head>
-
 <body>
-
-<!-- =======================================================
-     Sticky Header
-======================================================= -->
-<div class="header">
-  <img src="resources/Environmental Health Icon.png" alt="Logo">
-  <h1>Climate & Environmental Health Dashboard</h1>
-</div>
-
-<!-- =======================================================
-     Main Dashboard Grid
-======================================================= -->
-<div class="dashboard">
-
-  <!-- ===================================================
-       Indicator Card 1
-  =================================================== -->
-  <div class="indicator-card">
-    <h3>Number of complex things per 100,000 residents.</h3>
-    <input type="radio" name="tab1" id="tab1-status" checked>
-    <input type="radio" name="tab1" id="tab1-trend">
-    <input type="radio" name="tab1" id="tab1-info">
-    <!-- Tab Content -->
-    <div class="content">
-      <div id="content-status" class="tab-content">
-        <p class="stat-number">23 things</p>
-      </div>
-
-      <div id="content-trend" class="tab-content">
-        <svg viewBox="0 0 100 30" class="sparkline">
-          <polyline fill="none" stroke="#1776bc" stroke-width="2"
-            points="0,20 20,15 40,18 60,10 80,12 100,5"/>
-        </svg>
-      </div>
-
-      <div id="content-info" class="tab-content">
-        <p>This indicator tracks the number of hot days in a calendar year.</p>
-      </div>
+<header class="banner-container">
+    <div class="banner">
+        <a href="/">
+            <img src="resources/cropped_logo.png" alt="LDCPH Logo" class="logo-header">
+        </a>
+        <h1 class="titulo">Health Indicators</h1>
     </div>
-    <label for="tab1-status">Current Status</label>
-    <label for="tab1-trend">Trend</label>
-    <label for="tab1-info">Information</label>
-  </div>
+</header>
 
-  <!-- Duplicate indicator-card blocks as needed -->
-
-
-
-<!-- ===================================================
-       Indicator Card 2
-  =================================================== -->
-  <div class="indicator-card">
-    <h3>Another Indicator. This one seems to have quite a long name. Perhaps too long!</h3>
-    <input type="radio" name="tab2" id="tab2-status" checked>
-    <input type="radio" name="tab2" id="tab2-trend">
-    <input type="radio" name="tab2" id="tab2-info">
+<div class="tree">
+  <ul class="topics">
     
-
-    <!-- Tab Content -->
-    <div class="content">
-      <div id="content-status" class="tab-content">
-        <p class="stat-number">243</p>
-      </div>
-
-      <div id="content-trend" class="tab-content">
-        <svg viewBox="0 0 100 30" class="sparkline">
-          <polyline fill="none" stroke="#1776bc" stroke-width="3"
-            points="0,20 20,15 40,18 60,10 80,12 100,5"/>
-        </svg>
-      </div>
-
-      <div id="content-info" class="tab-content">
-        <p>This indicator tracks the number of cases processed in the last 30 days.</p>
-      </div>
-    </div>
-    <label for="tab2-status">Current Status</label>
-    <label for="tab2-trend">Trend</label>
-    <label for="tab2-info">Information</label>
-  </div>
-  <!-- Duplicate indicator-card blocks as needed -->
-
-
-
-  <!-- ===================================================
-       Indicator Card 3
-  =================================================== -->
-  <div class="indicator-card">
-    <h3>A third indicator</h3>
-    <input type="radio" name="tab3" id="tab3-status" checked>
-    <label for="tab3-status">Current Status</label>
-    <input type="radio" name="tab3" id="tab3-trend">
-    <label for="tab3-trend">Trend</label>
-    <input type="radio" name="tab3" id="tab3-info">
-    <label for="tab3-info">Information</label>
-
-    <!-- Tab Content -->
-    <div class="content">
-      <div id="content-status" class="tab-content">
-        <p class="stat-number">2 per 100,000</p>
-      </div>
-
-      <div id="content-trend" class="tab-content">
-        <svg viewBox="0 0 100 30" class="sparkline">
-          <polyline fill="none" stroke="#1776bc" stroke-width="4"
-            points="0,20 20,15 40,18 60,10 80,12 100,5"/>
-        </svg>
-      </div>
-
-      <div id="content-info" class="tab-content">
-        <p>This indicator tracks the a rate of some sort.</p>
-      </div>
-    </div>
-  </div>
-  <!-- Duplicate indicator-card blocks as needed -->
-
-
+      <li class="topic-link" style="--topic-icon: url('../resources/Environmental Health Icon.png');">
+        <a class="topic-name" href="Environment.html">
+          Environment and Health
+        </a>
+      </li>
+    
+      <li class="topic-link" style="--topic-icon: url('../resources/Environmental Health Icon.png');">
+        <a class="topic-name" href="Resp.html">
+          Respiratory Infections
+        </a>
+      </li>
+    
+      <li class="topic-link" style="--topic-icon: url('../resources/Behavioral Health.png');">
+        <a class="topic-name" href="Behavioral.html">
+          Behavioral Health
+        </a>
+      </li>
+    
+  </ul>
 </div>
+
+
+
 
 </body>
 </html>

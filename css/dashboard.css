@@ -1,0 +1,209 @@
+body {
+  margin: 0;
+  font-family: sans-serif;
+  background: #ffffff;
+  color: #333;
+  line-height: 1.4;
+}
+
+
+.banner-container {
+  background-color: white; /* Example background color */
+  padding: 10px 20px;
+  display: flex; /* Use flexbox for layout */
+  align-items: center; /* Vertically centers the items */
+  justify-content: space-between; /* Pushes the left and right sections to the edges */
+  height: 60px; /* Example banner height */
+}
+
+.banner {
+  display: flex;
+  align-items: center;
+  
+}
+
+.logo-header {
+  display: flex;
+  height: 60px;
+}
+
+.titulo {
+  font-size: 40px;
+  color: #1776bc;
+  font-weight: bold;
+  margin-left: 1in;
+  padding: 10px;
+}
+
+.tree {
+  background-image: url('../resources/LDCPH-TreeIcon.png');
+  height: 800px;
+  /* width: 100%; */
+  background-size: 80% auto;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+ul.topics {
+  list-style: none;
+  padding: 0;
+}
+
+li.topic-link {
+  display: flex; /* Aligns the icon and text vertically in the middle */
+  align-items: center;
+  margin: 10px 0;
+  line-height: 1.5;
+}
+
+li.topic-link::before {
+  content: ''; /* Required for pseudo-elements to render */
+  display: block;
+  flex-shrink: 0; /* Prevents the image from shrinking on smaller screens */
+  width: 80px; /* Set the width of your logo */
+  height: 80px; /* Set the height of your logo */
+  margin-right: 10px; /* Space between the logo and the text */
+  background-image: var(--topic-icon);
+  background-repeat: no-repeat;
+  background-size: contain; /* Ensures the whole logo is visible */
+}
+a.topic-name {
+  font-size: 24px;
+  color: #1776bc;
+  font-weight: bold;
+}
+
+/* -------------------------------------------------------
+   Sticky Header
+------------------------------------------------------- */
+.header {
+  position: sticky;
+  top: 0;
+  background: #a0ddfc;
+  border-bottom: 3px solid #1776bc;
+  padding: 0.75rem 1rem;
+  z-index: 1000;
+
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.header img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 1.4rem;
+}
+
+/* -------------------------------------------------------
+   Dashboard grid
+------------------------------------------------------- */
+.dashboard {
+  padding: 1rem;
+  display: grid;
+  gap: 1rem;
+}
+
+@media (min-width: 700px) {
+  .dashboard {
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  }
+}
+
+
+/* -------------------------------------------------------
+   Indicator Card
+------------------------------------------------------- */
+.indicator-card {
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  padding: 1rem;
+}
+
+
+/* -------------------------------------------------------
+   Tabs
+   (compact single-line tabs)
+------------------------------------------------------- */
+.tabs {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+/* Hide the radio buttons */
+.indicator-card input {
+  display: none;
+}
+
+.indicator-card label {
+  padding: 0.3rem 0.6rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+  /* border-radius: 6px; */
+  /* border: 1px solid #ccc; */
+  background: #f4f4f4;
+  white-space: nowrap;
+}
+
+/* Active tab styling */
+.indicator-card input:checked + label {
+  background: #1776bc;
+  color: #fff;
+  /* border-color: #1776bc; */
+}
+
+.indicator-card h3 {
+  color: #707a83;
+  font-weight: bold;
+}
+
+.info {
+    width: 100%;
+    color: #f3711b
+}
+
+.methodology p {
+    color: #1776bc;
+}
+
+
+
+
+.indicator-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: #444;
+}
+
+.stat-number {
+  font-size: 2.2rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+.stat-date {
+  text-align: center;
+  font-size: 0.8rem;
+  color: #777;
+}
+
+.sparkline {
+  width: 100%;
+  height: 80px;
+  color: #1776bc;
+}
+
+.methodology {
+  font-size: 0.8rem;
+  color: #666;
+}
