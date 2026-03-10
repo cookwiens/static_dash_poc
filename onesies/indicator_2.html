@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cold-related ED Visits (Annual) — Lawrence-Douglas County Health Dashboard</title>
+
+  <!-- One level up because this file lives in export/onesies/ -->
+  <link rel="stylesheet" href="../css/dashboard.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Source Sans 3', 'Segoe UI', sans-serif;
+      background: #f5f9fd;
+      color: #1e2a35;
+      min-height: 100vh;
+    }
+
+    /* ── Header ──────────────────────────────────────────────── */
+    .banner-container {
+      background: linear-gradient(135deg, #0f5a96 0%, #1776bc 100%);
+      border-bottom: 3px solid #f3711b;
+      padding: 0;
+      height: auto;
+      display: block;
+    }
+
+    .banner {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 18px 24px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .logo-header {
+      height: 44px;
+      width: auto;
+      display: block;
+      flex-shrink: 0;
+      filter: brightness(0) invert(1);
+      opacity: 0.95;
+    }
+
+    .banner-eyebrow {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #a0ddfc;
+      margin-bottom: 3px;
+    }
+
+    .banner-site-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: #ffffff;
+      line-height: 1.2;
+    }
+
+    /* ── Breadcrumb ──────────────────────────────────────────── */
+    .breadcrumb {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 14px 24px 0;
+      font-size: 0.8rem;
+      color: #707a83;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .breadcrumb a {
+      color: #1776bc;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .breadcrumb a:hover { text-decoration: underline; }
+    .breadcrumb-sep { color: #a0ddfc; }
+
+    /* ── Page body ───────────────────────────────────────────── */
+    .page-body {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 24px 24px 64px;
+      display: grid;
+      /* Tile is capped at 400px; left column gives it breathing room
+         on wider screens without making it stretch uncomfortably wide */
+      grid-template-columns: minmax(0, 420px) 1fr;
+      gap: 32px;
+      align-items: start;
+    }
+
+    /* ── Indicator sidebar (topics, groups, back link) ───────── */
+    .indicator-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .meta-block-label {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #707a83;
+      margin-bottom: 8px;
+    }
+
+    .tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .tag-topic {
+      background: #e8f4fd;
+      color: #0f5a96;
+      border: 1px solid #a0ddfc;
+    }
+
+    .tag-group {
+      background: #fff3eb;
+      color: #b84e0d;
+      border: 1px solid #f9bfa0;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #1776bc;
+      text-decoration: none;
+      padding: 8px 0;
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.15s;
+    }
+
+    .back-link:hover { border-bottom-color: #a0ddfc; }
+
+    .back-link svg {
+      flex-shrink: 0;
+      transition: transform 0.15s;
+    }
+
+    .back-link:hover svg { transform: translateX(-2px); }
+
+    /* ── Footer ──────────────────────────────────────────────── */
+    .page-footer {
+      border-top: 1px solid #d8e8f4;
+      background: #fff;
+      padding: 18px 24px;
+      text-align: center;
+      font-size: 0.78rem;
+      color: #707a83;
+    }
+
+    .page-footer a {
+      color: #1776bc;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .page-footer a:hover { text-decoration: underline; }
+
+    /* ── Mobile: stack tile above meta ──────────────────────── */
+    @media (max-width: 640px) {
+      .banner { padding: 14px 16px; }
+      .logo-header { height: 36px; }
+      .breadcrumb { padding: 12px 16px 0; }
+      .page-body {
+        grid-template-columns: 1fr;
+        padding: 16px 16px 48px;
+        gap: 20px;
+      }
+      /* Tile first on mobile, meta below */
+      .tile-col  { order: 1; }
+      .meta-col  { order: 2; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ── Header ────────────────────────────────────────────── -->
+  <header class="banner-container">
+    <div class="banner">
+      <a href="../index.html">
+        <img src="../resources/cropped_logo.png" alt="LDCPH Logo" class="logo-header">
+      </a>
+      <div>
+        <div class="banner-eyebrow">Lawrence-Douglas County Public Health</div>
+        <div class="banner-site-title">Health Indicator Dashboard</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── Breadcrumb ────────────────────────────────────────── -->
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <a href="../all_indicators.html">All indicators</a>
+    <span class="breadcrumb-sep">›</span>
+    <span>Cold-related ED Visits (Annual)</span>
+  </nav>
+
+  <!-- ── Body ──────────────────────────────────────────────── -->
+  <div class="page-body">
+
+    <!-- Tile column -->
+    <div class="tile-col">
+      <div class="indicator-card">
+
+  <h3 class="indicator-title">
+    Cold-related ED Visits (Annual)
+  </h3>
+
+  <!-- Tab radio inputs must precede .content so the CSS sibling selectors work -->
+  <input type="radio"
+         name="tab-2"
+         id="status-2"
+         checked>
+  <input type="radio"
+         name="tab-2"
+         id="tbl-2">
+  <input type="radio"
+         name="tab-2"
+         id="info-2">
+
+  <div class="view-selector">
+    <label for="status-2">Current</label>
+    <label for="tbl-2">Table</label>
+    <label for="info-2">Info</label>
+  </div>
+
+  <div class="content">
+
+    <!-- CURRENT -->
+    <div class="tab-content current">
+
+      <div class="metric-header">
+        <div class="stat-number">68 ED Visits</div>
+        <div class="trend-indicator bad">
+          ▲
+        </div>
+      </div>
+
+      <div class="stat-date">2025-01</div>
+
+      <div class="dashboard-tile">
+        
+        <svg viewBox="0 0 100 40" class="sparkline">
+            <polyline
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                points="4.0,36.0 14.222222222222221,35.05882352941177 24.444444444444443,26.588235294117645 34.666666666666664,29.411764705882355 44.888888888888886,19.058823529411764 55.11111111111111,26.588235294117645 65.33333333333333,8.705882352941178 75.55555555555554,16.235294117647058 85.77777777777777,4.9411764705882355 96.0,4.0"
+            />
+
+            
+                <circle
+                    cx="4.0"
+                    cy="36.0"
+                    r="5"
+                    fill="transparent"
+                    class="spark-point"
+                    data-x="2016-01"
+                    data-y="34.0"
+                />
+            
+                <circle
+                    cx="14.222222222222221"
+                    cy="35.05882352941177"
+                    r="5"
+                    fill="transparent"
+                    class="spark-point"
+                    data-x="2017-01"
+                    data-y="35.0"
+                />
+            
+                <circle
+                    cx="24.444444444444443"
+                    cy="26.588235294117645"
+                    r="5"
+                    fill="transparent"
+                    class="spark-point"
+                    data-x="2018-01"
+                    data-y="44.0"
+                />
+            
+                <circle
+                    cx="34.666666666666664"
+                    cy="29.411764705882355"
+                    r="5"
+                    fill="transparent"
+                    class="spark-point"
+                    data-x="2019-01"
+                    data-y="41.0"
+                />
+            
+                <circle
+                    cx="44.888888888888886"
+                    cy="19.058823529411764"
+                    r="5"
+                    fill="transparent"
+                    class="spark-point"
+                    data-x="2020-01"
+                    data-y="52.0"
+                />
+            
+                <circle
+                    cx="55.11111111111111"
+                    cy="26.588235294117645"
+                    r="5"
+                    fill="transparent"
+                    class="spark-point"
+                    data-x="2021-01"
+                    data-y="44.0"
+                />
+            
+                <circle
+                    cx="65.33333333333333"
+                    cy="8.705882352941178"
+                    r="5"
+                    fill="transparent"
+                    class="spark-point"
+                    data-x="2022-01"
+                    data-y="63.0"
+                />
+            
+                <circle
+                    cx="75.55555555555554"
+                    cy="16.235294117647058"
+                    r="5"
+                    fill="transparent"
+                    class="spark-point"
+                    data-x="2023-01"
+                    data-y="55.0"
+                />
+            
+                <circle
+                    cx="85.77777777777777"
+                    cy="4.9411764705882355"
+                    r="5"
+                    fill="transparent"
+                    class="spark-point"
+                    data-x="2024-01"
+                    data-y="67.0"
+                />
+            
+                <circle
+                    cx="96.0"
+                    cy="4.0"
+                    r="5"
+                    fill="transparent"
+                    class="spark-point"
+                    data-x="2025-01"
+                    data-y="68.0"
+                />
+            
+
+            <circle
+                cx="96.0"
+                cy="4.0"
+                r="3"
+                fill="currentColor"
+            />
+        </svg>
+        
+        <div class="spark-tooltip"></div>
+      </div>
+
+      
+        <p class="current-description">Cold outdoor temperatures can increase risk for health emergencies such as hypothermia and frostbite. People higher risk for cold-related illnesses include older adults, infancts, people experiencing houselessness or with inadequate home heating and participants in outdoor work or other activities.</p>
+      
+
+    </div>
+
+    <!-- TABLE -->
+    <div class="tab-content table">
+      
+        <div class="table-units">ED Visits</div>
+      
+      <div class="sideways-tables">
+        
+          <div><table border="1" class="dataframe indicator-table">
+  <tbody>
+    <tr>
+      <td>01-25</td>
+      <td>68.0</td>
+    </tr>
+    <tr>
+      <td>01-24</td>
+      <td>67.0</td>
+    </tr>
+    <tr>
+      <td>01-23</td>
+      <td>55.0</td>
+    </tr>
+    <tr>
+      <td>01-22</td>
+      <td>63.0</td>
+    </tr>
+    <tr>
+      <td>01-21</td>
+      <td>44.0</td>
+    </tr>
+  </tbody>
+</table></div>
+        
+          <div><table border="1" class="dataframe indicator-table">
+  <tbody>
+    <tr>
+      <td>01-20</td>
+      <td>52.0</td>
+    </tr>
+    <tr>
+      <td>01-19</td>
+      <td>41.0</td>
+    </tr>
+    <tr>
+      <td>01-18</td>
+      <td>44.0</td>
+    </tr>
+    <tr>
+      <td>01-17</td>
+      <td>35.0</td>
+    </tr>
+    <tr>
+      <td>01-16</td>
+      <td>34.0</td>
+    </tr>
+  </tbody>
+</table></div>
+        
+      </div>
+    </div>
+
+    <!-- INFO -->
+    <div class="tab-content info">
+      
+        <div class="methodology-label">Source</div>
+        ESSENCE 
+          
+        
+      
+
+      
+      
+      
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+(function () {
+  /* Scope to the last injected tile so multiple tiles on one page don't conflict */
+  var tiles = document.querySelectorAll(".dashboard-tile");
+  var lastTile = tiles[tiles.length - 1];
+  if (!lastTile) return;
+
+  var tooltip = lastTile.querySelector(".spark-tooltip");
+  if (!tooltip) return;
+
+  function showTooltip(point) {
+    tooltip.textContent = point.dataset.x + ": " + point.dataset.y;
+    tooltip.style.display = "block";
+  }
+
+  function moveTooltip(clientX, clientY) {
+    tooltip.style.left = (clientX + 12) + "px";
+    tooltip.style.top  = (clientY - 36) + "px";
+  }
+
+  function hideTooltip() {
+    tooltip.style.display = "none";
+  }
+
+  lastTile.querySelectorAll(".spark-point").forEach(function (point) {
+
+    /* Mouse */
+    point.addEventListener("mouseenter", function () { showTooltip(point); });
+    point.addEventListener("mousemove",  function (e) { moveTooltip(e.clientX, e.clientY); });
+    point.addEventListener("mouseleave", hideTooltip);
+
+    /* Touch — fires on mobile where mouseenter doesn't */
+    point.addEventListener("touchstart", function (e) {
+      e.preventDefault();               /* suppress ghost click */
+      var t = e.touches[0];
+      showTooltip(point);
+      moveTooltip(t.clientX, t.clientY);
+    }, { passive: false });
+
+    point.addEventListener("touchmove", function (e) {
+      var t = e.touches[0];
+      moveTooltip(t.clientX, t.clientY);
+    });
+
+    point.addEventListener("touchend", function () {
+      setTimeout(hideTooltip, 1200);    /* brief delay so user can read it */
+    });
+
+  });
+}());
+</script>
+    </div>
+
+    <!-- Meta sidebar -->
+    <div class="meta-col indicator-meta">
+
+      
+      <div>
+        <div class="meta-block-label">Topics</div>
+        <div class="tag-list">
+          
+            <a href="../Environment.html"
+               class="tag tag-topic">Environment and Health</a>
+          
+        </div>
+      </div>
+      
+
+      
+      <div>
+        <div class="meta-block-label">Indicator Groups</div>
+        <div class="tag-list">
+          
+            <span class="tag tag-group">Public GitHub Dashboard</span>
+          
+        </div>
+      </div>
+      
+
+      <div>
+        <a href="../all_indicators.html" class="back-link">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+               stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6"/>
+          </svg>
+          Back to all indicators
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── Footer ────────────────────────────────────────────── -->
+  <footer class="page-footer">
+    Lawrence-Douglas County Public Health &mdash;
+    <a href="../../all_indicators.html">View all indicators</a>
+  </footer>
+
+</body>
+</html>

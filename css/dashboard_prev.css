@@ -1,0 +1,375 @@
+body {
+  margin: 0;
+  font-family: sans-serif;
+  background: #ffffff;
+  color: #333;
+  line-height: 1.4;
+}
+
+
+.banner-container {
+  background-color: white; /* Example background color */
+  padding: 10px 20px;
+  display: flex; /* Use flexbox for layout */
+  align-items: center; /* Vertically centers the items */
+  justify-content: space-between; /* Pushes the left and right sections to the edges */
+  height: 60px; /* Example banner height */
+}
+
+.banner {
+  display: flex;
+  align-items: center; 
+}
+
+.logo-header {
+  display: flex;
+  height: 60px;
+}
+
+.titulo {
+  font-size: 40px;
+  color: #1776bc;
+  font-weight: bold;
+  margin-left: 1in;
+  padding: 10px;
+}
+
+.tree {
+  background-image: url('../resources/LDCPH-TreeIcon.png');
+  height: 800px;
+  /* width: 100%; */
+  background-size: 80% auto;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+ul.topics {
+  list-style: none;
+  padding: 0;
+}
+
+li.topic-link {
+  display: flex; /* Aligns the icon and text vertically in the middle */
+  align-items: center;
+  margin: 10px 0;
+  line-height: 1.5;
+}
+
+li.topic-link::before {
+  content: ''; /* Required for pseudo-elements to render */
+  display: block;
+  flex-shrink: 0; /* Prevents the image from shrinking on smaller screens */
+  width: 80px; /* Set the width of your logo */
+  height: 80px; /* Set the height of your logo */
+  margin-right: 10px; /* Space between the logo and the text */
+  background-image: var(--topic-icon);
+  background-repeat: no-repeat;
+  background-size: contain; /* Ensures the whole logo is visible */
+}
+a.topic-name {
+  font-size: 24px;
+  color: #1776bc;
+  font-weight: bold;
+}
+
+/*****
+    All indicator page
+*****/
+table.all-indicator-table {
+  border-collapse: collapse;
+  width: 100%;
+  border: 1px solid #ddd;
+  font-size: 12px;
+}
+
+table.all-indicator-table th, table.all-indicator-table td {
+  text-align: left;
+  /* padding: 3px; */
+  border: none;
+} 
+
+table.all-indicator-table tr {
+  border-bottom: 1px solid #ddd;
+  padding: none;
+}
+
+table.all-indicator-table tr:hover {
+  background-color: #a0ddfc;
+  cursor: pointer;
+}
+
+
+/* ---
+    Tab selectors
+---- */
+.view-selector input {
+  display: none;
+}
+
+.view-selector {
+  display: inline-flex;
+  gap: 4px;
+  padding: 3px;
+  border-radius: 999px;
+  margin-bottom: 10px;
+}
+
+.view-selector label {
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  cursor: pointer;
+  color: #444;
+  user-select: none;
+}
+
+#status-INDICATOR_ID:checked + label,
+#tbl-INDICATOR_ID:checked + label,
+#info-INDICATOR_ID:checked + label {
+  background: white;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+  color: black;
+}
+
+.view-selector input:checked + label {
+  background: white;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+  color: black;
+}
+
+.view-selector label:hover {
+  background: rgba(255,255,255,0.6);
+}
+
+.tab-content {
+  display: none;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from {opacity:0;}
+  to {opacity:1;}
+}
+
+input[id^="status-"]:checked ~ .content .current {
+  display: block;
+}
+
+input[id^="tbl-"]:checked ~ .content .table {
+  display: block;
+}
+
+input[id^="info-"]:checked ~ .content .info {
+  display: block;
+}
+
+
+/* -------------------------------------------------------
+   Sticky Header
+------------------------------------------------------- */
+.header {
+  position: sticky;
+  top: 0;
+  background: #a0ddfc;
+  border-bottom: 3px solid #1776bc;
+  padding: 0.75rem 1rem;
+  z-index: 1000;
+
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.header img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 1.4rem;
+}
+
+/* -------------------------------------------------------
+   Dashboard grid
+------------------------------------------------------- */
+.dashboard {
+  padding: 1rem;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  max-width: 1400px;
+  margin: auto;
+}
+
+@media (min-width: 700px) {
+  .dashboard {
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+
+  }
+}
+
+
+/* -------------------------------------------------------
+   Indicator Card
+------------------------------------------------------- */
+.indicator-card {
+  max-width: 400px;
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  padding: 1rem;
+}
+
+
+/* -------------------------------------------------------
+   Tabs
+   (compact single-line tabs)
+------------------------------------------------------- */
+.tabs {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+/* Hide the radio buttons */
+.indicator-card input {
+  display: none;
+}
+
+.indicator-card label {
+  padding: 0.3rem 0.6rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+  /* border-radius: 6px; */
+  /* border: 1px solid #ccc; */
+  background: #f4f4f4;
+  white-space: nowrap;
+}
+
+/* Active tab styling */
+.indicator-card input:checked + label {
+  background: #1776bc;
+  color: #fff;
+  /* border-color: #1776bc; */
+}
+
+.indicator-card h3 {
+  color: #707a83;
+  font-weight: bold;
+}
+
+.info {
+    width: 100%;
+    color: #f3711b
+}
+
+.methodology p {
+    color: #1776bc;
+}
+
+
+
+
+.indicator-title {
+  font-size: 1.6rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: #444;
+}
+
+.stat-number {
+  font-size: 1.4rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+.stat-date {
+  text-align: center;
+  font-size: 1rem;
+  color: #777;
+}
+
+.sparkline {
+  width: 100%;
+  height: 100px;
+  color: #1776bc;
+}
+
+.methodology {
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.spark-tooltip {
+    position: absolute;
+    pointer-events: none;
+    background: rgba(30,30,30,0.9);
+    color: white;
+    font-size: 16px;
+    padding: 8px 12px;
+    border-radius: 4px;
+    display: none;
+    white-space: nowrap;
+    z-index: 1000;
+}
+
+.spark-point {
+    cursor: pointer;
+}
+
+.metric-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.stat-number {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.trend-indicator {
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+.trend-indicator.good {
+  color: #2ca02c;
+}
+
+.trend-indicator.bad {
+  color: #d62728;
+}
+
+.trend-indicator.flat {
+  color: #777;
+}
+
+table.indicator-table {
+    border-collapse: collapse;
+    width: 90%;
+    border: 1px solid #ddd;
+    /* font-size: 12px; */
+}
+table.indicator-table, table.indicator-table td, table.indicator-table th {
+    border: none !important;
+    padding: 5px;
+    text-align: left;
+    margin-left: auto;
+    margin-right: auto;
+}
+.sideways-tables {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+.sideways-tables div {
+  flex: 1;
+  padding: 10px;
+}

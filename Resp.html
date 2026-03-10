@@ -1,18 +1,265 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <title>Respiratory Infections</title>
-    <link rel="stylesheet" href="css/dashboard.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Respiratory Infections — Lawrence-Douglas County Health Dashboard</title>
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* ── Page-level overrides for the topic page ─────────────── */
+    body {
+      font-family: 'Source Sans 3', 'Segoe UI', sans-serif;
+      background: #f5f9fd;
+      color: #1e2a35;
+    }
+
+    /* ── Header ──────────────────────────────────────────────── */
+    .banner-container {
+      background: linear-gradient(135deg, #0f5a96 0%, #1776bc 100%);
+      border-bottom: 3px solid #f3711b;
+      padding: 0;
+      height: auto;
+      display: block;
+    }
+
+    .banner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .logo-header {
+      height: 48px;
+      width: auto;
+      display: block;
+      flex-shrink: 0;
+      filter: brightness(0) invert(1);
+      opacity: 0.95;
+    }
+
+    .banner-text { flex: 1; }
+
+    .banner-eyebrow {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #a0ddfc;
+      margin-bottom: 3px;
+    }
+
+    .banner-site-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: #ffffff;
+      line-height: 1.2;
+    }
+
+    /* ── Breadcrumb ──────────────────────────────────────────── */
+    .breadcrumb {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 14px 24px 0;
+      font-size: 0.8rem;
+      color: #707a83;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .breadcrumb a {
+      color: #1776bc;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .breadcrumb a:hover { text-decoration: underline; }
+
+    .breadcrumb-sep {
+      color: #a0ddfc;
+      font-size: 0.9rem;
+    }
+
+    /* ── Topic Hero ──────────────────────────────────────────── */
+    .topic-hero {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 20px 24px 28px;
+      display: flex;
+      align-items: flex-start;
+      gap: 18px;
+    }
+
+    .topic-icon-wrap {
+      flex-shrink: 0;
+      width: 56px;
+      height: 56px;
+      background: #ffffff;
+      border-radius: 14px;
+      border: 1px solid #c8dff0;
+      box-shadow: 0 2px 6px rgba(23,118,188,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .topic-icon-wrap img {
+      width: 40px;
+      height: 40px;
+      object-fit: contain;
+    }
+
+    .topic-hero-text { flex: 1; }
+
+    .topic-label {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #1776bc;
+      margin-bottom: 4px;
+    }
+
+    .topic-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 1.9rem;
+      font-weight: 600;
+      color: #1e2a35;
+      line-height: 1.2;
+      margin: 0 0 8px;
+    }
+
+    .topic-description {
+      font-size: 0.93rem;
+      color: #4a5a6a;
+      line-height: 1.65;
+      max-width: 680px;
+      margin: 0;
+    }
+
+    /* ── Divider ─────────────────────────────────────────────── */
+    .topic-divider {
+      max-width: 1100px;
+      margin: 0 auto 4px;
+      padding: 0 24px;
+      border: none;
+      border-top: 1px solid #d8e8f4;
+    }
+
+    /* ── Indicator count label ───────────────────────────────── */
+    .indicator-count {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 12px 24px 4px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: #707a83;
+    }
+
+    /* ── Dashboard grid ──────────────────────────────────────── */
+    .dashboard {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 8px 24px 64px;
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    }
+
+    /* ── Footer ──────────────────────────────────────────────── */
+    .page-footer {
+      border-top: 1px solid #d8e8f4;
+      background: #fff;
+      padding: 20px 24px;
+      text-align: center;
+      font-size: 0.78rem;
+      color: #707a83;
+    }
+
+    .page-footer a {
+      color: #1776bc;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .page-footer a:hover { text-decoration: underline; }
+
+    /* ── Mobile ──────────────────────────────────────────────── */
+    @media (max-width: 600px) {
+      .banner { padding: 16px; gap: 12px; }
+      .logo-header { height: 38px; }
+      .banner-site-title { font-size: 1.1rem; }
+      .topic-hero { padding: 16px 16px 20px; gap: 14px; }
+      .topic-title { font-size: 1.5rem; }
+      .dashboard { padding: 8px 12px 48px; gap: 0.75rem; }
+      .breadcrumb,
+      .indicator-count { padding-left: 16px; padding-right: 16px; }
+    }
+  </style>
 </head>
+
 <body>
 
-<h1>Respiratory Infections</h1>
-<p>Paragraph describing respiratory infections</p>
+  <!-- ── Header ────────────────────────────────────────────── -->
+  <header class="banner-container">
+    <div class="banner">
+      <a href="/">
+        <img src="resources/cropped_logo.png" alt="LDCPH Logo" class="logo-header">
+      </a>
+      <div class="banner-text">
+        <div class="banner-eyebrow">Lawrence-Douglas County Public Health</div>
+        <div class="banner-site-title">Health Indicator Dashboard</div>
+      </div>
+    </div>
+  </header>
 
-<div class="tiles">
+  <!-- ── Breadcrumb ────────────────────────────────────────── -->
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <a href="index.html">Home</a>
+    <span class="breadcrumb-sep">›</span>
+    <span>Respiratory Infections</span>
+  </nav>
+
+  <!-- ── Topic hero ────────────────────────────────────────── -->
+  <div class="topic-hero">
     
-</div>
+    <div class="topic-hero-text">
+      <div class="topic-label">Health Topic</div>
+      <h1 class="topic-title">Respiratory Infections</h1>
+      
+        <p class="topic-description">Paragraph describing respiratory infections</p>
+      
+    </div>
+  </div>
+
+  <hr class="topic-divider">
+
+  <!-- ── Indicator count ───────────────────────────────────── -->
+  <div class="indicator-count">
+    0 indicators
+  </div>
+
+  <!-- ── Tile grid ─────────────────────────────────────────── -->
+  <div class="dashboard">
+    
+  </div>
+
+  <!-- ── Footer ────────────────────────────────────────────── -->
+  <footer class="page-footer">
+    Lawrence-Douglas County Public Health &mdash;
+    <a href="all_indicators.html">View all indicators</a>
+  </footer>
 
 </body>
 </html>

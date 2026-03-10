@@ -1,138 +1,1170 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <title>Environment and Health</title>
-    <link rel="stylesheet" href="css/dashboard.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Environment and Health — Lawrence-Douglas County Health Dashboard</title>
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* ── Page-level overrides for the topic page ─────────────── */
+    body {
+      font-family: 'Source Sans 3', 'Segoe UI', sans-serif;
+      background: #f5f9fd;
+      color: #1e2a35;
+    }
+
+    /* ── Header ──────────────────────────────────────────────── */
+    .banner-container {
+      background: linear-gradient(135deg, #0f5a96 0%, #1776bc 100%);
+      border-bottom: 3px solid #f3711b;
+      padding: 0;
+      height: auto;
+      display: block;
+    }
+
+    .banner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .logo-header {
+      height: 48px;
+      width: auto;
+      display: block;
+      flex-shrink: 0;
+      filter: brightness(0) invert(1);
+      opacity: 0.95;
+    }
+
+    .banner-text { flex: 1; }
+
+    .banner-eyebrow {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #a0ddfc;
+      margin-bottom: 3px;
+    }
+
+    .banner-site-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: #ffffff;
+      line-height: 1.2;
+    }
+
+    /* ── Breadcrumb ──────────────────────────────────────────── */
+    .breadcrumb {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 14px 24px 0;
+      font-size: 0.8rem;
+      color: #707a83;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .breadcrumb a {
+      color: #1776bc;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .breadcrumb a:hover { text-decoration: underline; }
+
+    .breadcrumb-sep {
+      color: #a0ddfc;
+      font-size: 0.9rem;
+    }
+
+    /* ── Topic Hero ──────────────────────────────────────────── */
+    .topic-hero {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 20px 24px 28px;
+      display: flex;
+      align-items: flex-start;
+      gap: 18px;
+    }
+
+    .topic-icon-wrap {
+      flex-shrink: 0;
+      width: 56px;
+      height: 56px;
+      background: #ffffff;
+      border-radius: 14px;
+      border: 1px solid #c8dff0;
+      box-shadow: 0 2px 6px rgba(23,118,188,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .topic-icon-wrap img {
+      width: 40px;
+      height: 40px;
+      object-fit: contain;
+    }
+
+    .topic-hero-text { flex: 1; }
+
+    .topic-label {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #1776bc;
+      margin-bottom: 4px;
+    }
+
+    .topic-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 1.9rem;
+      font-weight: 600;
+      color: #1e2a35;
+      line-height: 1.2;
+      margin: 0 0 8px;
+    }
+
+    .topic-description {
+      font-size: 0.93rem;
+      color: #4a5a6a;
+      line-height: 1.65;
+      max-width: 680px;
+      margin: 0;
+    }
+
+    /* ── Divider ─────────────────────────────────────────────── */
+    .topic-divider {
+      max-width: 1100px;
+      margin: 0 auto 4px;
+      padding: 0 24px;
+      border: none;
+      border-top: 1px solid #d8e8f4;
+    }
+
+    /* ── Indicator count label ───────────────────────────────── */
+    .indicator-count {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 12px 24px 4px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: #707a83;
+    }
+
+    /* ── Dashboard grid ──────────────────────────────────────── */
+    .dashboard {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 8px 24px 64px;
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    }
+
+    /* ── Footer ──────────────────────────────────────────────── */
+    .page-footer {
+      border-top: 1px solid #d8e8f4;
+      background: #fff;
+      padding: 20px 24px;
+      text-align: center;
+      font-size: 0.78rem;
+      color: #707a83;
+    }
+
+    .page-footer a {
+      color: #1776bc;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .page-footer a:hover { text-decoration: underline; }
+
+    /* ── Mobile ──────────────────────────────────────────────── */
+    @media (max-width: 600px) {
+      .banner { padding: 16px; gap: 12px; }
+      .logo-header { height: 38px; }
+      .banner-site-title { font-size: 1.1rem; }
+      .topic-hero { padding: 16px 16px 20px; gap: 14px; }
+      .topic-title { font-size: 1.5rem; }
+      .dashboard { padding: 8px 12px 48px; gap: 0.75rem; }
+      .breadcrumb,
+      .indicator-count { padding-left: 16px; padding-right: 16px; }
+    }
+  </style>
 </head>
+
 <body>
 
-<h1>Environment and Health</h1>
-<p>Paragraph describing the topic of environment and health.</p>
+  <!-- ── Header ────────────────────────────────────────────── -->
+  <header class="banner-container">
+    <div class="banner">
+      <a href="/">
+        <img src="resources/cropped_logo.png" alt="LDCPH Logo" class="logo-header">
+      </a>
+      <div class="banner-text">
+        <div class="banner-eyebrow">Lawrence-Douglas County Public Health</div>
+        <div class="banner-site-title">Health Indicator Dashboard</div>
+      </div>
+    </div>
+  </header>
 
-<div class="tiles">
+  <!-- ── Breadcrumb ────────────────────────────────────────── -->
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <a href="index.html">Home</a>
+    <span class="breadcrumb-sep">›</span>
+    <span>Environment and Health</span>
+  </nav>
+
+  <!-- ── Topic hero ────────────────────────────────────────── -->
+  <div class="topic-hero">
     
-        <div class="indicator-card">
+    <div class="topic-hero-text">
+      <div class="topic-label">Health Topic</div>
+      <h1 class="topic-title">Environment and Health</h1>
+      
+        <p class="topic-description">Paragraph describing the topic of environment and health.</p>
+      
+    </div>
+  </div>
+
+  <hr class="topic-divider">
+
+  <!-- ── Indicator count ───────────────────────────────────── -->
+  <div class="indicator-count">
+    3 indicators
+  </div>
+
+  <!-- ── Tile grid ─────────────────────────────────────────── -->
+  <div class="dashboard">
+    
+      <div class="indicator-card">
 
   <h3 class="indicator-title">
     Cold-related ED Visits (Annual)
   </h3>
 
-  <!-- Tabs -->
-  <input type="radio" name="tab-2" id="status-2" checked>
-  <label for="status-2">Current</label>
+  <!-- Tab radio inputs must precede .content so the CSS sibling selectors work -->
+  <input type="radio"
+         name="tab-2"
+         id="status-2"
+         checked>
+  <input type="radio"
+         name="tab-2"
+         id="tbl-2">
+  <input type="radio"
+         name="tab-2"
+         id="info-2">
 
-  <input type="radio" name="tab-2" id="trend-2">
-  <label for="trend-2">Trend</label>
-
-  <input type="radio" name="tab-2" id="info-2">
-  <label for="info-2">Info</label>
+  <div class="view-selector">
+    <label for="status-2">Current</label>
+    <label for="tbl-2">Table</label>
+    <label for="info-2">Info</label>
+  </div>
 
   <div class="content">
 
-    <!-- STATUS -->
-    <div class="tab-content status">
-      <div class="stat-number">
-        68 ED Visits
-      </div>
-      <div class="stat-date">
-        2025-01-01
-      </div>
-    </div>
+    <!-- CURRENT -->
+    <div class="tab-content current">
 
-    <!-- TREND -->
-    <div class="tab-content trend">
-      
+      <div class="metric-header">
+        <div class="stat-number">68 ED Visits</div>
+        <div class="trend-indicator bad">
+          ▲
+        </div>
+      </div>
+
+      <div class="stat-date">2025-01</div>
+
+      <div class="dashboard-tile">
+        
         <svg viewBox="0 0 100 40" class="sparkline">
-            <polyline fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    points="4.0,36.0 14.222222222222221,35.05882352941177 24.444444444444443,26.588235294117645 34.666666666666664,29.411764705882355 44.888888888888886,19.058823529411764 55.11111111111111,26.588235294117645 65.33333333333333,8.705882352941178 75.55555555555554,16.235294117647058 85.77777777777777,4.9411764705882355 96.0,4.0" />
-            <circle cx="96.0" cy="4.0"
-                    r="3"
-                    fill="currentColor" />
+            <polyline
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                points="4.0,36.0 14.222222222222221,35.05882352941177 24.444444444444443,26.588235294117645 34.666666666666664,29.411764705882355 44.888888888888886,19.058823529411764 55.11111111111111,26.588235294117645 65.33333333333333,8.705882352941178 75.55555555555554,16.235294117647058 85.77777777777777,4.9411764705882355 96.0,4.0"
+            />
+
+            
+                <circle
+                    cx="4.0"
+                    cy="36.0"
+                    r="5"
+                    fill="transparent"
+                    class="spark-point"
+                    data-x="2016-01"
+                    data-y="34.0"
+                />
+            
+                <circle
+                    cx="14.222222222222221"
+                    cy="35.05882352941177"
+                    r="5"
+                    fill="transparent"
+                    class="spark-point"
+                    data-x="2017-01"
+                    data-y="35.0"
+                />
+            
+                <circle
+                    cx="24.444444444444443"
+                    cy="26.588235294117645"
+                    r="5"
+                    fill="transparent"
+                    class="spark-point"
+                    data-x="2018-01"
+                    data-y="44.0"
+                />
+            
+                <circle
+                    cx="34.666666666666664"
+                    cy="29.411764705882355"
+                    r="5"
+                    fill="transparent"
+                    class="spark-point"
+                    data-x="2019-01"
+                    data-y="41.0"
+                />
+            
+                <circle
+                    cx="44.888888888888886"
+                    cy="19.058823529411764"
+                    r="5"
+                    fill="transparent"
+                    class="spark-point"
+                    data-x="2020-01"
+                    data-y="52.0"
+                />
+            
+                <circle
+                    cx="55.11111111111111"
+                    cy="26.588235294117645"
+                    r="5"
+                    fill="transparent"
+                    class="spark-point"
+                    data-x="2021-01"
+                    data-y="44.0"
+                />
+            
+                <circle
+                    cx="65.33333333333333"
+                    cy="8.705882352941178"
+                    r="5"
+                    fill="transparent"
+                    class="spark-point"
+                    data-x="2022-01"
+                    data-y="63.0"
+                />
+            
+                <circle
+                    cx="75.55555555555554"
+                    cy="16.235294117647058"
+                    r="5"
+                    fill="transparent"
+                    class="spark-point"
+                    data-x="2023-01"
+                    data-y="55.0"
+                />
+            
+                <circle
+                    cx="85.77777777777777"
+                    cy="4.9411764705882355"
+                    r="5"
+                    fill="transparent"
+                    class="spark-point"
+                    data-x="2024-01"
+                    data-y="67.0"
+                />
+            
+                <circle
+                    cx="96.0"
+                    cy="4.0"
+                    r="5"
+                    fill="transparent"
+                    class="spark-point"
+                    data-x="2025-01"
+                    data-y="68.0"
+                />
+            
+
+            <circle
+                cx="96.0"
+                cy="4.0"
+                r="3"
+                fill="currentColor"
+            />
         </svg>
         
+        <div class="spark-tooltip"></div>
+      </div>
+
+      
+        <p class="current-description">Cold outdoor temperatures can increase risk for health emergencies such as hypothermia and frostbite. People higher risk for cold-related illnesses include older adults, infancts, people experiencing houselessness or with inadequate home heating and participants in outdoor work or other activities.</p>
+      
+
+    </div>
+
+    <!-- TABLE -->
+    <div class="tab-content table">
+      
+        <div class="table-units">ED Visits</div>
+      
+      <div class="sideways-tables">
+        
+          <div><table border="1" class="dataframe indicator-table">
+  <tbody>
+    <tr>
+      <td>01-25</td>
+      <td>68.0</td>
+    </tr>
+    <tr>
+      <td>01-24</td>
+      <td>67.0</td>
+    </tr>
+    <tr>
+      <td>01-23</td>
+      <td>55.0</td>
+    </tr>
+    <tr>
+      <td>01-22</td>
+      <td>63.0</td>
+    </tr>
+    <tr>
+      <td>01-21</td>
+      <td>44.0</td>
+    </tr>
+  </tbody>
+</table></div>
+        
+          <div><table border="1" class="dataframe indicator-table">
+  <tbody>
+    <tr>
+      <td>01-20</td>
+      <td>52.0</td>
+    </tr>
+    <tr>
+      <td>01-19</td>
+      <td>41.0</td>
+    </tr>
+    <tr>
+      <td>01-18</td>
+      <td>44.0</td>
+    </tr>
+    <tr>
+      <td>01-17</td>
+      <td>35.0</td>
+    </tr>
+    <tr>
+      <td>01-16</td>
+      <td>34.0</td>
+    </tr>
+  </tbody>
+</table></div>
+        
+      </div>
     </div>
 
     <!-- INFO -->
     <div class="tab-content info">
       
-        <p>Paragraph describing the indicator</p>
+        <div class="methodology-label">Source</div>
+        ESSENCE 
+          
+        
       
 
       
-        <p class="methodology">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum
-        </p>
+      
       
     </div>
 
   </div>
 
 </div>
+
+<script>
+(function () {
+  /* Scope to the last injected tile so multiple tiles on one page don't conflict */
+  var tiles = document.querySelectorAll(".dashboard-tile");
+  var lastTile = tiles[tiles.length - 1];
+  if (!lastTile) return;
+
+  var tooltip = lastTile.querySelector(".spark-tooltip");
+  if (!tooltip) return;
+
+  function showTooltip(point) {
+    tooltip.textContent = point.dataset.x + ": " + point.dataset.y;
+    tooltip.style.display = "block";
+  }
+
+  function moveTooltip(clientX, clientY) {
+    tooltip.style.left = (clientX + 12) + "px";
+    tooltip.style.top  = (clientY - 36) + "px";
+  }
+
+  function hideTooltip() {
+    tooltip.style.display = "none";
+  }
+
+  lastTile.querySelectorAll(".spark-point").forEach(function (point) {
+
+    /* Mouse */
+    point.addEventListener("mouseenter", function () { showTooltip(point); });
+    point.addEventListener("mousemove",  function (e) { moveTooltip(e.clientX, e.clientY); });
+    point.addEventListener("mouseleave", hideTooltip);
+
+    /* Touch — fires on mobile where mouseenter doesn't */
+    point.addEventListener("touchstart", function (e) {
+      e.preventDefault();               /* suppress ghost click */
+      var t = e.touches[0];
+      showTooltip(point);
+      moveTooltip(t.clientX, t.clientY);
+    }, { passive: false });
+
+    point.addEventListener("touchmove", function (e) {
+      var t = e.touches[0];
+      moveTooltip(t.clientX, t.clientY);
+    });
+
+    point.addEventListener("touchend", function () {
+      setTimeout(hideTooltip, 1200);    /* brief delay so user can read it */
+    });
+
+  });
+}());
+</script>
     
-        <div class="indicator-card">
+      <div class="indicator-card">
 
   <h3 class="indicator-title">
     Heat-related ED Visits (Annual)
   </h3>
 
-  <!-- Tabs -->
-  <input type="radio" name="tab-1" id="status-1" checked>
-  <label for="status-1">Current</label>
+  <!-- Tab radio inputs must precede .content so the CSS sibling selectors work -->
+  <input type="radio"
+         name="tab-1"
+         id="status-1"
+         checked>
+  <input type="radio"
+         name="tab-1"
+         id="tbl-1">
+  <input type="radio"
+         name="tab-1"
+         id="info-1">
 
-  <input type="radio" name="tab-1" id="trend-1">
-  <label for="trend-1">Trend</label>
-
-  <input type="radio" name="tab-1" id="info-1">
-  <label for="info-1">Info</label>
+  <div class="view-selector">
+    <label for="status-1">Current</label>
+    <label for="tbl-1">Table</label>
+    <label for="info-1">Info</label>
+  </div>
 
   <div class="content">
 
-    <!-- STATUS -->
-    <div class="tab-content status">
-      <div class="stat-number">
-        83 ED Visits
-      </div>
-      <div class="stat-date">
-        2025-01-01
-      </div>
-    </div>
+    <!-- CURRENT -->
+    <div class="tab-content current">
 
-    <!-- TREND -->
-    <div class="tab-content trend">
-      
+      <div class="metric-header">
+        <div class="stat-number">83 ED Visits</div>
+        <div class="trend-indicator bad">
+          ▲
+        </div>
+      </div>
+
+      <div class="stat-date">2025-01</div>
+
+      <div class="dashboard-tile">
+        
         <svg viewBox="0 0 100 40" class="sparkline">
-            <polyline fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    points="4.0,25.894736842105264 14.222222222222221,30.385964912280702 24.444444444444443,14.666666666666668 34.666666666666664,28.140350877192983 44.888888888888886,36.0 55.11111111111111,18.596491228070175 65.33333333333333,11.859649122807017 75.55555555555554,7.92982456140351 85.77777777777777,4.0 96.0,7.368421052631579" />
-            <circle cx="96.0" cy="7.368421052631579"
-                    r="3"
-                    fill="currentColor" />
+            <polyline
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                points="4.0,25.894736842105264 14.222222222222221,30.385964912280702 24.444444444444443,14.666666666666668 34.666666666666664,28.140350877192983 44.888888888888886,36.0 55.11111111111111,18.596491228070175 65.33333333333333,11.859649122807017 75.55555555555554,7.92982456140351 85.77777777777777,4.0 96.0,7.368421052631579"
+            />
+
+            
+                <circle
+                    cx="4.0"
+                    cy="25.894736842105264"
+                    r="5"
+                    fill="transparent"
+                    class="spark-point"
+                    data-x="2016-01"
+                    data-y="50.0"
+                />
+            
+                <circle
+                    cx="14.222222222222221"
+                    cy="30.385964912280702"
+                    r="5"
+                    fill="transparent"
+                    class="spark-point"
+                    data-x="2017-01"
+                    data-y="42.0"
+                />
+            
+                <circle
+                    cx="24.444444444444443"
+                    cy="14.666666666666668"
+                    r="5"
+                    fill="transparent"
+                    class="spark-point"
+                    data-x="2018-01"
+                    data-y="70.0"
+                />
+            
+                <circle
+                    cx="34.666666666666664"
+                    cy="28.140350877192983"
+                    r="5"
+                    fill="transparent"
+                    class="spark-point"
+                    data-x="2019-01"
+                    data-y="46.0"
+                />
+            
+                <circle
+                    cx="44.888888888888886"
+                    cy="36.0"
+                    r="5"
+                    fill="transparent"
+                    class="spark-point"
+                    data-x="2020-01"
+                    data-y="32.0"
+                />
+            
+                <circle
+                    cx="55.11111111111111"
+                    cy="18.596491228070175"
+                    r="5"
+                    fill="transparent"
+                    class="spark-point"
+                    data-x="2021-01"
+                    data-y="63.0"
+                />
+            
+                <circle
+                    cx="65.33333333333333"
+                    cy="11.859649122807017"
+                    r="5"
+                    fill="transparent"
+                    class="spark-point"
+                    data-x="2022-01"
+                    data-y="75.0"
+                />
+            
+                <circle
+                    cx="75.55555555555554"
+                    cy="7.92982456140351"
+                    r="5"
+                    fill="transparent"
+                    class="spark-point"
+                    data-x="2023-01"
+                    data-y="82.0"
+                />
+            
+                <circle
+                    cx="85.77777777777777"
+                    cy="4.0"
+                    r="5"
+                    fill="transparent"
+                    class="spark-point"
+                    data-x="2024-01"
+                    data-y="89.0"
+                />
+            
+                <circle
+                    cx="96.0"
+                    cy="7.368421052631579"
+                    r="5"
+                    fill="transparent"
+                    class="spark-point"
+                    data-x="2025-01"
+                    data-y="83.0"
+                />
+            
+
+            <circle
+                cx="96.0"
+                cy="7.368421052631579"
+                r="3"
+                fill="currentColor"
+            />
         </svg>
         
+        <div class="spark-tooltip"></div>
+      </div>
+
+      
+        <p class="current-description">High outdoor temperatures can lead to health emergencies cramps, heat exhaution and heat stroke. Heat can also lead to cardiovascular and renal system problems increasing risk for heart attack, stroke and kidney injury. </p>
+      
+
+    </div>
+
+    <!-- TABLE -->
+    <div class="tab-content table">
+      
+        <div class="table-units">ED Visits</div>
+      
+      <div class="sideways-tables">
+        
+          <div><table border="1" class="dataframe indicator-table">
+  <tbody>
+    <tr>
+      <td>01-25</td>
+      <td>83.0</td>
+    </tr>
+    <tr>
+      <td>01-24</td>
+      <td>89.0</td>
+    </tr>
+    <tr>
+      <td>01-23</td>
+      <td>82.0</td>
+    </tr>
+    <tr>
+      <td>01-22</td>
+      <td>75.0</td>
+    </tr>
+    <tr>
+      <td>01-21</td>
+      <td>63.0</td>
+    </tr>
+  </tbody>
+</table></div>
+        
+          <div><table border="1" class="dataframe indicator-table">
+  <tbody>
+    <tr>
+      <td>01-20</td>
+      <td>32.0</td>
+    </tr>
+    <tr>
+      <td>01-19</td>
+      <td>46.0</td>
+    </tr>
+    <tr>
+      <td>01-18</td>
+      <td>70.0</td>
+    </tr>
+    <tr>
+      <td>01-17</td>
+      <td>42.0</td>
+    </tr>
+    <tr>
+      <td>01-16</td>
+      <td>50.0</td>
+    </tr>
+  </tbody>
+</table></div>
+        
+      </div>
     </div>
 
     <!-- INFO -->
     <div class="tab-content info">
       
-        <p>This is a paragraph description of the indicator. </p>
+        <div class="methodology-label">Source</div>
+        ESSENCE 
+          
+        
       
 
       
-        <p class="methodology">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum
-        </p>
+      <div class="methodology-label">ESSENCE Query</div>
+      See the <a href="documentation.html">documentation</a> for details on essence query parameters.
+      
+      
       
     </div>
 
   </div>
 
 </div>
+
+<script>
+(function () {
+  /* Scope to the last injected tile so multiple tiles on one page don't conflict */
+  var tiles = document.querySelectorAll(".dashboard-tile");
+  var lastTile = tiles[tiles.length - 1];
+  if (!lastTile) return;
+
+  var tooltip = lastTile.querySelector(".spark-tooltip");
+  if (!tooltip) return;
+
+  function showTooltip(point) {
+    tooltip.textContent = point.dataset.x + ": " + point.dataset.y;
+    tooltip.style.display = "block";
+  }
+
+  function moveTooltip(clientX, clientY) {
+    tooltip.style.left = (clientX + 12) + "px";
+    tooltip.style.top  = (clientY - 36) + "px";
+  }
+
+  function hideTooltip() {
+    tooltip.style.display = "none";
+  }
+
+  lastTile.querySelectorAll(".spark-point").forEach(function (point) {
+
+    /* Mouse */
+    point.addEventListener("mouseenter", function () { showTooltip(point); });
+    point.addEventListener("mousemove",  function (e) { moveTooltip(e.clientX, e.clientY); });
+    point.addEventListener("mouseleave", hideTooltip);
+
+    /* Touch — fires on mobile where mouseenter doesn't */
+    point.addEventListener("touchstart", function (e) {
+      e.preventDefault();               /* suppress ghost click */
+      var t = e.touches[0];
+      showTooltip(point);
+      moveTooltip(t.clientX, t.clientY);
+    }, { passive: false });
+
+    point.addEventListener("touchmove", function (e) {
+      var t = e.touches[0];
+      moveTooltip(t.clientX, t.clientY);
+    });
+
+    point.addEventListener("touchend", function () {
+      setTimeout(hideTooltip, 1200);    /* brief delay so user can read it */
+    });
+
+  });
+}());
+</script>
     
+      <div class="indicator-card">
+
+  <h3 class="indicator-title">
+    Infant Mortality Rate
+  </h3>
+
+  <!-- Tab radio inputs must precede .content so the CSS sibling selectors work -->
+  <input type="radio"
+         name="tab-3"
+         id="status-3"
+         checked>
+  <input type="radio"
+         name="tab-3"
+         id="tbl-3">
+  <input type="radio"
+         name="tab-3"
+         id="info-3">
+
+  <div class="view-selector">
+    <label for="status-3">Current</label>
+    <label for="tbl-3">Table</label>
+    <label for="info-3">Info</label>
+  </div>
+
+  <div class="content">
+
+    <!-- CURRENT -->
+    <div class="tab-content current">
+
+      <div class="metric-header">
+        <div class="stat-number">4.1 per 1,000 live births (95% CI: 2.5 - 6.3)</div>
+        <div class="trend-indicator good">
+          ▼
+        </div>
+      </div>
+
+      <div class="stat-date">2019-2023</div>
+
+      <div class="dashboard-tile">
+        
+        <svg viewBox="0 0 100 40" class="sparkline">
+            <polyline
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                points="4.0,36.0 14.222222222222221,27.351351351351354 24.444444444444443,24.756756756756758 34.666666666666664,14.378378378378379 44.888888888888886,6.5945945945946 55.11111111111111,4.0 65.33333333333333,9.189189189189193 75.55555555555554,6.5945945945946 85.77777777777777,26.48648648648649 96.0,23.891891891891895"
+            />
+
+            
+                <circle
+                    cx="4.0"
+                    cy="36.0"
+                    r="5"
+                    fill="transparent"
+                    class="spark-point"
+                    data-x="2009-2013"
+                    data-y="2.7"
+                />
+            
+                <circle
+                    cx="14.222222222222221"
+                    cy="27.351351351351354"
+                    r="5"
+                    fill="transparent"
+                    class="spark-point"
+                    data-x="2010-2014"
+                    data-y="3.7"
+                />
+            
+                <circle
+                    cx="24.444444444444443"
+                    cy="24.756756756756758"
+                    r="5"
+                    fill="transparent"
+                    class="spark-point"
+                    data-x="2011-2015"
+                    data-y="4.0"
+                />
+            
+                <circle
+                    cx="34.666666666666664"
+                    cy="14.378378378378379"
+                    r="5"
+                    fill="transparent"
+                    class="spark-point"
+                    data-x="2012-2016"
+                    data-y="5.2"
+                />
+            
+                <circle
+                    cx="44.888888888888886"
+                    cy="6.5945945945946"
+                    r="5"
+                    fill="transparent"
+                    class="spark-point"
+                    data-x="2013-2017"
+                    data-y="6.1"
+                />
+            
+                <circle
+                    cx="55.11111111111111"
+                    cy="4.0"
+                    r="5"
+                    fill="transparent"
+                    class="spark-point"
+                    data-x="2014-2018"
+                    data-y="6.4"
+                />
+            
+                <circle
+                    cx="65.33333333333333"
+                    cy="9.189189189189193"
+                    r="5"
+                    fill="transparent"
+                    class="spark-point"
+                    data-x="2015-2019"
+                    data-y="5.8"
+                />
+            
+                <circle
+                    cx="75.55555555555554"
+                    cy="6.5945945945946"
+                    r="5"
+                    fill="transparent"
+                    class="spark-point"
+                    data-x="2016-2020"
+                    data-y="6.1"
+                />
+            
+                <circle
+                    cx="85.77777777777777"
+                    cy="26.48648648648649"
+                    r="5"
+                    fill="transparent"
+                    class="spark-point"
+                    data-x="2018-2022"
+                    data-y="3.8"
+                />
+            
+                <circle
+                    cx="96.0"
+                    cy="23.891891891891895"
+                    r="5"
+                    fill="transparent"
+                    class="spark-point"
+                    data-x="2019-2023"
+                    data-y="4.1"
+                />
+            
+
+            <circle
+                cx="96.0"
+                cy="23.891891891891895"
+                r="3"
+                fill="currentColor"
+            />
+        </svg>
+        
+        <div class="spark-tooltip"></div>
+      </div>
+
+      
+        <p class="current-description">Infant mortality is one of the basic indicators of the health of a community. Causes of infant death include birth defects, pre-term delivery, low birth weight and pregnancy complications.</p>
+      
+
+    </div>
+
+    <!-- TABLE -->
+    <div class="tab-content table">
+      
+        <div class="table-units">per 1,000 live births</div>
+      
+      <div class="sideways-tables">
+        
+          <div><table border="1" class="dataframe indicator-table">
+  <tbody>
+    <tr>
+      <td>2019-2023</td>
+      <td>4.1</td>
+    </tr>
+    <tr>
+      <td>2018-2022</td>
+      <td>3.8</td>
+    </tr>
+    <tr>
+      <td>2016-2020</td>
+      <td>6.1</td>
+    </tr>
+    <tr>
+      <td>2015-2019</td>
+      <td>5.8</td>
+    </tr>
+    <tr>
+      <td>2014-2018</td>
+      <td>6.4</td>
+    </tr>
+  </tbody>
+</table></div>
+        
+          <div><table border="1" class="dataframe indicator-table">
+  <tbody>
+    <tr>
+      <td>2013-2017</td>
+      <td>6.1</td>
+    </tr>
+    <tr>
+      <td>2012-2016</td>
+      <td>5.2</td>
+    </tr>
+    <tr>
+      <td>2011-2015</td>
+      <td>4.0</td>
+    </tr>
+    <tr>
+      <td>2010-2014</td>
+      <td>3.7</td>
+    </tr>
+    <tr>
+      <td>2009-2013</td>
+      <td>2.7</td>
+    </tr>
+  </tbody>
+</table></div>
+        
+      </div>
+    </div>
+
+    <!-- INFO -->
+    <div class="tab-content info">
+      
+        <div class="methodology-label">Source</div>
+        Vital Statistics 
+          
+        
+      
+
+      
+      
+        <div class="methodology-label">Methodology</div>
+        <p class="methodology">Available on Kansas Health Matters.</p>
+      
+      
+      <div class="methodology-label">Related Resources</div>
+      
+        
+          <i><a href="https://www.kansashealthmatters.org/indicators/index/view?indicatorId=1364&amp;localeId=962" target="_blank">KansasHealthMatters: Infant Mortality Rate, Douglas County</a></i> - The KansasHealthMatters page for the Douglas County Infant Mortality Rate provides additional benchmarks and trend analysis.
+        
+      
+      
+      
+    </div>
+
+  </div>
+
 </div>
+
+<script>
+(function () {
+  /* Scope to the last injected tile so multiple tiles on one page don't conflict */
+  var tiles = document.querySelectorAll(".dashboard-tile");
+  var lastTile = tiles[tiles.length - 1];
+  if (!lastTile) return;
+
+  var tooltip = lastTile.querySelector(".spark-tooltip");
+  if (!tooltip) return;
+
+  function showTooltip(point) {
+    tooltip.textContent = point.dataset.x + ": " + point.dataset.y;
+    tooltip.style.display = "block";
+  }
+
+  function moveTooltip(clientX, clientY) {
+    tooltip.style.left = (clientX + 12) + "px";
+    tooltip.style.top  = (clientY - 36) + "px";
+  }
+
+  function hideTooltip() {
+    tooltip.style.display = "none";
+  }
+
+  lastTile.querySelectorAll(".spark-point").forEach(function (point) {
+
+    /* Mouse */
+    point.addEventListener("mouseenter", function () { showTooltip(point); });
+    point.addEventListener("mousemove",  function (e) { moveTooltip(e.clientX, e.clientY); });
+    point.addEventListener("mouseleave", hideTooltip);
+
+    /* Touch — fires on mobile where mouseenter doesn't */
+    point.addEventListener("touchstart", function (e) {
+      e.preventDefault();               /* suppress ghost click */
+      var t = e.touches[0];
+      showTooltip(point);
+      moveTooltip(t.clientX, t.clientY);
+    }, { passive: false });
+
+    point.addEventListener("touchmove", function (e) {
+      var t = e.touches[0];
+      moveTooltip(t.clientX, t.clientY);
+    });
+
+    point.addEventListener("touchend", function () {
+      setTimeout(hideTooltip, 1200);    /* brief delay so user can read it */
+    });
+
+  });
+}());
+</script>
+    
+  </div>
+
+  <!-- ── Footer ────────────────────────────────────────────── -->
+  <footer class="page-footer">
+    Lawrence-Douglas County Public Health &mdash;
+    <a href="all_indicators.html">View all indicators</a>
+  </footer>
 
 </body>
 </html>
