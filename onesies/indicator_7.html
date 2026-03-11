@@ -3,18 +3,20 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Behavioral Health — Lawrence-Douglas County Health Dashboard</title>
-  <link rel="stylesheet" href="css/dashboard.css">
+  <title>Suicide Mortality Rate — Lawrence-Douglas County Health Dashboard</title>
+
+  <!-- One level up because this file lives in export/onesies/ -->
+  <link rel="stylesheet" href="../css/dashboard.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
 
   <style>
-    /* ── Page-level overrides for the topic page ─────────────── */
     body {
       font-family: 'Source Sans 3', 'Segoe UI', sans-serif;
       background: #f5f9fd;
       color: #1e2a35;
+      min-height: 100vh;
     }
 
     /* ── Header ──────────────────────────────────────────────── */
@@ -27,24 +29,22 @@
     }
 
     .banner {
-      max-width: 1100px;
+      max-width: 860px;
       margin: 0 auto;
-      padding: 20px 24px;
+      padding: 18px 24px;
       display: flex;
       align-items: center;
-      gap: 20px;
+      gap: 18px;
     }
 
     .logo-header {
-      height: 48px;
+      height: 44px;
       width: auto;
       display: block;
       flex-shrink: 0;
       filter: brightness(0) invert(1);
       opacity: 0.95;
     }
-
-    .banner-text { flex: 1; }
 
     .banner-eyebrow {
       font-size: 0.68rem;
@@ -57,7 +57,7 @@
 
     .banner-site-title {
       font-family: 'Playfair Display', Georgia, serif;
-      font-size: 1.4rem;
+      font-size: 1.3rem;
       font-weight: 600;
       color: #ffffff;
       line-height: 1.2;
@@ -65,7 +65,7 @@
 
     /* ── Breadcrumb ──────────────────────────────────────────── */
     .breadcrumb {
-      max-width: 1100px;
+      max-width: 860px;
       margin: 0 auto;
       padding: 14px 24px 0;
       font-size: 0.8rem;
@@ -82,114 +82,91 @@
     }
 
     .breadcrumb a:hover { text-decoration: underline; }
+    .breadcrumb-sep { color: #a0ddfc; }
 
-    .breadcrumb-sep {
-      color: #a0ddfc;
-      font-size: 0.9rem;
-    }
-
-    /* ── Topic Hero ──────────────────────────────────────────── */
-    .topic-hero {
-      max-width: 1100px;
+    /* ── Page body ───────────────────────────────────────────── */
+    .page-body {
+      max-width: 860px;
       margin: 0 auto;
-      padding: 20px 24px 28px;
+      padding: 24px 24px 64px;
+      display: grid;
+      /* Tile is capped at 400px; left column gives it breathing room
+         on wider screens without making it stretch uncomfortably wide */
+      grid-template-columns: minmax(0, 420px) 1fr;
+      gap: 32px;
+      align-items: start;
+    }
+
+    /* ── Indicator sidebar (topics, groups, back link) ───────── */
+    .indicator-meta {
       display: flex;
-      align-items: flex-start;
-      gap: 18px;
+      flex-direction: column;
+      gap: 20px;
     }
 
-    .topic-icon-wrap {
-      flex-shrink: 0;
-      width: 56px;
-      height: 56px;
-      background: #ffffff;
-      border-radius: 14px;
-      border: 1px solid #c8dff0;
-      box-shadow: 0 2px 6px rgba(23,118,188,0.1);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-    }
-
-    .topic-icon-wrap img {
-      width: 40px;
-      height: 40px;
-      object-fit: contain;
-    }
-
-    .topic-hero-text { flex: 1; }
-
-    .topic-label {
+    .meta-block-label {
       font-size: 0.68rem;
       font-weight: 700;
       letter-spacing: 0.1em;
       text-transform: uppercase;
-      color: #1776bc;
-      margin-bottom: 4px;
-    }
-
-    .topic-title {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: 1.9rem;
-      font-weight: 600;
-      color: #1e2a35;
-      line-height: 1.2;
-      margin: 0 0 8px;
-    }
-
-    .topic-description {
-      font-size: 0.93rem;
-      color: #4a5a6a;
-      line-height: 1.65;
-      max-width: 680px;
-      margin: 0;
-    }
-
-    /* ── Divider ─────────────────────────────────────────────── */
-    .topic-divider {
-      max-width: 1100px;
-      margin: 0 auto 4px;
-      padding: 0 24px;
-      border: none;
-      border-top: 1px solid #d8e8f4;
-    }
-
-    /* ── Indicator count label ───────────────────────────────── */
-    .indicator-count {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 12px 24px 4px;
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 0.07em;
-      text-transform: uppercase;
       color: #707a83;
+      margin-bottom: 8px;
     }
 
-    /* ── Indicator card override ─────────────────────────────── */
-    /* dashboard.css sets width:100% / max-width:400px which      */
-    /* collapses grid column-gap; let the grid control sizing     */
-    .indicator-card {
-      width: auto;
-      max-width: none;
+    .tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
     }
 
-    /* ── Dashboard grid ──────────────────────────────────────── */
-    .dashboard {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 8px 24px 64px;
-      display: grid;
-      gap: 1rem;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    .tag {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      white-space: nowrap;
     }
+
+    .tag-topic {
+      background: #e8f4fd;
+      color: #0f5a96;
+      border: 1px solid #a0ddfc;
+    }
+
+    .tag-group {
+      background: #fff3eb;
+      color: #b84e0d;
+      border: 1px solid #f9bfa0;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #1776bc;
+      text-decoration: none;
+      padding: 8px 0;
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.15s;
+    }
+
+    .back-link:hover { border-bottom-color: #a0ddfc; }
+
+    .back-link svg {
+      flex-shrink: 0;
+      transition: transform 0.15s;
+    }
+
+    .back-link:hover svg { transform: translateX(-2px); }
 
     /* ── Footer ──────────────────────────────────────────────── */
     .page-footer {
       border-top: 1px solid #d8e8f4;
       background: #fff;
-      padding: 20px 24px;
+      padding: 18px 24px;
       text-align: center;
       font-size: 0.78rem;
       color: #707a83;
@@ -203,16 +180,19 @@
 
     .page-footer a:hover { text-decoration: underline; }
 
-    /* ── Mobile ──────────────────────────────────────────────── */
-    @media (max-width: 600px) {
-      .banner { padding: 16px; gap: 12px; }
-      .logo-header { height: 38px; }
-      .banner-site-title { font-size: 1.1rem; }
-      .topic-hero { padding: 16px 16px 20px; gap: 14px; }
-      .topic-title { font-size: 1.5rem; }
-      .dashboard { padding: 8px 12px 48px; gap: 0.75rem; }
-      .breadcrumb,
-      .indicator-count { padding-left: 16px; padding-right: 16px; }
+    /* ── Mobile: stack tile above meta ──────────────────────── */
+    @media (max-width: 640px) {
+      .banner { padding: 14px 16px; }
+      .logo-header { height: 36px; }
+      .breadcrumb { padding: 12px 16px 0; }
+      .page-body {
+        grid-template-columns: 1fr;
+        padding: 16px 16px 48px;
+        gap: 20px;
+      }
+      /* Tile first on mobile, meta below */
+      .tile-col  { order: 1; }
+      .meta-col  { order: 2; }
     }
   </style>
 </head>
@@ -222,10 +202,10 @@
   <!-- ── Header ────────────────────────────────────────────── -->
   <header class="banner-container">
     <div class="banner">
-      <a href="/">
-        <img src="resources/cropped_logo.png" alt="LDCPH Logo" class="logo-header">
+      <a href="../index.html">
+        <img src="../resources/cropped_logo.png" alt="LDCPH Logo" class="logo-header">
       </a>
-      <div class="banner-text">
+      <div>
         <div class="banner-eyebrow">Lawrence-Douglas County Public Health</div>
         <div class="banner-site-title">Health Indicator Dashboard</div>
       </div>
@@ -234,55 +214,38 @@
 
   <!-- ── Breadcrumb ────────────────────────────────────────── -->
   <nav class="breadcrumb" aria-label="Breadcrumb">
-    <a href="index.html">Home</a>
+    <a href="../all_indicators.html">All indicators</a>
     <span class="breadcrumb-sep">›</span>
-    <span>Behavioral Health</span>
+    <span>Suicide Mortality Rate</span>
   </nav>
 
-  <!-- ── Topic hero ────────────────────────────────────────── -->
-  <div class="topic-hero">
-    
-    <div class="topic-hero-text">
-      <div class="topic-label">Health Topic</div>
-      <h1 class="topic-title">Behavioral Health</h1>
-      
-        <p class="topic-description">Paragraph describing the topic of chronic disease.</p>
-      
-    </div>
-  </div>
+  <!-- ── Body ──────────────────────────────────────────────── -->
+  <div class="page-body">
 
-  <hr class="topic-divider">
-
-  <!-- ── Indicator count ───────────────────────────────────── -->
-  <div class="indicator-count">
-    1 indicator
-  </div>
-
-  <!-- ── Tile grid ─────────────────────────────────────────── -->
-  <div class="dashboard">
-    
+    <!-- Tile column -->
+    <div class="tile-col">
       <div class="indicator-card">
 
   <h3 class="indicator-title">
-    Cold-related ED Visits (Annual)
+    Suicide Mortality Rate
   </h3>
 
   <!-- Tab radio inputs must precede .content so the CSS sibling selectors work -->
   <input type="radio"
-         name="tab-2"
-         id="status-2"
+         name="tab-7"
+         id="status-7"
          checked>
   <input type="radio"
-         name="tab-2"
-         id="tbl-2">
+         name="tab-7"
+         id="tbl-7">
   <input type="radio"
-         name="tab-2"
-         id="info-2">
+         name="tab-7"
+         id="info-7">
 
   <div class="view-selector">
-    <label for="status-2">Current</label>
-    <label for="tbl-2">Table</label>
-    <label for="info-2">Info</label>
+    <label for="status-7">Current</label>
+    <label for="tbl-7">Table</label>
+    <label for="info-7">Info</label>
   </div>
 
   <div class="content">
@@ -291,13 +254,13 @@
     <div class="tab-content current">
 
       <div class="metric-header">
-        <div class="stat-number">68 ED Visits</div>
-        <div class="trend-indicator bad">
-          ▲
+        <div class="stat-number">15.9 per 100,000 population</div>
+        <div class="trend-indicator flat">
+          ■
         </div>
       </div>
 
-      <div class="stat-date">2025-01</div>
+      <div class="stat-date">2021-2023</div>
 
       <div class="dashboard-tile">
         
@@ -306,114 +269,114 @@
                 fill="none"
                 stroke="currentColor"
                 stroke-width="2"
-                points="4.0,36.0 14.222222222222221,35.05882352941177 24.444444444444443,26.588235294117645 34.666666666666664,29.411764705882355 44.888888888888886,19.058823529411764 55.11111111111111,26.588235294117645 65.33333333333333,8.705882352941178 75.55555555555554,16.235294117647058 85.77777777777777,4.9411764705882355 96.0,4.0"
+                points="4.0,13.904761904761909 14.222222222222221,4.0 24.444444444444443,7.047619047619062 34.666666666666664,16.952380952380956 44.888888888888886,15.428571428571438 55.11111111111111,21.523809523809526 65.33333333333333,18.47619047619049 75.55555555555554,36.0 85.77777777777777,25.333333333333336 96.0,13.14285714285715"
             />
 
             
                 <circle
                     cx="4.0"
-                    cy="36.0"
+                    cy="13.904761904761909"
                     r="5"
                     fill="transparent"
                     class="spark-point"
-                    data-x="2016-01"
-                    data-y="34.0"
+                    data-x="2012-2014"
+                    data-y="15.8"
                 />
             
                 <circle
                     cx="14.222222222222221"
-                    cy="35.05882352941177"
-                    r="5"
-                    fill="transparent"
-                    class="spark-point"
-                    data-x="2017-01"
-                    data-y="35.0"
-                />
-            
-                <circle
-                    cx="24.444444444444443"
-                    cy="26.588235294117645"
-                    r="5"
-                    fill="transparent"
-                    class="spark-point"
-                    data-x="2018-01"
-                    data-y="44.0"
-                />
-            
-                <circle
-                    cx="34.666666666666664"
-                    cy="29.411764705882355"
-                    r="5"
-                    fill="transparent"
-                    class="spark-point"
-                    data-x="2019-01"
-                    data-y="41.0"
-                />
-            
-                <circle
-                    cx="44.888888888888886"
-                    cy="19.058823529411764"
-                    r="5"
-                    fill="transparent"
-                    class="spark-point"
-                    data-x="2020-01"
-                    data-y="52.0"
-                />
-            
-                <circle
-                    cx="55.11111111111111"
-                    cy="26.588235294117645"
-                    r="5"
-                    fill="transparent"
-                    class="spark-point"
-                    data-x="2021-01"
-                    data-y="44.0"
-                />
-            
-                <circle
-                    cx="65.33333333333333"
-                    cy="8.705882352941178"
-                    r="5"
-                    fill="transparent"
-                    class="spark-point"
-                    data-x="2022-01"
-                    data-y="63.0"
-                />
-            
-                <circle
-                    cx="75.55555555555554"
-                    cy="16.235294117647058"
-                    r="5"
-                    fill="transparent"
-                    class="spark-point"
-                    data-x="2023-01"
-                    data-y="55.0"
-                />
-            
-                <circle
-                    cx="85.77777777777777"
-                    cy="4.9411764705882355"
-                    r="5"
-                    fill="transparent"
-                    class="spark-point"
-                    data-x="2024-01"
-                    data-y="67.0"
-                />
-            
-                <circle
-                    cx="96.0"
                     cy="4.0"
                     r="5"
                     fill="transparent"
                     class="spark-point"
-                    data-x="2025-01"
-                    data-y="68.0"
+                    data-x="2013-2015"
+                    data-y="17.1"
+                />
+            
+                <circle
+                    cx="24.444444444444443"
+                    cy="7.047619047619062"
+                    r="5"
+                    fill="transparent"
+                    class="spark-point"
+                    data-x="2014-2016"
+                    data-y="16.7"
+                />
+            
+                <circle
+                    cx="34.666666666666664"
+                    cy="16.952380952380956"
+                    r="5"
+                    fill="transparent"
+                    class="spark-point"
+                    data-x="2015-2017"
+                    data-y="15.4"
+                />
+            
+                <circle
+                    cx="44.888888888888886"
+                    cy="15.428571428571438"
+                    r="5"
+                    fill="transparent"
+                    class="spark-point"
+                    data-x="2016-2018"
+                    data-y="15.6"
+                />
+            
+                <circle
+                    cx="55.11111111111111"
+                    cy="21.523809523809526"
+                    r="5"
+                    fill="transparent"
+                    class="spark-point"
+                    data-x="2017-2019"
+                    data-y="14.8"
+                />
+            
+                <circle
+                    cx="65.33333333333333"
+                    cy="18.47619047619049"
+                    r="5"
+                    fill="transparent"
+                    class="spark-point"
+                    data-x="2018-2020"
+                    data-y="15.2"
+                />
+            
+                <circle
+                    cx="75.55555555555554"
+                    cy="36.0"
+                    r="5"
+                    fill="transparent"
+                    class="spark-point"
+                    data-x="2019-2021"
+                    data-y="12.9"
+                />
+            
+                <circle
+                    cx="85.77777777777777"
+                    cy="25.333333333333336"
+                    r="5"
+                    fill="transparent"
+                    class="spark-point"
+                    data-x="2020-2022"
+                    data-y="14.3"
+                />
+            
+                <circle
+                    cx="96.0"
+                    cy="13.14285714285715"
+                    r="5"
+                    fill="transparent"
+                    class="spark-point"
+                    data-x="2021-2023"
+                    data-y="15.9"
                 />
             
 
             <circle
                 cx="96.0"
-                cy="4.0"
+                cy="13.14285714285715"
                 r="3"
                 fill="currentColor"
             />
@@ -423,7 +386,7 @@
       </div>
 
       
-        <p class="current-description">Cold outdoor temperatures can increase risk for health emergencies such as hypothermia and frostbite. People higher risk for cold-related illnesses include older adults, infancts, people experiencing houselessness or with inadequate home heating and participants in outdoor work or other activities.</p>
+        <p class="current-description">Suicide results in the tragic loss of human life as well as agonizing grief, fear, and confusion in families and communities. Its impact is not limited to an individual person or family, but extends across generations and throughout communities. The breadth of the problem and the complexity of its risk factors make suicide prevention well suited to a community-based public health approach that engages multiple systems and reaches all citizens. Over 500 Kansas residents die from suicide annually. </p>
       
 
     </div>
@@ -431,31 +394,31 @@
     <!-- TABLE -->
     <div class="tab-content table">
       
-        <div class="table-units">ED Visits</div>
+        <div class="table-units">per 100,000 population</div>
       
       <div class="sideways-tables">
         
           <div><table border="1" class="dataframe indicator-table">
   <tbody>
     <tr>
-      <td>01-25</td>
-      <td>68.0</td>
+      <td>2021-2023</td>
+      <td>15.9</td>
     </tr>
     <tr>
-      <td>01-24</td>
-      <td>67.0</td>
+      <td>2020-2022</td>
+      <td>14.3</td>
     </tr>
     <tr>
-      <td>01-23</td>
-      <td>55.0</td>
+      <td>2019-2021</td>
+      <td>12.9</td>
     </tr>
     <tr>
-      <td>01-22</td>
-      <td>63.0</td>
+      <td>2018-2020</td>
+      <td>15.2</td>
     </tr>
     <tr>
-      <td>01-21</td>
-      <td>44.0</td>
+      <td>2017-2019</td>
+      <td>14.8</td>
     </tr>
   </tbody>
 </table></div>
@@ -463,24 +426,24 @@
           <div><table border="1" class="dataframe indicator-table">
   <tbody>
     <tr>
-      <td>01-20</td>
-      <td>52.0</td>
+      <td>2016-2018</td>
+      <td>15.6</td>
     </tr>
     <tr>
-      <td>01-19</td>
-      <td>41.0</td>
+      <td>2015-2017</td>
+      <td>15.4</td>
     </tr>
     <tr>
-      <td>01-18</td>
-      <td>44.0</td>
+      <td>2014-2016</td>
+      <td>16.7</td>
     </tr>
     <tr>
-      <td>01-17</td>
-      <td>35.0</td>
+      <td>2013-2015</td>
+      <td>17.1</td>
     </tr>
     <tr>
-      <td>01-16</td>
-      <td>34.0</td>
+      <td>2012-2014</td>
+      <td>15.8</td>
     </tr>
   </tbody>
 </table></div>
@@ -492,12 +455,15 @@
     <div class="tab-content info">
       
         <div class="methodology-label">Source</div>
-        ESSENCE 
+        Vital Statistics 
           
         
       
 
       
+      
+        <div class="methodology-label">Methodology</div>
+        <p class="methodology">Available from Kansas Health Matters.</p>
       
       
     </div>
@@ -557,14 +523,34 @@
   });
 }());
 </script>
-    
+    </div>
+
+    <!-- Meta sidebar -->
+    <div class="meta-col indicator-meta">
+
+      
+
+      
+
+      <div>
+        <a href="../all_indicators.html" class="back-link">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+               stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6"/>
+          </svg>
+          Back to all indicators
+        </a>
+      </div>
+
+    </div>
   </div>
 
   <!-- ── Footer ────────────────────────────────────────────── -->
   <footer class="page-footer">
     Lawrence-Douglas County Public Health &mdash;
-    <a href="all_indicators.html">View all indicators</a>&mdash;
-    <a href="documentation.html">Documentation</a>
+    <a href="../../all_indicators.html">View all indicators</a> &mdash;
+    <a href="../../documentation.html">Documentation</a>
   </footer>
 
 </body>

@@ -215,8 +215,6 @@ input[id^="info-"]:checked ~ .content .info {
    Indicator Card
 ------------------------------------------------------- */
 .indicator-card {
-  max-width: 400px;
-  width: 100%;
   border: 1px solid #d8e8f4;
   border-radius: 14px;
   background: #fff;

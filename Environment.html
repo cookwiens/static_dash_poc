@@ -167,6 +167,14 @@
       color: #707a83;
     }
 
+    /* ── Indicator card override ─────────────────────────────── */
+    /* dashboard.css sets width:100% / max-width:400px which      */
+    /* collapses grid column-gap; let the grid control sizing     */
+    .indicator-card {
+      width: auto;
+      max-width: none;
+    }
+
     /* ── Dashboard grid ──────────────────────────────────────── */
     .dashboard {
       max-width: 1100px;
@@ -247,7 +255,7 @@
 
   <!-- ── Indicator count ───────────────────────────────────── -->
   <div class="indicator-count">
-    3 indicators
+    5 indicators
   </div>
 
   <!-- ── Tile grid ─────────────────────────────────────────── -->
@@ -1098,6 +1106,604 @@
           <i><a href="https://www.kansashealthmatters.org/indicators/index/view?indicatorId=1364&amp;localeId=962" target="_blank">KansasHealthMatters: Infant Mortality Rate, Douglas County</a></i> - The KansasHealthMatters page for the Douglas County Infant Mortality Rate provides additional benchmarks and trend analysis.
         
       
+      
+      
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+(function () {
+  /* Scope to the last injected tile so multiple tiles on one page don't conflict */
+  var tiles = document.querySelectorAll(".dashboard-tile");
+  var lastTile = tiles[tiles.length - 1];
+  if (!lastTile) return;
+
+  var tooltip = lastTile.querySelector(".spark-tooltip");
+  if (!tooltip) return;
+
+  function showTooltip(point) {
+    tooltip.textContent = point.dataset.x + ": " + point.dataset.y;
+    tooltip.style.display = "block";
+  }
+
+  function moveTooltip(clientX, clientY) {
+    tooltip.style.left = (clientX + 12) + "px";
+    tooltip.style.top  = (clientY - 36) + "px";
+  }
+
+  function hideTooltip() {
+    tooltip.style.display = "none";
+  }
+
+  lastTile.querySelectorAll(".spark-point").forEach(function (point) {
+
+    /* Mouse */
+    point.addEventListener("mouseenter", function () { showTooltip(point); });
+    point.addEventListener("mousemove",  function (e) { moveTooltip(e.clientX, e.clientY); });
+    point.addEventListener("mouseleave", hideTooltip);
+
+    /* Touch — fires on mobile where mouseenter doesn't */
+    point.addEventListener("touchstart", function (e) {
+      e.preventDefault();               /* suppress ghost click */
+      var t = e.touches[0];
+      showTooltip(point);
+      moveTooltip(t.clientX, t.clientY);
+    }, { passive: false });
+
+    point.addEventListener("touchmove", function (e) {
+      var t = e.touches[0];
+      moveTooltip(t.clientX, t.clientY);
+    });
+
+    point.addEventListener("touchend", function () {
+      setTimeout(hideTooltip, 1200);    /* brief delay so user can read it */
+    });
+
+  });
+}());
+</script>
+    
+      <div class="indicator-card">
+
+  <h3 class="indicator-title">
+    Percent of births with low brith weight
+  </h3>
+
+  <!-- Tab radio inputs must precede .content so the CSS sibling selectors work -->
+  <input type="radio"
+         name="tab-5"
+         id="status-5"
+         checked>
+  <input type="radio"
+         name="tab-5"
+         id="tbl-5">
+  <input type="radio"
+         name="tab-5"
+         id="info-5">
+
+  <div class="view-selector">
+    <label for="status-5">Current</label>
+    <label for="tbl-5">Table</label>
+    <label for="info-5">Info</label>
+  </div>
+
+  <div class="content">
+
+    <!-- CURRENT -->
+    <div class="tab-content current">
+
+      <div class="metric-header">
+        <div class="stat-number">7.2 (95% CI: 6.3 - 8.2)</div>
+        <div class="trend-indicator flat">
+          ■
+        </div>
+      </div>
+
+      <div class="stat-date">2021-2023</div>
+
+      <div class="dashboard-tile">
+        
+        <svg viewBox="0 0 100 40" class="sparkline">
+            <polyline
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                points="4.0,22.526315789473685 14.222222222222221,36.0 24.444444444444443,25.894736842105267 34.666666666666664,24.210526315789465 44.888888888888886,4.0 55.11111111111111,9.052631578947366 65.33333333333333,12.421052631578949 75.55555555555554,24.210526315789465 85.77777777777777,24.210526315789465 96.0,19.1578947368421"
+            />
+
+            
+                <circle
+                    cx="4.0"
+                    cy="22.526315789473685"
+                    r="5"
+                    fill="transparent"
+                    class="spark-point"
+                    data-x="2012-2014"
+                    data-y="7.0"
+                />
+            
+                <circle
+                    cx="14.222222222222221"
+                    cy="36.0"
+                    r="5"
+                    fill="transparent"
+                    class="spark-point"
+                    data-x="2013-2015"
+                    data-y="6.2"
+                />
+            
+                <circle
+                    cx="24.444444444444443"
+                    cy="25.894736842105267"
+                    r="5"
+                    fill="transparent"
+                    class="spark-point"
+                    data-x="2014-2016"
+                    data-y="6.8"
+                />
+            
+                <circle
+                    cx="34.666666666666664"
+                    cy="24.210526315789465"
+                    r="5"
+                    fill="transparent"
+                    class="spark-point"
+                    data-x="2015-2017"
+                    data-y="6.9"
+                />
+            
+                <circle
+                    cx="44.888888888888886"
+                    cy="4.0"
+                    r="5"
+                    fill="transparent"
+                    class="spark-point"
+                    data-x="2016-2018"
+                    data-y="8.1"
+                />
+            
+                <circle
+                    cx="55.11111111111111"
+                    cy="9.052631578947366"
+                    r="5"
+                    fill="transparent"
+                    class="spark-point"
+                    data-x="2017-2019"
+                    data-y="7.8"
+                />
+            
+                <circle
+                    cx="65.33333333333333"
+                    cy="12.421052631578949"
+                    r="5"
+                    fill="transparent"
+                    class="spark-point"
+                    data-x="2018-2020"
+                    data-y="7.6"
+                />
+            
+                <circle
+                    cx="75.55555555555554"
+                    cy="24.210526315789465"
+                    r="5"
+                    fill="transparent"
+                    class="spark-point"
+                    data-x="2019-2021"
+                    data-y="6.9"
+                />
+            
+                <circle
+                    cx="85.77777777777777"
+                    cy="24.210526315789465"
+                    r="5"
+                    fill="transparent"
+                    class="spark-point"
+                    data-x="2020-2022"
+                    data-y="6.9"
+                />
+            
+                <circle
+                    cx="96.0"
+                    cy="19.1578947368421"
+                    r="5"
+                    fill="transparent"
+                    class="spark-point"
+                    data-x="2021-2023"
+                    data-y="7.2"
+                />
+            
+
+            <circle
+                cx="96.0"
+                cy="19.1578947368421"
+                r="3"
+                fill="currentColor"
+            />
+        </svg>
+        
+        <div class="spark-tooltip"></div>
+      </div>
+
+      
+        <p class="current-description">Babies born with low birth weight, less than 5 pountds, 8 ounces, are at risk for serious problems such as low oxygen levels at birth, difficulty staying warm, trouble feeding, trouble breathing and getting infections.</p>
+      
+
+    </div>
+
+    <!-- TABLE -->
+    <div class="tab-content table">
+      
+      <div class="sideways-tables">
+        
+          <div><table border="1" class="dataframe indicator-table">
+  <tbody>
+    <tr>
+      <td>2021-2023</td>
+      <td>7.2</td>
+    </tr>
+    <tr>
+      <td>2020-2022</td>
+      <td>6.9</td>
+    </tr>
+    <tr>
+      <td>2019-2021</td>
+      <td>6.9</td>
+    </tr>
+    <tr>
+      <td>2018-2020</td>
+      <td>7.6</td>
+    </tr>
+    <tr>
+      <td>2017-2019</td>
+      <td>7.8</td>
+    </tr>
+  </tbody>
+</table></div>
+        
+          <div><table border="1" class="dataframe indicator-table">
+  <tbody>
+    <tr>
+      <td>2016-2018</td>
+      <td>8.1</td>
+    </tr>
+    <tr>
+      <td>2015-2017</td>
+      <td>6.9</td>
+    </tr>
+    <tr>
+      <td>2014-2016</td>
+      <td>6.8</td>
+    </tr>
+    <tr>
+      <td>2013-2015</td>
+      <td>6.2</td>
+    </tr>
+    <tr>
+      <td>2012-2014</td>
+      <td>7.0</td>
+    </tr>
+  </tbody>
+</table></div>
+        
+      </div>
+    </div>
+
+    <!-- INFO -->
+    <div class="tab-content info">
+      
+        <div class="methodology-label">Source</div>
+        Vital Statistics 
+          
+        
+      
+
+      
+      
+        <div class="methodology-label">Methodology</div>
+        <p class="methodology">Available on Kansas Health Matters.</p>
+      
+      
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+(function () {
+  /* Scope to the last injected tile so multiple tiles on one page don't conflict */
+  var tiles = document.querySelectorAll(".dashboard-tile");
+  var lastTile = tiles[tiles.length - 1];
+  if (!lastTile) return;
+
+  var tooltip = lastTile.querySelector(".spark-tooltip");
+  if (!tooltip) return;
+
+  function showTooltip(point) {
+    tooltip.textContent = point.dataset.x + ": " + point.dataset.y;
+    tooltip.style.display = "block";
+  }
+
+  function moveTooltip(clientX, clientY) {
+    tooltip.style.left = (clientX + 12) + "px";
+    tooltip.style.top  = (clientY - 36) + "px";
+  }
+
+  function hideTooltip() {
+    tooltip.style.display = "none";
+  }
+
+  lastTile.querySelectorAll(".spark-point").forEach(function (point) {
+
+    /* Mouse */
+    point.addEventListener("mouseenter", function () { showTooltip(point); });
+    point.addEventListener("mousemove",  function (e) { moveTooltip(e.clientX, e.clientY); });
+    point.addEventListener("mouseleave", hideTooltip);
+
+    /* Touch — fires on mobile where mouseenter doesn't */
+    point.addEventListener("touchstart", function (e) {
+      e.preventDefault();               /* suppress ghost click */
+      var t = e.touches[0];
+      showTooltip(point);
+      moveTooltip(t.clientX, t.clientY);
+    }, { passive: false });
+
+    point.addEventListener("touchmove", function (e) {
+      var t = e.touches[0];
+      moveTooltip(t.clientX, t.clientY);
+    });
+
+    point.addEventListener("touchend", function () {
+      setTimeout(hideTooltip, 1200);    /* brief delay so user can read it */
+    });
+
+  });
+}());
+</script>
+    
+      <div class="indicator-card">
+
+  <h3 class="indicator-title">
+    Percentage of births where the mother smoked during pregnancy
+  </h3>
+
+  <!-- Tab radio inputs must precede .content so the CSS sibling selectors work -->
+  <input type="radio"
+         name="tab-4"
+         id="status-4"
+         checked>
+  <input type="radio"
+         name="tab-4"
+         id="tbl-4">
+  <input type="radio"
+         name="tab-4"
+         id="info-4">
+
+  <div class="view-selector">
+    <label for="status-4">Current</label>
+    <label for="tbl-4">Table</label>
+    <label for="info-4">Info</label>
+  </div>
+
+  <div class="content">
+
+    <!-- CURRENT -->
+    <div class="tab-content current">
+
+      <div class="metric-header">
+        <div class="stat-number">6.3 percent (95% CI: 5.4 - 7.1)</div>
+        <div class="trend-indicator good">
+          ▼
+        </div>
+      </div>
+
+      <div class="stat-date">2021-2023</div>
+
+      <div class="dashboard-tile">
+        
+        <svg viewBox="0 0 100 40" class="sparkline">
+            <polyline
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                points="4.0,4.0 14.222222222222221,8.740740740740733 24.444444444444443,12.296296296296287 34.666666666666664,18.814814814814817 44.888888888888886,19.999999999999996 55.11111111111111,24.14814814814814 65.33333333333333,24.14814814814814 75.55555555555554,28.888888888888886 85.77777777777777,30.074074074074073 96.0,36.0"
+            />
+
+            
+                <circle
+                    cx="4.0"
+                    cy="4.0"
+                    r="5"
+                    fill="transparent"
+                    class="spark-point"
+                    data-x="2012-2014"
+                    data-y="11.7"
+                />
+            
+                <circle
+                    cx="14.222222222222221"
+                    cy="8.740740740740733"
+                    r="5"
+                    fill="transparent"
+                    class="spark-point"
+                    data-x="2013-2015"
+                    data-y="10.9"
+                />
+            
+                <circle
+                    cx="24.444444444444443"
+                    cy="12.296296296296287"
+                    r="5"
+                    fill="transparent"
+                    class="spark-point"
+                    data-x="2014-2016"
+                    data-y="10.3"
+                />
+            
+                <circle
+                    cx="34.666666666666664"
+                    cy="18.814814814814817"
+                    r="5"
+                    fill="transparent"
+                    class="spark-point"
+                    data-x="2015-2017"
+                    data-y="9.2"
+                />
+            
+                <circle
+                    cx="44.888888888888886"
+                    cy="19.999999999999996"
+                    r="5"
+                    fill="transparent"
+                    class="spark-point"
+                    data-x="2016-2018"
+                    data-y="9.0"
+                />
+            
+                <circle
+                    cx="55.11111111111111"
+                    cy="24.14814814814814"
+                    r="5"
+                    fill="transparent"
+                    class="spark-point"
+                    data-x="2017-2019"
+                    data-y="8.3"
+                />
+            
+                <circle
+                    cx="65.33333333333333"
+                    cy="24.14814814814814"
+                    r="5"
+                    fill="transparent"
+                    class="spark-point"
+                    data-x="2018-2020"
+                    data-y="8.3"
+                />
+            
+                <circle
+                    cx="75.55555555555554"
+                    cy="28.888888888888886"
+                    r="5"
+                    fill="transparent"
+                    class="spark-point"
+                    data-x="2019-2021"
+                    data-y="7.5"
+                />
+            
+                <circle
+                    cx="85.77777777777777"
+                    cy="30.074074074074073"
+                    r="5"
+                    fill="transparent"
+                    class="spark-point"
+                    data-x="2020-2022"
+                    data-y="7.3"
+                />
+            
+                <circle
+                    cx="96.0"
+                    cy="36.0"
+                    r="5"
+                    fill="transparent"
+                    class="spark-point"
+                    data-x="2021-2023"
+                    data-y="6.3"
+                />
+            
+
+            <circle
+                cx="96.0"
+                cy="36.0"
+                r="3"
+                fill="currentColor"
+            />
+        </svg>
+        
+        <div class="spark-tooltip"></div>
+      </div>
+
+      
+        <p class="current-description">Smoking during pregnancy can result in negative outcomes including premature delivery, miscarriage and a higher risk of having a baby with low birth weight.</p>
+      
+
+    </div>
+
+    <!-- TABLE -->
+    <div class="tab-content table">
+      
+        <div class="table-units">percent</div>
+      
+      <div class="sideways-tables">
+        
+          <div><table border="1" class="dataframe indicator-table">
+  <tbody>
+    <tr>
+      <td>2021-2023</td>
+      <td>6.3</td>
+    </tr>
+    <tr>
+      <td>2020-2022</td>
+      <td>7.3</td>
+    </tr>
+    <tr>
+      <td>2019-2021</td>
+      <td>7.5</td>
+    </tr>
+    <tr>
+      <td>2018-2020</td>
+      <td>8.3</td>
+    </tr>
+    <tr>
+      <td>2017-2019</td>
+      <td>8.3</td>
+    </tr>
+  </tbody>
+</table></div>
+        
+          <div><table border="1" class="dataframe indicator-table">
+  <tbody>
+    <tr>
+      <td>2016-2018</td>
+      <td>9.0</td>
+    </tr>
+    <tr>
+      <td>2015-2017</td>
+      <td>9.2</td>
+    </tr>
+    <tr>
+      <td>2014-2016</td>
+      <td>10.3</td>
+    </tr>
+    <tr>
+      <td>2013-2015</td>
+      <td>10.9</td>
+    </tr>
+    <tr>
+      <td>2012-2014</td>
+      <td>11.7</td>
+    </tr>
+  </tbody>
+</table></div>
+        
+      </div>
+    </div>
+
+    <!-- INFO -->
+    <div class="tab-content info">
+      
+        <div class="methodology-label">Source</div>
+        Vital Statistics 
+          
+        
+      
+
+      
+      
+        <div class="methodology-label">Methodology</div>
+        <p class="methodology">Available on Kansas Health Matters.</p>
       
       
     </div>
