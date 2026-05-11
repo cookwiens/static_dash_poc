@@ -238,6 +238,7 @@ input[id^="info-"]:checked ~ .content .info {
   /* Clamp to 2 lines to keep card height consistent in grid */
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -463,3 +464,93 @@ table.indicator-table tr + tr td {
   .stat-number    { font-size: 1.9rem; }
   .sparkline      { height: 120px; }
 }
+
+
+
+
+
+/* =======================================================
+   TILE-2 DESIGN OVERRIDES
+   Append to dashboard.css.  All rules are scoped to
+   .tile-2 so they cannot affect tile-1 cards.
+   ======================================================= */
+
+/* --- Card: subtle left-edge accent, no shadow --------- */
+.tile-2.indicator-card {
+  border: 1px solid #e0ecf7;
+  border-left: 4px solid #1776bc;
+  border-radius: 10px;
+  box-shadow: none;
+  padding: 1rem 1.1rem 1rem 1rem;
+  gap: 0.35rem;
+}
+
+/* --- Header block: title + kpi sit in a two-row stack - */
+.t2-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  margin-bottom: 0.4rem;
+}
+
+/* --- Title: the primary visual element ---------------- */
+.tile-2 .indicator-title,
+.tile-2.indicator-card h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1e2a35;
+  line-height: 1.35;
+  margin: 0;
+  /* Allow up to 3 lines so longer indicator names aren't
+     brutally clipped; title is the star here. */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  /* No border-radius; left border on the card does the job */
+  border: none;
+  padding: 0;
+}
+
+/* --- KPI block: number + arrow + date in one line ----- */
+.t2-kpi-block {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+}
+
+/* Stat number: smaller, lighter — a supporting detail    */
+.tile-2 .stat-number {
+  font-size: 1.55rem;
+  font-weight: 500;
+  color: #1776bc;
+  letter-spacing: -0.01em;
+  line-height: 1;
+}
+
+/* Trend arrow: scaled to match the smaller number ------- */
+.tile-2 .trend-indicator {
+  font-size: 1.1rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
+/* Date label: inline after the number, no uppercase block */
+.tile-2 .stat-date {
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  color: #9aa5ae;
+  /* override the centered block style from tile-1 */
+  text-align: left;
+  margin-bottom: 0;
+}
+
+/* --- Sparkline: taller to give axes room -------------- */
+.tile-2 .sparkline {
+  height: 110px;
+  overflow: visible;   /* x-axis labels sit just below the viewBox */
+}
+
