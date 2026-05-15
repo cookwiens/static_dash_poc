@@ -262,11 +262,7 @@
   <!-- ── Tile grid ─────────────────────────────────────────── -->
   <div class="dashboard">
     
-      <div class="indicator-card">
-
-  <h3 class="indicator-title">
-    Cold-related ED Visits (Annual)
-  </h3>
+      <div class="indicator-card tile-2">
 
   <!-- Tab radio inputs must precede .content so the CSS sibling selectors work -->
   <input type="radio"
@@ -280,6 +276,17 @@
          name="tab-2"
          id="info-2">
 
+  <div class="t2-header">
+    <h3 class="indicator-title">
+      Cold-related ED Visits (Annual)
+    </h3>
+    <div class="t2-kpi-block">
+      <span class="stat-number">68 ED Visits</span>
+      <span class="trend-indicator bad">▲</span>
+      <span class="stat-date">2025</span>
+    </div>
+  </div>
+
   <div class="view-selector">
     <label for="status-2">Current</label>
     <label for="tbl-2">Table</label>
@@ -290,15 +297,6 @@
 
     <!-- CURRENT -->
     <div class="tab-content current">
-
-      <div class="metric-header">
-        <div class="stat-number">68 ED Visits</div>
-        <div class="trend-indicator bad">
-          ▲
-        </div>
-      </div>
-
-      <div class="stat-date">2025</div>
 
       <div class="dashboard-tile">
         <svg viewBox="0 0 280 110" class="sparkline">
@@ -402,9 +400,20 @@
     <div class="tab-content info">
       
         <div class="methodology-label">Source</div>
-        ESSENCE 
+          <b>ESSENCE. </b>
+          The Electronic Surveillance System for the Early Notification of Community-based Epidemics (ESSENCE) is a
+CDC-supported web-based tool that allows public health officials to analyze and visualize data from the BioSense Platform in near real-time. It helps detect, monitor, and respond to disease outbreaks, natural disasters, and other public health threats using data from hospital emergency departments and other sources.<br>
+
+          
+            <a href=https://www.cdc.gov/nssp/index.html>
+              CDC National Syndromic Surveillance Program (NSSP)
+            </a>
           
         
+      
+      <br>
+      <br>
+
       
 
       
@@ -418,7 +427,6 @@
 
 <script>
 (function () {
-  /* Scope to the last injected tile so multiple tiles on one page don't conflict */
   var tiles = document.querySelectorAll(".dashboard-tile");
   var lastTile = tiles[tiles.length - 1];
   if (!lastTile) return;
@@ -441,15 +449,12 @@
   }
 
   lastTile.querySelectorAll(".spark-point").forEach(function (point) {
-
-    /* Mouse */
     point.addEventListener("mouseenter", function () { showTooltip(point); });
     point.addEventListener("mousemove",  function (e) { moveTooltip(e.clientX, e.clientY); });
     point.addEventListener("mouseleave", hideTooltip);
 
-    /* Touch — fires on mobile where mouseenter doesn't */
     point.addEventListener("touchstart", function (e) {
-      e.preventDefault();               /* suppress ghost click */
+      e.preventDefault();
       var t = e.touches[0];
       showTooltip(point);
       moveTooltip(t.clientX, t.clientY);
@@ -461,18 +466,13 @@
     });
 
     point.addEventListener("touchend", function () {
-      setTimeout(hideTooltip, 1200);    /* brief delay so user can read it */
+      setTimeout(hideTooltip, 1200);
     });
-
   });
 }());
 </script>
     
-      <div class="indicator-card">
-
-  <h3 class="indicator-title">
-    Heat-related ED Visits (Annual)
-  </h3>
+      <div class="indicator-card tile-2">
 
   <!-- Tab radio inputs must precede .content so the CSS sibling selectors work -->
   <input type="radio"
@@ -486,6 +486,17 @@
          name="tab-1"
          id="info-1">
 
+  <div class="t2-header">
+    <h3 class="indicator-title">
+      Heat-related ED Visits (Annual)
+    </h3>
+    <div class="t2-kpi-block">
+      <span class="stat-number">83 ED Visits</span>
+      <span class="trend-indicator bad">▲</span>
+      <span class="stat-date">2025</span>
+    </div>
+  </div>
+
   <div class="view-selector">
     <label for="status-1">Current</label>
     <label for="tbl-1">Table</label>
@@ -496,15 +507,6 @@
 
     <!-- CURRENT -->
     <div class="tab-content current">
-
-      <div class="metric-header">
-        <div class="stat-number">83 ED Visits</div>
-        <div class="trend-indicator bad">
-          ▲
-        </div>
-      </div>
-
-      <div class="stat-date">2025</div>
 
       <div class="dashboard-tile">
         <svg viewBox="0 0 280 110" class="sparkline">
@@ -608,9 +610,20 @@
     <div class="tab-content info">
       
         <div class="methodology-label">Source</div>
-        ESSENCE 
+          <b>ESSENCE. </b>
+          The Electronic Surveillance System for the Early Notification of Community-based Epidemics (ESSENCE) is a
+CDC-supported web-based tool that allows public health officials to analyze and visualize data from the BioSense Platform in near real-time. It helps detect, monitor, and respond to disease outbreaks, natural disasters, and other public health threats using data from hospital emergency departments and other sources.<br>
+
+          
+            <a href=https://www.cdc.gov/nssp/index.html>
+              CDC National Syndromic Surveillance Program (NSSP)
+            </a>
           
         
+      
+      <br>
+      <br>
+
       
 
       
@@ -627,7 +640,6 @@
 
 <script>
 (function () {
-  /* Scope to the last injected tile so multiple tiles on one page don't conflict */
   var tiles = document.querySelectorAll(".dashboard-tile");
   var lastTile = tiles[tiles.length - 1];
   if (!lastTile) return;
@@ -650,15 +662,12 @@
   }
 
   lastTile.querySelectorAll(".spark-point").forEach(function (point) {
-
-    /* Mouse */
     point.addEventListener("mouseenter", function () { showTooltip(point); });
     point.addEventListener("mousemove",  function (e) { moveTooltip(e.clientX, e.clientY); });
     point.addEventListener("mouseleave", hideTooltip);
 
-    /* Touch — fires on mobile where mouseenter doesn't */
     point.addEventListener("touchstart", function (e) {
-      e.preventDefault();               /* suppress ghost click */
+      e.preventDefault();
       var t = e.touches[0];
       showTooltip(point);
       moveTooltip(t.clientX, t.clientY);
@@ -670,18 +679,13 @@
     });
 
     point.addEventListener("touchend", function () {
-      setTimeout(hideTooltip, 1200);    /* brief delay so user can read it */
+      setTimeout(hideTooltip, 1200);
     });
-
   });
 }());
 </script>
     
-      <div class="indicator-card">
-
-  <h3 class="indicator-title">
-    Infant Mortality Rate
-  </h3>
+      <div class="indicator-card tile-2">
 
   <!-- Tab radio inputs must precede .content so the CSS sibling selectors work -->
   <input type="radio"
@@ -695,6 +699,17 @@
          name="tab-3"
          id="info-3">
 
+  <div class="t2-header">
+    <h3 class="indicator-title">
+      Infant Mortality Rate
+    </h3>
+    <div class="t2-kpi-block">
+      <span class="stat-number">4.1 per 1,000 live births</span>
+      <span class="trend-indicator good">▼</span>
+      <span class="stat-date">2019-2023</span>
+    </div>
+  </div>
+
   <div class="view-selector">
     <label for="status-3">Current</label>
     <label for="tbl-3">Table</label>
@@ -705,15 +720,6 @@
 
     <!-- CURRENT -->
     <div class="tab-content current">
-
-      <div class="metric-header">
-        <div class="stat-number">4.1 per 1,000 live births</div>
-        <div class="trend-indicator good">
-          ▼
-        </div>
-      </div>
-
-      <div class="stat-date">2019-2023</div>
 
       <div class="dashboard-tile">
         <svg viewBox="0 0 280 110" class="sparkline">
@@ -817,9 +823,19 @@
     <div class="tab-content info">
       
         <div class="methodology-label">Source</div>
-        Vital Statistics 
+          <b>Vital Statistics. </b>
+          The state of Kansas maintains a registry of vital events including births, deaths, marriages, divorces, and stillbirths, managed by the KDHE Office of Vital Statistics. Vital statistics data are available through the Kansas Information for Communities portal. Key vital statistics indicators are available from Kansas Health Matters.<br>
+
+          
+            <a href=https://www.kdhe.ks.gov/1165/Office-of-Vital-Statistics>
+              Kansas Department of Health and Environment
+            </a>
           
         
+      
+      <br>
+      <br>
+
       
 
       
@@ -844,7 +860,6 @@
 
 <script>
 (function () {
-  /* Scope to the last injected tile so multiple tiles on one page don't conflict */
   var tiles = document.querySelectorAll(".dashboard-tile");
   var lastTile = tiles[tiles.length - 1];
   if (!lastTile) return;
@@ -867,15 +882,12 @@
   }
 
   lastTile.querySelectorAll(".spark-point").forEach(function (point) {
-
-    /* Mouse */
     point.addEventListener("mouseenter", function () { showTooltip(point); });
     point.addEventListener("mousemove",  function (e) { moveTooltip(e.clientX, e.clientY); });
     point.addEventListener("mouseleave", hideTooltip);
 
-    /* Touch — fires on mobile where mouseenter doesn't */
     point.addEventListener("touchstart", function (e) {
-      e.preventDefault();               /* suppress ghost click */
+      e.preventDefault();
       var t = e.touches[0];
       showTooltip(point);
       moveTooltip(t.clientX, t.clientY);
@@ -887,18 +899,13 @@
     });
 
     point.addEventListener("touchend", function () {
-      setTimeout(hideTooltip, 1200);    /* brief delay so user can read it */
+      setTimeout(hideTooltip, 1200);
     });
-
   });
 }());
 </script>
     
-      <div class="indicator-card">
-
-  <h3 class="indicator-title">
-    Percent of births with low birth weight
-  </h3>
+      <div class="indicator-card tile-2">
 
   <!-- Tab radio inputs must precede .content so the CSS sibling selectors work -->
   <input type="radio"
@@ -912,6 +919,17 @@
          name="tab-5"
          id="info-5">
 
+  <div class="t2-header">
+    <h3 class="indicator-title">
+      Percent of births with low birth weight
+    </h3>
+    <div class="t2-kpi-block">
+      <span class="stat-number">7.2</span>
+      <span class="trend-indicator flat">■</span>
+      <span class="stat-date">2021-2023</span>
+    </div>
+  </div>
+
   <div class="view-selector">
     <label for="status-5">Current</label>
     <label for="tbl-5">Table</label>
@@ -922,15 +940,6 @@
 
     <!-- CURRENT -->
     <div class="tab-content current">
-
-      <div class="metric-header">
-        <div class="stat-number">7.2</div>
-        <div class="trend-indicator flat">
-          ■
-        </div>
-      </div>
-
-      <div class="stat-date">2021-2023</div>
 
       <div class="dashboard-tile">
         <svg viewBox="0 0 280 110" class="sparkline">
@@ -1032,9 +1041,19 @@
     <div class="tab-content info">
       
         <div class="methodology-label">Source</div>
-        Vital Statistics 
+          <b>Vital Statistics. </b>
+          The state of Kansas maintains a registry of vital events including births, deaths, marriages, divorces, and stillbirths, managed by the KDHE Office of Vital Statistics. Vital statistics data are available through the Kansas Information for Communities portal. Key vital statistics indicators are available from Kansas Health Matters.<br>
+
+          
+            <a href=https://www.kdhe.ks.gov/1165/Office-of-Vital-Statistics>
+              Kansas Department of Health and Environment
+            </a>
           
         
+      
+      <br>
+      <br>
+
       
 
       
@@ -1051,7 +1070,6 @@
 
 <script>
 (function () {
-  /* Scope to the last injected tile so multiple tiles on one page don't conflict */
   var tiles = document.querySelectorAll(".dashboard-tile");
   var lastTile = tiles[tiles.length - 1];
   if (!lastTile) return;
@@ -1074,15 +1092,12 @@
   }
 
   lastTile.querySelectorAll(".spark-point").forEach(function (point) {
-
-    /* Mouse */
     point.addEventListener("mouseenter", function () { showTooltip(point); });
     point.addEventListener("mousemove",  function (e) { moveTooltip(e.clientX, e.clientY); });
     point.addEventListener("mouseleave", hideTooltip);
 
-    /* Touch — fires on mobile where mouseenter doesn't */
     point.addEventListener("touchstart", function (e) {
-      e.preventDefault();               /* suppress ghost click */
+      e.preventDefault();
       var t = e.touches[0];
       showTooltip(point);
       moveTooltip(t.clientX, t.clientY);
@@ -1094,18 +1109,13 @@
     });
 
     point.addEventListener("touchend", function () {
-      setTimeout(hideTooltip, 1200);    /* brief delay so user can read it */
+      setTimeout(hideTooltip, 1200);
     });
-
   });
 }());
 </script>
     
-      <div class="indicator-card">
-
-  <h3 class="indicator-title">
-    Percentage of births where the mother smoked during pregnancy
-  </h3>
+      <div class="indicator-card tile-2">
 
   <!-- Tab radio inputs must precede .content so the CSS sibling selectors work -->
   <input type="radio"
@@ -1119,6 +1129,17 @@
          name="tab-4"
          id="info-4">
 
+  <div class="t2-header">
+    <h3 class="indicator-title">
+      Percentage of births where the mother smoked during pregnancy
+    </h3>
+    <div class="t2-kpi-block">
+      <span class="stat-number">6.3 percent</span>
+      <span class="trend-indicator good">▼</span>
+      <span class="stat-date">2021-2023</span>
+    </div>
+  </div>
+
   <div class="view-selector">
     <label for="status-4">Current</label>
     <label for="tbl-4">Table</label>
@@ -1129,15 +1150,6 @@
 
     <!-- CURRENT -->
     <div class="tab-content current">
-
-      <div class="metric-header">
-        <div class="stat-number">6.3 percent</div>
-        <div class="trend-indicator good">
-          ▼
-        </div>
-      </div>
-
-      <div class="stat-date">2021-2023</div>
 
       <div class="dashboard-tile">
         <svg viewBox="0 0 280 110" class="sparkline">
@@ -1241,9 +1253,19 @@
     <div class="tab-content info">
       
         <div class="methodology-label">Source</div>
-        Vital Statistics 
+          <b>Vital Statistics. </b>
+          The state of Kansas maintains a registry of vital events including births, deaths, marriages, divorces, and stillbirths, managed by the KDHE Office of Vital Statistics. Vital statistics data are available through the Kansas Information for Communities portal. Key vital statistics indicators are available from Kansas Health Matters.<br>
+
+          
+            <a href=https://www.kdhe.ks.gov/1165/Office-of-Vital-Statistics>
+              Kansas Department of Health and Environment
+            </a>
           
         
+      
+      <br>
+      <br>
+
       
 
       
@@ -1260,7 +1282,6 @@
 
 <script>
 (function () {
-  /* Scope to the last injected tile so multiple tiles on one page don't conflict */
   var tiles = document.querySelectorAll(".dashboard-tile");
   var lastTile = tiles[tiles.length - 1];
   if (!lastTile) return;
@@ -1283,15 +1304,12 @@
   }
 
   lastTile.querySelectorAll(".spark-point").forEach(function (point) {
-
-    /* Mouse */
     point.addEventListener("mouseenter", function () { showTooltip(point); });
     point.addEventListener("mousemove",  function (e) { moveTooltip(e.clientX, e.clientY); });
     point.addEventListener("mouseleave", hideTooltip);
 
-    /* Touch — fires on mobile where mouseenter doesn't */
     point.addEventListener("touchstart", function (e) {
-      e.preventDefault();               /* suppress ghost click */
+      e.preventDefault();
       var t = e.touches[0];
       showTooltip(point);
       moveTooltip(t.clientX, t.clientY);
@@ -1303,18 +1321,13 @@
     });
 
     point.addEventListener("touchend", function () {
-      setTimeout(hideTooltip, 1200);    /* brief delay so user can read it */
+      setTimeout(hideTooltip, 1200);
     });
-
   });
 }());
 </script>
     
-      <div class="indicator-card">
-
-  <h3 class="indicator-title">
-    Age-Adjusted Suicide Mortality Rate
-  </h3>
+      <div class="indicator-card tile-2">
 
   <!-- Tab radio inputs must precede .content so the CSS sibling selectors work -->
   <input type="radio"
@@ -1328,6 +1341,17 @@
          name="tab-7"
          id="info-7">
 
+  <div class="t2-header">
+    <h3 class="indicator-title">
+      Age-Adjusted Suicide Mortality Rate
+    </h3>
+    <div class="t2-kpi-block">
+      <span class="stat-number">15.9 per 100,000 population</span>
+      <span class="trend-indicator flat">■</span>
+      <span class="stat-date">2021-2023</span>
+    </div>
+  </div>
+
   <div class="view-selector">
     <label for="status-7">Current</label>
     <label for="tbl-7">Table</label>
@@ -1338,15 +1362,6 @@
 
     <!-- CURRENT -->
     <div class="tab-content current">
-
-      <div class="metric-header">
-        <div class="stat-number">15.9 per 100,000 population</div>
-        <div class="trend-indicator flat">
-          ■
-        </div>
-      </div>
-
-      <div class="stat-date">2021-2023</div>
 
       <div class="dashboard-tile">
         <svg viewBox="0 0 280 110" class="sparkline">
@@ -1450,9 +1465,19 @@
     <div class="tab-content info">
       
         <div class="methodology-label">Source</div>
-        Vital Statistics 
+          <b>Vital Statistics. </b>
+          The state of Kansas maintains a registry of vital events including births, deaths, marriages, divorces, and stillbirths, managed by the KDHE Office of Vital Statistics. Vital statistics data are available through the Kansas Information for Communities portal. Key vital statistics indicators are available from Kansas Health Matters.<br>
+
+          
+            <a href=https://www.kdhe.ks.gov/1165/Office-of-Vital-Statistics>
+              Kansas Department of Health and Environment
+            </a>
           
         
+      
+      <br>
+      <br>
+
       
 
       
@@ -1469,7 +1494,6 @@
 
 <script>
 (function () {
-  /* Scope to the last injected tile so multiple tiles on one page don't conflict */
   var tiles = document.querySelectorAll(".dashboard-tile");
   var lastTile = tiles[tiles.length - 1];
   if (!lastTile) return;
@@ -1492,15 +1516,12 @@
   }
 
   lastTile.querySelectorAll(".spark-point").forEach(function (point) {
-
-    /* Mouse */
     point.addEventListener("mouseenter", function () { showTooltip(point); });
     point.addEventListener("mousemove",  function (e) { moveTooltip(e.clientX, e.clientY); });
     point.addEventListener("mouseleave", hideTooltip);
 
-    /* Touch — fires on mobile where mouseenter doesn't */
     point.addEventListener("touchstart", function (e) {
-      e.preventDefault();               /* suppress ghost click */
+      e.preventDefault();
       var t = e.touches[0];
       showTooltip(point);
       moveTooltip(t.clientX, t.clientY);
@@ -1512,9 +1533,8 @@
     });
 
     point.addEventListener("touchend", function () {
-      setTimeout(hideTooltip, 1200);    /* brief delay so user can read it */
+      setTimeout(hideTooltip, 1200);
     });
-
   });
 }());
 </script>

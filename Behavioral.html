@@ -262,11 +262,7 @@
   <!-- ── Tile grid ─────────────────────────────────────────── -->
   <div class="dashboard">
     
-      <div class="indicator-card">
-
-  <h3 class="indicator-title">
-    Suicide Rate per 100,000
-  </h3>
+      <div class="indicator-card tile-2">
 
   <!-- Tab radio inputs must precede .content so the CSS sibling selectors work -->
   <input type="radio"
@@ -280,6 +276,17 @@
          name="tab-9"
          id="info-9">
 
+  <div class="t2-header">
+    <h3 class="indicator-title">
+      Suicide Rate per 100,000
+    </h3>
+    <div class="t2-kpi-block">
+      <span class="stat-number">18.0 per 100,000</span>
+      <span class="trend-indicator bad">▲</span>
+      <span class="stat-date">2024</span>
+    </div>
+  </div>
+
   <div class="view-selector">
     <label for="status-9">Current</label>
     <label for="tbl-9">Table</label>
@@ -290,15 +297,6 @@
 
     <!-- CURRENT -->
     <div class="tab-content current">
-
-      <div class="metric-header">
-        <div class="stat-number">18.0 per 100,000</div>
-        <div class="trend-indicator bad">
-          ▲
-        </div>
-      </div>
-
-      <div class="stat-date">2024</div>
 
       <div class="dashboard-tile">
         <svg viewBox="0 0 280 110" class="sparkline">
@@ -402,12 +400,30 @@
     <div class="tab-content info">
       
         <div class="methodology-label">Source</div>
-        KIC Death Module 
+          <b>KIC Death Module. </b>
+          Kansas Information for 
+Communities (KIC)<br>
+
+          
+            <a href=https://kic.kdheks.gov/death_new.php#top>
+              KDHE KIC Death
+            </a>
           
         
-        KIC Population Module 
-          
-          
+        <br>
+            <b>KIC Population Module. </b>
+            Kansas Information for Communities (KIC) population module.<br>
+
+            
+              <a href=https://kic.kdheks.gov/popltneth_str.php#top>
+                KDHE KIC Poplulation
+              </a>
+            
+        
+      
+      <br>
+      <br>
+
       
 
       
@@ -437,7 +453,6 @@
 
 <script>
 (function () {
-  /* Scope to the last injected tile so multiple tiles on one page don't conflict */
   var tiles = document.querySelectorAll(".dashboard-tile");
   var lastTile = tiles[tiles.length - 1];
   if (!lastTile) return;
@@ -460,15 +475,12 @@
   }
 
   lastTile.querySelectorAll(".spark-point").forEach(function (point) {
-
-    /* Mouse */
     point.addEventListener("mouseenter", function () { showTooltip(point); });
     point.addEventListener("mousemove",  function (e) { moveTooltip(e.clientX, e.clientY); });
     point.addEventListener("mouseleave", hideTooltip);
 
-    /* Touch — fires on mobile where mouseenter doesn't */
     point.addEventListener("touchstart", function (e) {
-      e.preventDefault();               /* suppress ghost click */
+      e.preventDefault();
       var t = e.touches[0];
       showTooltip(point);
       moveTooltip(t.clientX, t.clientY);
@@ -480,9 +492,8 @@
     });
 
     point.addEventListener("touchend", function () {
-      setTimeout(hideTooltip, 1200);    /* brief delay so user can read it */
+      setTimeout(hideTooltip, 1200);
     });
-
   });
 }());
 </script>
