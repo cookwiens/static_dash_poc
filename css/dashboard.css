@@ -386,7 +386,7 @@ input[id^="info-"]:checked   ~ .content .info    { display: block; }
 }
 
 /* -------------------------------------------------------
-   Table tab
+   Table tab - might could delete this
 ------------------------------------------------------- */
 .table-units {
   font-size: 0.78rem;
