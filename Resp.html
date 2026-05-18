@@ -264,39 +264,69 @@
     
       <div class="indicator-card tile-2">
 
-  <!-- Tab radio inputs must precede .content so the CSS sibling selectors work -->
-  <input type="radio"
-         name="tab-7"
-         id="status-7"
-         checked>
-  <input type="radio"
-         name="tab-7"
-         id="tbl-7">
-  <input type="radio"
-         name="tab-7"
-         id="info-7">
 
-  <div class="t2-header">
-    <h3 class="indicator-title">
-      Age-Adjusted Suicide Mortality Rate
-    </h3>
-    <div class="t2-kpi-block">
-      <span class="stat-number">15.9 per 100,000 population</span>
-      <span class="trend-indicator flat">■</span>
-      <span class="stat-date">2021-2023</span>
-    </div>
+<div class="t2-header">
+  <h3 class="indicator-title">
+    Age-Adjusted Suicide Mortality Rate
+  </h3>
+  <div class="t2-kpi-block">
+    <span class="stat-number">15.9 per 100,000 population</span>
+    <span class="trend-indicator flat"
+          aria-label="The overall trend is neither increasing nor decreasingwhich is ."
+          area-hidden="false">
+      ■
+    </span>
+    <span class="visually-hidden">
+      The overall trend is neither increasing nor decreasingwhich is .
+    </span>
+    <span class="stat-date">2021-2023</span>
   </div>
+</div>
 
-  <div class="view-selector">
-    <label for="status-7">Current</label>
-    <label for="tbl-7">Learn more</label>
-    <label for="info-7">Info</label>
-  </div>
+<div class="view-selector" role="tablist" aria-label="Indicator views">
+
+  <button role="tab"
+          id="tab-current-7"
+          aria-controls="panel-current-7"
+          aria-selected="true"
+          tabindex="0"
+          class="tab-btn active">
+    Trend
+  </button>
+
+  <button role="tab"
+          id="tab-learn-7"
+          aria-controls="panel-learn-7"
+          aria-selected="false"
+          tabindex="-1"
+          class="tab-btn">
+    Learn more
+  </button>
+
+  <button role="tab"
+          id="tab-info-7"
+          aria-controls="panel-info-7"
+          aria-selected="false"
+          tabindex="-1"
+          class="tab-btn">
+    Info
+  </button>
+
+</div>
+
+
+  
+
+
 
   <div class="content">
 
     <!-- CURRENT -->
-    <div class="tab-content current">
+    <div class="tab-content current"
+         role="tabpanel"
+         id="panel-current-7"
+         aria-labelledby="tab-current-7"
+         tabindex="0">
 
       <div class="dashboard-tile">
         <svg viewBox="0 0 280 110" class="sparkline">
@@ -337,12 +367,22 @@
     </div>
 
     <!-- TABLE -->
-    <div class="tab-content table">
+    <div class="tab-content table"
+         role="tabpanel"
+         id="panel-learn-7"
+         aria-labelledby="tab-learn-7"
+         tabindex="0"
+         hidden>
       
     </div>
 
     <!-- INFO -->
-    <div class="tab-content info">
+    <div class="tab-content info"
+         role="tabpanel"
+         id="panel-info-7"
+         aria-labelledby="tab-info-7"
+         tabindex="0"
+         hidden>
       
         <div class="methodology-label">Source</div>
           <b>Vital Statistics. </b>
@@ -371,48 +411,79 @@
 
 <script>
 (function () {
-  var tiles = document.querySelectorAll(".dashboard-tile");
-  var lastTile = tiles[tiles.length - 1];
-  if (!lastTile) return;
 
-  var tooltip = lastTile.querySelector(".spark-tooltip");
-  if (!tooltip) return;
+  // ── Tab widget ──────────────────────────────────────────
+  document.querySelectorAll('.indicator-card').forEach(function (card) {
+    var tabs   = Array.from(card.querySelectorAll('[role="tab"]'));
+    var panels = Array.from(card.querySelectorAll('[role="tabpanel"]'));
 
-  function showTooltip(point) {
-    tooltip.textContent = point.dataset.x + ": " + point.dataset.y;
-    tooltip.style.display = "block";
-  }
+    function activateTab(tab) {
+      tabs.forEach(function (t) {
+        t.setAttribute('aria-selected', 'false');
+        t.setAttribute('tabindex', '-1');
+        t.classList.remove('active');
+      });
+      panels.forEach(function (p) { p.hidden = true; });
 
-  function moveTooltip(clientX, clientY) {
-    tooltip.style.left = (clientX + 12) + "px";
-    tooltip.style.top  = (clientY - 36) + "px";
-  }
+      tab.setAttribute('aria-selected', 'true');
+      tab.setAttribute('tabindex', '0');
+      tab.classList.add('active');
 
-  function hideTooltip() {
-    tooltip.style.display = "none";
-  }
+      var panel = card.querySelector('#' + tab.getAttribute('aria-controls'));
+      if (panel) panel.hidden = false;
+    }
 
-  lastTile.querySelectorAll(".spark-point").forEach(function (point) {
-    point.addEventListener("mouseenter", function () { showTooltip(point); });
-    point.addEventListener("mousemove",  function (e) { moveTooltip(e.clientX, e.clientY); });
-    point.addEventListener("mouseleave", hideTooltip);
+    tabs.forEach(function (tab, index) {
+      tab.addEventListener('click', function () { activateTab(tab); });
 
-    point.addEventListener("touchstart", function (e) {
-      e.preventDefault();
-      var t = e.touches[0];
-      showTooltip(point);
-      moveTooltip(t.clientX, t.clientY);
-    }, { passive: false });
-
-    point.addEventListener("touchmove", function (e) {
-      var t = e.touches[0];
-      moveTooltip(t.clientX, t.clientY);
-    });
-
-    point.addEventListener("touchend", function () {
-      setTimeout(hideTooltip, 1200);
+      tab.addEventListener('keydown', function (e) {
+        var newIndex;
+        if      (e.key === 'ArrowRight') { newIndex = (index + 1) % tabs.length; }
+        else if (e.key === 'ArrowLeft')  { newIndex = (index - 1 + tabs.length) % tabs.length; }
+        else if (e.key === 'Home')       { newIndex = 0; }
+        else if (e.key === 'End')        { newIndex = tabs.length - 1; }
+        else return;
+        e.preventDefault();
+        activateTab(tabs[newIndex]);
+        tabs[newIndex].focus();
+      });
     });
   });
+
+  // ── Sparkline tooltips ──────────────────────────────────
+  document.querySelectorAll('.dashboard-tile').forEach(function (tile) {
+    var tooltip = tile.querySelector('.spark-tooltip');
+    if (!tooltip) return;
+
+    function showTooltip(point) {
+      tooltip.textContent = point.dataset.x + ': ' + point.dataset.y;
+      tooltip.style.display = 'block';
+    }
+    function moveTooltip(clientX, clientY) {
+      tooltip.style.left = (clientX + 12) + 'px';
+      tooltip.style.top  = (clientY - 36) + 'px';
+    }
+    function hideTooltip() { tooltip.style.display = 'none'; }
+
+    tile.querySelectorAll('.spark-point').forEach(function (point) {
+      point.addEventListener('mouseenter', function () { showTooltip(point); });
+      point.addEventListener('mousemove',  function (e) { moveTooltip(e.clientX, e.clientY); });
+      point.addEventListener('mouseleave', hideTooltip);
+
+      point.addEventListener('touchstart', function (e) {
+        e.preventDefault();
+        showTooltip(point);
+        moveTooltip(e.touches[0].clientX, e.touches[0].clientY);
+      }, { passive: false });
+      point.addEventListener('touchmove', function (e) {
+        moveTooltip(e.touches[0].clientX, e.touches[0].clientY);
+      });
+      point.addEventListener('touchend', function () {
+        setTimeout(hideTooltip, 1200);
+      });
+    });
+  });
+
 }());
 </script>
     
