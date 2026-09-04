@@ -1,431 +1,158 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lawrence-Douglas County Health Indicator Dashboard</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;600&display=swap" rel="stylesheet">
-
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --blue:      #1776bc;
-      --blue-dark: #0f5a96;
-      --sky:       #a0ddfc;
-      --orange:    #f3711b;
-      --muted:     #707a83;
-      --ink:       #1e2a35;
-      --bg:        #f5f9fd;
-      --rule:      #d8e8f4;
-      --card:      #ffffff;
-    }
-
-    body {
-      font-family: 'Source Sans 3', 'Segoe UI', sans-serif;
-      background: var(--bg);
-      color: var(--ink);
-      min-height: 100vh;
-    }
-
-    /* ── Header ── */
-    header {
-      background: linear-gradient(135deg, var(--blue-dark) 0%, var(--blue) 100%);
-      border-bottom: 3px solid var(--orange);
-    }
-
-    .banner {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 20px 24px;
-      display: flex;
-      align-items: center;
-      gap: 20px;
-    }
-
-    .logo-header {
-      height: 48px;
-      width: auto;
-      display: block;
-      flex-shrink: 0;
-      filter: brightness(0) invert(1);
-      opacity: 0.95;
-    }
-
-    .banner-text { flex: 1; }
-
-    .banner-eyebrow {
-      font-size: 0.68rem;
-      font-weight: 600;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--sky);
-      margin-bottom: 3px;
-    }
-
-    .banner-site-title {
-      font-family: 'EB Garamond', serif;
-      font-size: 1.4rem;
-      font-weight: 600;
-      color: #fff;
-      line-height: 1.2;
-    }
-
-    /* ── Hero ── */
-    .hero {
-      background: linear-gradient(135deg, var(--blue-dark) 0%, var(--blue) 100%);
-      padding: 36px 24px 44px;
-    }
-
-    .hero-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      gap: 24px;
-      flex-wrap: wrap;
-    }
-
-    .hero-label {
-      font-size: 0.68rem;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--sky);
-      margin-bottom: 8px;
-    }
-
-    .hero h1 {
-      font-family: 'EB Garamond', serif;
-      font-size: clamp(1.8rem, 4vw, 2.6rem);
-      font-weight: 600;
-      color: #fff;
-      line-height: 1.2;
-      margin-bottom: 12px;
-    }
-
-    .hero p {
-      font-size: 0.97rem;
-      color: rgba(255,255,255,0.75);
-      max-width: 520px;
-      line-height: 1.65;
-    }
-
-    .hero-links {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      padding-bottom: 4px;
-    }
-
-    .hero-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      padding: 9px 18px;
-      border-radius: 6px;
-      font-size: 0.83rem;
-      font-weight: 600;
-      text-decoration: none;
-      transition: background .18s, color .18s, transform .15s;
-      white-space: nowrap;
-    }
-
-    .hero-btn-primary {
-      background: #fff;
-      color: var(--blue-dark);
-    }
-    .hero-btn-primary:hover {
-      background: var(--sky);
-      transform: translateY(-1px);
-    }
-
-    .hero-btn-ghost {
-      background: rgba(255,255,255,0.12);
-      color: #fff;
-      border: 1px solid rgba(255,255,255,0.3);
-    }
-    .hero-btn-ghost:hover {
-      background: rgba(255,255,255,0.22);
-      transform: translateY(-1px);
-    }
-
-    /* ── Main ── */
-    main {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 32px 24px 64px;
-    }
-
-    .section-header {
-      display: flex;
-      align-items: baseline;
-      gap: 12px;
-      margin-bottom: 16px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid var(--rule);
-    }
-
-    .section-title {
-      font-size: 0.72rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--muted);
-    }
-
-    .section-count {
-      font-size: 0.72rem;
-      color: var(--blue);
-      font-weight: 600;
-    }
-
-    /* ── Topic cards ── */
-    .topics {
-      list-style: none;
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 1rem;
-    }
-
-    .topic-card {
-      background: var(--card);
-      border: 1px solid var(--rule);
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0 1px 4px rgba(23,118,188,0.06);
-      transition: box-shadow .22s, transform .22s, border-color .22s;
-      animation: fadeUp .4s ease both;
-    }
-
-    .topic-card:nth-child(1) { animation-delay: .04s; }
-    .topic-card:nth-child(2) { animation-delay: .10s; }
-    .topic-card:nth-child(3) { animation-delay: .16s; }
-    .topic-card:nth-child(4) { animation-delay: .22s; }
-    .topic-card:nth-child(5) { animation-delay: .28s; }
-    .topic-card:nth-child(6) { animation-delay: .34s; }
-
-    .topic-card:hover {
-      box-shadow: 0 6px 20px rgba(23,118,188,0.15);
-      transform: translateY(-3px);
-      border-color: var(--blue);
-    }
-
-    .topic-card a {
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-      text-decoration: none;
-      color: inherit;
-    }
-
-    .topic-icon-band {
-      height: 100px;
-      background: linear-gradient(135deg, #e8f4fd 0%, #d4ecfa 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 16px;
-      position: relative;
-    }
-
-    .topic-icon-band::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 3px;
-      background: var(--blue);
-      opacity: 0;
-      transition: opacity .22s;
-    }
-
-    .topic-card:hover .topic-icon-band::before {
-      opacity: 1;
-    }
-
-    .topic-icon-band img {
-      height: 80px;
-      width: auto;
-      object-fit: contain;
-    }
-
-    .topic-body {
-      padding: 14px 16px 16px;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      gap: 8px;
-    }
-
-    .topic-name {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: 1.05rem;
-      font-weight: 600;
-      color: var(--ink);
-      line-height: 1.3;
-    }
-
-    .topic-cta {
-      font-size: 0.78rem;
-      font-weight: 700;
-      color: var(--blue);
-      letter-spacing: 0.04em;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .topic-cta svg {
-      transition: transform .18s;
-    }
-
-    .topic-card:hover .topic-cta svg {
-      transform: translateX(4px);
-    }
-
-    /* ── Footer ── */
-    footer {
-      border-top: 1px solid var(--rule);
-      background: var(--card);
-      padding: 20px 24px;
-      text-align: center;
-      font-size: 0.78rem;
-      color: var(--muted);
-    }
-
-    footer a {
-      color: var(--blue);
-      text-decoration: none;
-      font-weight: 600;
-    }
-    footer a:hover { text-decoration: underline; }
-
-    /* ── Animation ── */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(14px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    /* ── Mobile ── */
-    @media (max-width: 600px) {
-      .banner { padding: 16px; gap: 12px; }
-      .logo-header { height: 38px; }
-      .banner-site-title { font-size: 1.1rem; }
-      .hero { padding: 28px 16px 36px; }
-      .hero-inner { flex-direction: column; align-items: flex-start; }
-      main { padding: 24px 16px 48px; }
-      .topics { grid-template-columns: 1fr 1fr; gap: .75rem; }
-    }
-
-    @media (max-width: 420px) {
-      .topics { grid-template-columns: 1fr; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Respiratory Illness Surveillance Dashboard | Lawrence-Douglas County Public Health</title>
+<meta name="description" content="Weekly emergency department visit rates and wastewater surveillance trends for COVID-19, Influenza, and RSV in Lawrence-Douglas County.">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body>
+<a class="skip-link" href="#main">Skip to main content</a>
 
-  <!-- ── Header ── -->
-  <header>
-    <div class="banner">
-      <a href="https://ldchealth.org/">
-        <img src="resources/cropped_logo.png" alt="LDCPH Logo" class="logo-header">
-      </a>
-      <div class="banner-text">
-        <div class="banner-eyebrow">Lawrence-Douglas County Public Health</div>
-        <div class="banner-site-title">Health Indicator Dashboard</div>
-      </div>
-    </div>
-  </header>
+<header class="site-header">
+  <div class="header-bar">
+    <a class="brand" href="#top">
+      <img class="brand__logo" src="assets/img/logo.svg" alt="Lawrence-Douglas County Public Health logo">
+      <span class="brand__text">
+        <span class="brand__agency">Lawrence-Douglas County Public Health</span>
+        <span class="brand__tagline">Respiratory Illness Surveillance</span>
+      </span>
+    </a>
+    <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="mainNav" aria-label="Toggle navigation menu"></button>
+  </div>
+  <nav class="main-nav" id="mainNav">
+    <a href="#overview">Overview</a>
+    <a href="#covid">COVID-19</a>
+    <a href="#influenza">Influenza</a>
+    <a href="#rsv">RSV</a>
+    <a href="#about">About the Data</a>
+  </nav>
+</header>
 
-  <!-- ── Hero ── -->
+<main id="main">
+  <div id="top"></div>
   <section class="hero">
-    <div class="hero-inner">
-      <div class="hero-text">
-        <p class="hero-label">Community Health Data · Douglas County, Kansas</p>
-        <h1>Explore Health<br>Indicators</h1>
-        <p>Browse population health data across environmental, respiratory, behavioral, and other topics for Douglas County.</p>
-      </div>
-      <div class="hero-links">
-        <a href="all_indicators.html" class="hero-btn hero-btn-primary">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-          Search all indicators
-        </a>
-        <a href="documentation.html" class="hero-btn hero-btn-ghost">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-          Documentation
-        </a>
+    <div class="container">
+      <h1>Respiratory Illness Surveillance Dashboard</h1>
+      <p>Weekly emergency department visit rates and wastewater trends for COVID-19, influenza, and RSV across Lawrence &amp; Douglas County, Kansas.</p>
+      <div class="hero__meta">
+        <span class="badge"><span class="badge__dot"></span> Data updated <span id="lastUpdated">—</span></span>
+        <span class="badge">Sources: local ED syndromic surveillance &middot; wastewater sampling</span>
       </div>
     </div>
   </section>
 
-  <!-- ── Topic grid ── -->
-  <main>
-    <div class="section-header">
-      <span class="section-title">Browse by topic</span>
-      <span class="section-count">3 topics</span>
+  <section class="section" id="overview">
+    <div class="container">
+      <h2 class="section-title">At a Glance</h2>
+      <p class="section-sub">Most recent weekly ED visit rate and most recent wastewater result for each pathogen.</p>
+      <div class="stat-grid" id="statGrid">
+        <div class="state-msg">Loading current snapshot…</div>
+      </div>
     </div>
+  </section>
 
-    <ul class="topics">
-      
-      <li class="topic-card">
-        <a href="Environment.html">
-          <div class="topic-icon-band">
-            <img src="resources/Environmental Health Icon.png" alt="">
+  <section class="section" id="covid">
+    <div class="container">
+      <h2 class="section-title">COVID-19</h2>
+      <p class="section-sub">Emergency department visit rate compared with the same weeks last year, alongside wastewater trends.</p>
+      <div class="pathogen-card" data-pathogen="covid" style="--tone:var(--covid-strong)">
+        <div class="pathogen-card__head">
+          <span class="pathogen-card__dot"></span>
+          <h3 class="pathogen-card__title">COVID-19 Trends</h3>
+        </div>
+        <p class="pathogen-card__desc">ED visit rate (per 100,000 visits) and wastewater viral activity level.</p>
+        <div class="chart-grid">
+          <div class="chart-box">
+            <h3>ED Visit Rate — This Year vs. Last Year</h3>
+            <div class="chart-wrap"><canvas id="chart-covid-ed"></canvas></div>
+            <p class="legend-note">Solid = current season &nbsp;·&nbsp; Dashed = same weeks, prior year</p>
           </div>
-          <div class="topic-body">
-            <span class="topic-name">Environment and Health</span>
-            <span class="topic-cta">
-              View indicators
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </span>
+          <div class="chart-box">
+            <h3>Wastewater Surveillance</h3>
+            <div class="chart-wrap"><canvas id="chart-covid-ww"></canvas></div>
+            <p class="legend-note">Sampled levels over time across monitored sites</p>
           </div>
-        </a>
-      </li>
-      
-      <li class="topic-card">
-        <a href="Resp.html">
-          <div class="topic-icon-band">
-            <img src="resources/Respiratory Infections.png" alt="">
-          </div>
-          <div class="topic-body">
-            <span class="topic-name">Respiratory Infections</span>
-            <span class="topic-cta">
-              View indicators
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </span>
-          </div>
-        </a>
-      </li>
-      
-      <li class="topic-card">
-        <a href="Behavioral.html">
-          <div class="topic-icon-band">
-            <img src="resources/Behavioral Health.png" alt="">
-          </div>
-          <div class="topic-body">
-            <span class="topic-name">Behavioral Health</span>
-            <span class="topic-cta">
-              View indicators
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </span>
-          </div>
-        </a>
-      </li>
-      
-    </ul>
-  </main>
+        </div>
+      </div>
+    </div>
+  </section>
 
-  <!-- ── Footer ── */
-  <footer>
-    Lawrence-Douglas County Public Health &mdash;
-    <a href="all_indicators.html">View all indicators</a> &mdash;
-    <a href="documentation.html">Documentation</a>
-  </footer>
+  <section class="section" id="influenza">
+    <div class="container">
+      <h2 class="section-title">Influenza</h2>
+      <p class="section-sub">Emergency department visit rate compared with the same weeks last year, alongside wastewater trends.</p>
+      <div class="pathogen-card" data-pathogen="influenza" style="--tone:var(--flu-strong)">
+        <div class="pathogen-card__head">
+          <span class="pathogen-card__dot"></span>
+          <h3 class="pathogen-card__title">Influenza Trends</h3>
+        </div>
+        <p class="pathogen-card__desc">ED visit rate (per 100,000 visits) and wastewater viral activity level.</p>
+        <div class="chart-grid">
+          <div class="chart-box">
+            <h3>ED Visit Rate — This Year vs. Last Year</h3>
+            <div class="chart-wrap"><canvas id="chart-influenza-ed"></canvas></div>
+            <p class="legend-note">Solid = current season &nbsp;·&nbsp; Dashed = same weeks, prior year</p>
+          </div>
+          <div class="chart-box">
+            <h3>Wastewater Surveillance</h3>
+            <div class="chart-wrap"><canvas id="chart-influenza-ww"></canvas></div>
+            <p class="legend-note">Sampled levels over time across monitored sites</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
+  <section class="section" id="rsv">
+    <div class="container">
+      <h2 class="section-title">RSV</h2>
+      <p class="section-sub">Emergency department visit rate compared with the same weeks last year, alongside wastewater trends.</p>
+      <div class="pathogen-card" data-pathogen="rsv" style="--tone:var(--rsv-strong)">
+        <div class="pathogen-card__head">
+          <span class="pathogen-card__dot"></span>
+          <h3 class="pathogen-card__title">RSV Trends</h3>
+        </div>
+        <p class="pathogen-card__desc">ED visit rate (per 100,000 visits) and wastewater viral activity level.</p>
+        <div class="chart-grid">
+          <div class="chart-box">
+            <h3>ED Visit Rate — This Year vs. Last Year</h3>
+            <div class="chart-wrap"><canvas id="chart-rsv-ed"></canvas></div>
+            <p class="legend-note">Solid = current season &nbsp;·&nbsp; Dashed = same weeks, prior year</p>
+          </div>
+          <div class="chart-box">
+            <h3>Wastewater Surveillance</h3>
+            <div class="chart-wrap"><canvas id="chart-rsv-ww"></canvas></div>
+            <p class="legend-note">Sampled levels over time across monitored sites</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="about">
+    <div class="container">
+      <h2 class="section-title">About This Data</h2>
+      <ul class="about-list">
+        <li><strong>ED visit rates</strong> are calculated weekly from local emergency department syndromic surveillance and reported as a rate to allow comparison across time periods.</li>
+        <li><strong>Wastewater surveillance</strong> reflects viral genetic material measured in sewage samples, an early indicator of community transmission that is independent of testing or healthcare-seeking behavior.</li>
+        <li>Data are refreshed periodically; see the "Data updated" badge above for the most recent refresh date.</li>
+        <li>This dashboard is for general public health situational awareness and should not be used for individual medical decision-making.</li>
+      </ul>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <span>&copy; <span id="year"></span> Lawrence-Douglas County Public Health</span>
+    <span><a href="https://www.ldchealth.org" target="_blank" rel="noopener">ldchealth.org</a></span>
+  </div>
+</footer>
+
+<script src="assets/js/vendor/chart.min.js"></script>
+<script src="assets/js/main.js"></script>
 </body>
 </html>
