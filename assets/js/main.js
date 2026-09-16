@@ -1,7 +1,8 @@
 /* ==========================================================================
    Lawrence-Douglas County Public Health — Dashboard logic
-   Loads two static JSON files (produced by the Jupyter notebook) and
-   renders responsive Chart.js line charts. No build step, no CDN needed.
+   Loads three static JSON files (produced by the Jupyter notebook) and
+   renders responsive Chart.js line charts, plus a staff-authored narrative.
+   No build step, no CDN needed.
    ========================================================================== */
 
 (function () {
@@ -48,6 +49,7 @@
   const DATA_URLS = {
     ed: "assets/data/ed_visits.json",
     ww: "assets/data/wastewater.json",
+    narrative: "assets/data/narrative.json",
   };
 
   Chart.defaults.font.family = getComputedStyle(document.body).fontFamily;
@@ -63,101 +65,123 @@
     return `rgba(${r},${g},${b},${alpha})`;
   }
 
-  // ---- Fetch both datasets ----
+  // ---- Fetch all three datasets ----
   Promise.all([
     fetch(DATA_URLS.ed).then((r) => r.json()),
     fetch(DATA_URLS.ww).then((r) => r.json()),
+    fetch(DATA_URLS.narrative).then((r) => r.json()).catch(() => null),
   ])
-    .then(([edData, wwData]) => {
-      renderLastUpdated(edData, wwData);
-      renderStatGrid(edData, wwData);
+    .then(([edData, wwData, narrativeData]) => {
+      renderLastUpdated(edData, wwData, narrativeData);
+      renderNarrative(narrativeData);
       Object.keys(PATHOGEN_META).forEach((key) => {
-        renderEdChart(key, edData);
-        renderWastewaterChart(key, wwData);
+        const edSeries = findPathogen(edData.pathogens, key);
+        const wwSeries = findPathogen(wwData.pathogens, key);
+        if (!edSeries || !wwSeries) return;
+
+        const shared = computeSharedXAxis(edSeries.dates, wwSeries.points.map((p) => p.date));
+        renderEdChart(key, edSeries, edData.unit, shared);
+        renderWastewaterChart(key, wwSeries, wwData.unit, shared);
       });
     })
     .catch((err) => {
       console.error("Failed to load dashboard data:", err);
-      document.getElementById("statGrid").innerHTML =
-        '<div class="state-msg">Data could not be loaded. Check that assets/data/*.json exist.</div>';
+      document.getElementById("narrativeBox").innerHTML =
+        '<p class="state-msg">Data could not be loaded. Check that assets/data/*.json exist.</p>';
     });
 
   // ---- Last updated badge ----
-  function renderLastUpdated(edData, wwData) {
-    const dates = [edData.generated, wwData.generated].filter(Boolean).sort();
+  function renderLastUpdated(edData, wwData, narrativeData) {
+    const dates = [edData.generated, wwData.generated, narrativeData && narrativeData.generated]
+      .filter(Boolean)
+      .sort();
     const latest = dates[dates.length - 1];
-    document.getElementById("lastUpdated").textContent = latest
-      ? formatDate(latest)
-      : "unknown";
+    document.getElementById("lastUpdated").textContent = latest ? formatDate(latest) : "unknown";
   }
 
-  // ---- "At a glance" stat cards ----
-  function renderStatGrid(edData, wwData) {
-    const grid = document.getElementById("statGrid");
-    grid.innerHTML = "";
+  // ---- Narrative summary (staff-authored, limited HTML allowed) ----
+  const ALLOWED_NARRATIVE_TAGS = ["b", "i", "hr", "br", "strong", "em", "u", "p"];
 
-    Object.keys(PATHOGEN_META).forEach((key) => {
-      const meta = PATHOGEN_META[key];
-      const edSeries = findPathogen(edData.pathogens, key);
-      const wwSeries = findPathogen(wwData.pathogens, key);
+  function sanitizeNarrativeHtml(raw, allowedTags) {
+    allowedTags = allowedTags || ALLOWED_NARRATIVE_TAGS;
+    const template = document.createElement("template");
+    template.innerHTML = raw;
 
-      const current = edSeries ? lastNonNull(edSeries.current) : null;
-      const previous = edSeries ? valueAtSameIndex(edSeries.current, edSeries.previous) : null;
-      const delta = current != null && previous != null && previous !== 0
-        ? ((current - previous) / previous) * 100
-        : null;
+    function walk(node) {
+      // Snapshot childNodes first since we mutate the tree while iterating.
+      Array.from(node.childNodes).forEach((child) => {
+        if (child.nodeType === Node.ELEMENT_NODE) {
+          const tag = child.tagName.toLowerCase();
+          walk(child); // sanitize children before deciding this node's fate
+          if (tag === "script" || tag === "style") {
+            child.remove(); // drop disallowed + inherently unsafe tags entirely
+          } else if (!allowedTags.includes(tag)) {
+            // Unwrap: keep the text/children, discard the tag itself
+            while (child.firstChild) node.insertBefore(child.firstChild, child);
+            node.removeChild(child);
+          } else {
+            // Allowed tag — strip all attributes (blocks onclick=, href=javascript:, etc.)
+            Array.from(child.attributes).forEach((attr) => child.removeAttribute(attr.name));
+          }
+        }
+        // text nodes pass through untouched
+      });
+    }
 
-      const wwLatest = wwSeries && wwSeries.points.length
-        ? wwSeries.points[wwSeries.points.length - 1]
-        : null;
-
-      const deltaClass = delta == null ? "flat" : delta > 5 ? "up" : delta < -5 ? "down" : "flat";
-      const deltaText = delta == null
-        ? "No comparison available"
-        : `${delta > 0 ? "▲" : delta < 0 ? "▼" : "►"} ${Math.abs(delta).toFixed(0)}% vs. same week last year`;
-
-      const card = document.createElement("div");
-      card.className = "stat-card";
-      card.style.setProperty("--stat-color", meta.strong);
-      card.innerHTML = `
-        <div class="stat-card__label"><span class="stat-card__swatch"></span>${meta.label} — ED visits</div>
-        <div class="stat-card__value">${current != null ? current.toFixed(1) : "—"}
-          <span class="stat-card__unit">${edData.unit || ""}</span>
-        </div>
-        <div class="stat-card__delta ${deltaClass}">${deltaText}</div>
-      `;
-      grid.appendChild(card);
-
-      const wwCard = document.createElement("div");
-      wwCard.className = "stat-card";
-      wwCard.style.setProperty("--stat-color", meta.soft);
-      wwCard.innerHTML = `
-        <div class="stat-card__label"><span class="stat-card__swatch"></span>${meta.label} — Wastewater</div>
-        <div class="stat-card__value">${wwLatest ? wwLatest.value.toLocaleString() : "—"}
-          <span class="stat-card__unit">${wwData.unit || ""}</span>
-        </div>
-        <div class="stat-card__delta flat">${wwLatest ? "As of " + formatDate(wwLatest.date) : "No data"}</div>
-      `;
-      grid.appendChild(wwCard);
-    });
+    walk(template.content);
+    return template.innerHTML;
   }
 
-  // ---- ED chart: category axis (week labels), current vs. previous year ----
-  function renderEdChart(key, edData) {
+  function renderNarrative(narrativeData) {
+    const box = document.getElementById("narrativeBox");
+    if (!narrativeData || !narrativeData.html || !narrativeData.html.trim()) {
+      box.innerHTML = '<p class="state-msg">No current situation summary has been posted yet.</p>';
+      return;
+    }
+    box.innerHTML = sanitizeNarrativeHtml(narrativeData.html);
+  }
+
+  // ---- Shared x-axis (ED weeks + wastewater samples, same range & ticks) ----
+  function computeSharedXAxis(edDates, wwDates) {
+    const allDays = [...edDates, ...wwDates].map(dateToEpochDay);
+    const min = Math.min(...allDays);
+    const max = Math.max(...allDays);
+    const span = Math.max(max - min, 1);
+    const targetTicks = 6;
+    let stepDays = 7;
+    while (span / stepDays > targetTicks) stepDays += 7;
+    return { min, max, stepSize: stepDays };
+  }
+
+  function sharedXScale(shared) {
+    return {
+      type: "linear",
+      min: shared.min,
+      max: shared.max,
+      ticks: {
+        stepSize: shared.stepSize,
+        callback: (val) => formatEpochDay(val),
+        maxRotation: 0,
+        autoSkip: false,
+      },
+      grid: { display: false },
+    };
+  }
+
+  // ---- ED chart: linear date axis, current vs. previous year overlaid at same x ----
+  function renderEdChart(key, series, unit, shared) {
     const canvas = document.getElementById(`chart-${key}-ed`);
     if (!canvas) return;
-    const series = findPathogen(edData.pathogens, key);
-    if (!series) return;
     const meta = PATHOGEN_META[key];
+    const xs = series.dates.map(dateToEpochDay);
 
     new Chart(canvas.getContext("2d"), {
       type: "line",
       data: {
-        labels: series.week_labels,
         datasets: [
           {
             label: series.current_label || "Current",
-            data: series.current,
+            data: xs.map((x, i) => ({ x, y: series.current[i] })),
             borderColor: meta.strong,
             backgroundColor: hexToRgba(meta.strong, 0.12),
             fill: true,
@@ -169,7 +193,7 @@
           },
           {
             label: series.previous_label || "Previous",
-            data: series.previous,
+            data: xs.map((x, i) => ({ x, y: series.previous[i] })),
             borderColor: meta.soft,
             borderDash: [6, 4],
             fill: false,
@@ -181,22 +205,17 @@
           },
         ],
       },
-      options: baseLineOptions(edData.unit, "category"),
+      options: baseLineOptions(unit, shared),
     });
   }
 
-  // ---- Wastewater chart: linear/time-ish axis using epoch-day numbers ----
-  function renderWastewaterChart(key, wwData) {
+  // ---- Wastewater chart: same shared date axis, irregular sample spacing ----
+  function renderWastewaterChart(key, series, unit, shared) {
     const canvas = document.getElementById(`chart-${key}-ww`);
     if (!canvas) return;
-    const series = findPathogen(wwData.pathogens, key);
-    if (!series) return;
     const meta = PATHOGEN_META[key];
 
-    const points = series.points.map((p) => ({
-      x: dateToEpochDay(p.date),
-      y: p.value,
-    }));
+    const points = series.points.map((p) => ({ x: dateToEpochDay(p.date), y: p.value }));
 
     new Chart(canvas.getContext("2d"), {
       type: "line",
@@ -215,38 +234,12 @@
           },
         ],
       },
-      options: {
-        ...baseLineOptions(wwData.unit, "linear"),
-        scales: {
-          x: {
-            type: "linear",
-            ticks: {
-              callback: (val) => formatEpochDay(val),
-              maxRotation: 0,
-              autoSkip: true,
-              maxTicksLimit: 6,
-            },
-            grid: { display: false },
-          },
-          y: {
-            beginAtZero: true,
-            grid: { color: "#e2e6e9" },
-            title: { display: !!wwData.unit, text: wwData.unit, font: { size: 10 } },
-          },
-        },
-        plugins: {
-          ...baseLineOptions(wwData.unit, "linear").plugins,
-          tooltip: {
-            callbacks: {
-              title: (items) => formatEpochDay(items[0].parsed.x),
-            },
-          },
-        },
-      },
+      options: baseLineOptions(unit, shared, { titleFromEpoch: true }),
     });
   }
 
-  function baseLineOptions(unit, xType) {
+  function baseLineOptions(unit, shared, opts) {
+    opts = opts || {};
     return {
       responsive: true,
       maintainAspectRatio: false,
@@ -256,35 +249,29 @@
           position: "bottom",
           labels: { boxWidth: 14, boxHeight: 3, padding: 14 },
         },
-        tooltip: { backgroundColor: "#26292c", padding: 10, cornerRadius: 8 },
+        tooltip: {
+          backgroundColor: "#26292c",
+          padding: 10,
+          cornerRadius: 8,
+          callbacks: opts.titleFromEpoch
+            ? { title: (items) => formatEpochDay(items[0].parsed.x) }
+            : undefined,
+        },
       },
-      scales:
-        xType === "category"
-          ? {
-              x: { grid: { display: false }, ticks: { maxRotation: 0, autoSkip: true, maxTicksLimit: 8 } },
-              y: {
-                beginAtZero: true,
-                grid: { color: "#e2e6e9" },
-                title: { display: !!unit, text: unit, font: { size: 10 } },
-              },
-            }
-          : undefined,
+      scales: {
+        x: sharedXScale(shared),
+        y: {
+          beginAtZero: true,
+          grid: { color: "#e2e6e9" },
+          title: { display: !!unit, text: unit, font: { size: 10 } },
+        },
+      },
     };
   }
 
   // ---- helpers ----
   function findPathogen(list, key) {
     return (list || []).find((p) => p.key === key);
-  }
-  function lastNonNull(arr) {
-    for (let i = arr.length - 1; i >= 0; i--) if (arr[i] != null) return arr[i];
-    return null;
-  }
-  function valueAtSameIndex(currentArr, previousArr) {
-    for (let i = currentArr.length - 1; i >= 0; i--) {
-      if (currentArr[i] != null) return previousArr[i] ?? null;
-    }
-    return null;
   }
   function dateToEpochDay(dateStr) {
     return Math.floor(new Date(dateStr + "T00:00:00").getTime() / 86400000);

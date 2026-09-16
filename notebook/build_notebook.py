@@ -22,12 +22,14 @@ This notebook is the **data pipeline half** of the static dashboard. It is respo
 
 1. Downloading / loading your raw ED visit and wastewater data
 2. Transforming each into the small JSON schema the website's JavaScript expects
-3. Writing those JSON files into the site's `assets/data/` folder
-4. Stamping a "generated" date so the page can show *Data updated: ...*
+3. Writing a short **narrative summary** (with limited HTML formatting) for the "Current
+   Situation" section
+4. Writing all three JSON files into the site's `assets/data/` folder
+5. Stamping a "generated" date so the page can show *Data updated: ...*
 
 The **site template itself** (`index.html`, `assets/css/styles.css`, `assets/js/main.js`,
 and the vendored `assets/js/vendor/chart.min.js`) does **not** need to be regenerated each
-run — you only overwrite the two JSON files and re-push to GitHub Pages.
+run — you only overwrite the three JSON files and re-push to GitHub Pages.
 
 > ⚠️ **Before you run this for real, read the "A note on ED counts vs. rates" cell below** —
 > it affects whether your previous-year ED comparison is apples-to-apples.
@@ -80,6 +82,22 @@ need option 2 or 3, flag it and the JS/CSS can be extended with a second y-axis 
 index-mode toggle — it's a small change, just not the default.
 """))
 
+cells.append(md("""## A note on the shared ED / wastewater x-axis
+
+The site automatically gives each pathogen's ED chart and wastewater chart the **same
+date range and the same tick marks**, so the two charts line up visually. This is handled
+entirely in `assets/js/main.js` (`computeSharedXAxis`) — you don't need to do anything
+special in this notebook beyond providing real calendar dates for both series:
+
+- **ED visits**: always weekly, plotted on the **Sunday** of each week. Use actual ISO
+  dates (`YYYY-MM-DD`), not just week numbers or formatted label strings.
+- **Wastewater**: irregular sample days (commonly 2–3 per week). Use the actual sample
+  collection date for each observation.
+
+As long as both series use real calendar dates that cover roughly the same period, the
+two charts for a given pathogen will automatically share an aligned x-axis.
+"""))
+
 cells.append(md("""## Step 1 — Load your raw data
 
 Replace the two loader functions below with however you actually pull this data today
@@ -91,9 +109,10 @@ cells.append(code("""def load_ed_visits() -> pd.DataFrame:
     \"\"\"
     TODO: replace with your real ED-visit data source.
 
-    Expected shape — one row per week, wide format:
+    Expected shape — one row per week (Sunday-dated), wide format:
         week_end_date | covid_rate | covid_rate_prior | flu_rate | flu_rate_prior | rsv_rate | rsv_rate_prior
 
+    'week_end_date' = the Sunday for that week (an actual date, not a label string)
     'covid_rate' etc. = current period rate (per 100,000 ED visits)
     'covid_rate_prior' etc. = same calendar week, PRIOR year (rate — see note above)
     \"\"\"
@@ -106,7 +125,7 @@ def load_wastewater() -> pd.DataFrame:
     \"\"\"
     TODO: replace with your real wastewater data source.
 
-    Expected shape — one row per sample date, wide format:
+    Expected shape — one row per sample date (irregular, ~2-3x/week), wide format:
         sample_date | covid_level | flu_level | rsv_level
 
     No prior-year columns needed here (wastewater side has no year-over-year requirement).
@@ -126,7 +145,11 @@ cells.append(code("""def build_ed_json(df: pd.DataFrame, date_col: str, pathogen
                    unit: str = "Rate per 100,000 ED visits") -> dict:
     df = df.sort_values(date_col).reset_index(drop=True)
     dates = pd.to_datetime(df[date_col])
-    week_labels = [d.strftime("%b %-d") for d in dates]
+
+    # Sanity check: ED dates should all be Sundays (weekday() == 6)
+    non_sundays = dates[dates.dt.weekday != 6]
+    if len(non_sundays):
+        print(f"WARNING: {len(non_sundays)} ED date(s) are not Sundays — check your source data.")
 
     current_label = f"Current ({dates.min():%b %Y}\u2013{dates.max():%b %Y})"
     prev_start = dates.min() - pd.DateOffset(years=1)
@@ -140,7 +163,7 @@ cells.append(code("""def build_ed_json(df: pd.DataFrame, date_col: str, pathogen
             "label": cfg["label"],
             "current_label": cfg.get("current_label", current_label),
             "previous_label": cfg.get("previous_label", previous_label),
-            "week_labels": week_labels,
+            "dates": [d.date().isoformat() for d in dates],
             "current": [None if pd.isna(v) else round(float(v), 1) for v in df[cfg["current_col"]]],
             "previous": [None if pd.isna(v) else round(float(v), 1) for v in df[cfg["previous_col"]]],
         })
@@ -174,7 +197,35 @@ PATHOGEN_WW_CONFIG = {
 }
 """))
 
-cells.append(md("## Step 3 — Run the pipeline and write the JSON files"))
+cells.append(md("""## Step 3 — Write the "Current Situation" narrative
+
+Enter your short status update directly below as an HTML string. This replaces the old
+"At a Glance" stat tiles with a single free-text summary that appears at the top of the
+site.
+
+**Allowed HTML tags:** `<b>` `<i>` `<hr>` `<br>` (plus `<strong>`, `<em>`, `<u>`, `<p>` as
+equivalents/conveniences). Anything else — including any `<script>`, `<div>`, inline
+styles, or `onclick`-style attributes — is stripped out by the site's built-in sanitizer
+before it's displayed, so pasting in something unexpected won't break the page or expose
+it to injected code. If you want to allow additional tags later, that's a one-line change
+in `assets/js/main.js` (`ALLOWED_NARRATIVE_TAGS`).
+"""))
+
+cells.append(code('''NARRATIVE_HTML = """
+<b>Respiratory illness activity remains at seasonal-expected levels</b> across
+Lawrence and Douglas County.<br>
+Influenza continues to account for the largest share of ED visits this season, with
+wastewater signal <i>trending slightly upward</i> over the past two weeks.<hr>
+COVID-19 activity is stable and below last year's levels at this point in the season.
+RSV activity has passed its seasonal peak and is <i>declining</i>.<br><br>
+<b>Recommendation:</b> Residents who are eligible are encouraged to stay up to date on
+vaccinations. Testing and vaccination information is available at ldchealth.org.
+"""
+
+narrative_payload = {"generated": TODAY.isoformat(), "html": NARRATIVE_HTML.strip()}
+'''))
+
+cells.append(md("## Step 4 — Run the pipeline and write all three JSON files"))
 
 cells.append(code("""ed_df = load_ed_visits()
 ww_df = load_wastewater()
@@ -188,25 +239,31 @@ with open(DATA_DIR / "ed_visits.json", "w") as f:
 with open(DATA_DIR / "wastewater.json", "w") as f:
     json.dump(ww_payload, f, indent=2)
 
+with open(DATA_DIR / "narrative.json", "w") as f:
+    json.dump(narrative_payload, f, indent=2)
+
 print("Wrote", DATA_DIR / "ed_visits.json")
 print("Wrote", DATA_DIR / "wastewater.json")
+print("Wrote", DATA_DIR / "narrative.json")
 """))
 
-cells.append(md("""## Step 4 — Push to GitHub Pages
+cells.append(md("""## Step 5 — Push to GitHub Pages
 
-Once the two JSON files are refreshed, commit and push the whole `ldcph-site/` folder
+Once the three JSON files are refreshed, commit and push the whole `ldcph-site/` folder
 (or just the changed JSON files) to your GitHub Pages repo:
 
 ```bash
 cd ldcph-site
-git add assets/data/ed_visits.json assets/data/wastewater.json
+git add assets/data/ed_visits.json assets/data/wastewater.json assets/data/narrative.json
 git commit -m "Data refresh: $(date +%F)"
 git push
 ```
 
-If you want this fully hands-off, wrap Steps 1–4 in a scheduled job (cron, GitHub Actions
+If you want this fully hands-off, wrap Steps 1–5 in a scheduled job (cron, GitHub Actions
 on a schedule, Task Scheduler, etc.) that runs this notebook (e.g., via `papermill` or
-`jupyter nbconvert --execute`) and then runs the git commands above.
+`jupyter nbconvert --execute`) and then runs the git commands above — though you'll likely
+want to keep writing the narrative by hand each time, since it's meant to be a human's
+short interpretation of the data, not an auto-generated one.
 """))
 
 nb = {

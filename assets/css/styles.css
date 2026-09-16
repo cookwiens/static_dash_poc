@@ -258,37 +258,27 @@ a { color: var(--color-primary); }
   max-width: 72ch;
 }
 
-/* ---------------------------------- Stat strip ---------------------------------- */
-.stat-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-  gap: 14px;
-}
-.stat-card {
+/* ---------------------------------- Narrative summary ---------------------------------- */
+.narrative-box {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-left: 5px solid var(--stat-color, var(--color-accent));
+  border-left: 5px solid var(--color-primary);
   border-radius: var(--radius);
-  padding: 16px 18px;
   box-shadow: var(--shadow);
+  padding: clamp(16px, 3vw, 26px) clamp(18px, 3.5vw, 30px);
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--color-text);
 }
-.stat-card__label {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.8rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-  color: var(--color-text-soft);
+.narrative-box b,
+.narrative-box strong { color: var(--color-primary-dk); }
+.narrative-box hr {
+  border: none;
+  border-top: 1px solid var(--color-border);
+  margin: 14px 0;
 }
-.stat-card__swatch { width: 10px; height: 10px; border-radius: 3px; background: var(--stat-color, var(--color-accent)); }
-.stat-card__value { font-size: 1.7rem; font-weight: 800; color: var(--color-text); margin-top: 4px; }
-.stat-card__unit { font-size: 0.76rem; color: var(--color-text-soft); font-weight: 500; }
-.stat-card__delta { margin-top: 6px; font-size: 0.82rem; font-weight: 600; }
-.stat-card__delta.up { color: var(--ext-coral); }
-.stat-card__delta.down { color: var(--ext-teal); }
-.stat-card__delta.flat { color: var(--color-text-soft); }
+.narrative-box p { margin: 0 0 10px; }
+.narrative-box p:last-child { margin-bottom: 0; }
 
 /* ---------------------------------- Pathogen cards ---------------------------------- */
 .pathogen-card {
@@ -316,7 +306,7 @@ a { color: var(--color-primary); }
   gap: 18px;
 }
 @media (min-width: 900px) {
-  .chart-grid { grid-template-columns: 1.15fr 1fr; }
+  .chart-grid { grid-template-columns: 1fr 1fr; }
 }
 
 .chart-box h3 {

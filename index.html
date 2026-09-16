@@ -23,7 +23,7 @@
     <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="mainNav" aria-label="Toggle navigation menu"></button>
   </div>
   <nav class="main-nav" id="mainNav">
-    <a href="#overview">Overview</a>
+    <a href="#summary">Current Situation</a>
     <a href="#covid">COVID-19</a>
     <a href="#influenza">Influenza</a>
     <a href="#rsv">RSV</a>
@@ -44,12 +44,12 @@
     </div>
   </section>
 
-  <section class="section" id="overview">
+  <section class="section" id="summary">
     <div class="container">
-      <h2 class="section-title">At a Glance</h2>
-      <p class="section-sub">Most recent weekly ED visit rate and most recent wastewater result for each pathogen.</p>
-      <div class="stat-grid" id="statGrid">
-        <div class="state-msg">Loading current snapshot…</div>
+      <h2 class="section-title">Current Situation</h2>
+      <p class="section-sub">A short narrative update from LDCPH staff, reflecting the latest interpretation of the data below.</p>
+      <div class="narrative-box" id="narrativeBox">
+        <p class="state-msg">Loading current summary…</p>
       </div>
     </div>
   </section>
@@ -63,7 +63,7 @@
           <span class="pathogen-card__dot"></span>
           <h3 class="pathogen-card__title">COVID-19 Trends</h3>
         </div>
-        <p class="pathogen-card__desc">ED visit rate (per 100,000 visits) and wastewater viral activity level.</p>
+        <p class="pathogen-card__desc">ED visit rate (per 100,000 visits) and wastewater viral activity level. Both charts share the same date range and tick marks for easy side-by-side reading.</p>
         <div class="chart-grid">
           <div class="chart-box">
             <h3>ED Visit Rate — This Year vs. Last Year</h3>
@@ -89,7 +89,7 @@
           <span class="pathogen-card__dot"></span>
           <h3 class="pathogen-card__title">Influenza Trends</h3>
         </div>
-        <p class="pathogen-card__desc">ED visit rate (per 100,000 visits) and wastewater viral activity level.</p>
+        <p class="pathogen-card__desc">ED visit rate (per 100,000 visits) and wastewater viral activity level. Both charts share the same date range and tick marks for easy side-by-side reading.</p>
         <div class="chart-grid">
           <div class="chart-box">
             <h3>ED Visit Rate — This Year vs. Last Year</h3>
@@ -115,7 +115,7 @@
           <span class="pathogen-card__dot"></span>
           <h3 class="pathogen-card__title">RSV Trends</h3>
         </div>
-        <p class="pathogen-card__desc">ED visit rate (per 100,000 visits) and wastewater viral activity level.</p>
+        <p class="pathogen-card__desc">ED visit rate (per 100,000 visits) and wastewater viral activity level. Both charts share the same date range and tick marks for easy side-by-side reading.</p>
         <div class="chart-grid">
           <div class="chart-box">
             <h3>ED Visit Rate — This Year vs. Last Year</h3>
@@ -136,8 +136,8 @@
     <div class="container">
       <h2 class="section-title">About This Data</h2>
       <ul class="about-list">
-        <li><strong>ED visit rates</strong> are calculated weekly from local emergency department syndromic surveillance and reported as a rate to allow comparison across time periods.</li>
-        <li><strong>Wastewater surveillance</strong> reflects viral genetic material measured in sewage samples, an early indicator of community transmission that is independent of testing or healthcare-seeking behavior.</li>
+        <li><strong>ED visit rates</strong> are aggregated weekly from local emergency department syndromic surveillance and plotted on the Sunday of each week, reported as a rate to allow comparison across time periods.</li>
+        <li><strong>Wastewater surveillance</strong> reflects viral genetic material measured in sewage samples (typically 2–3 samples per week, on irregular days), an early indicator of community transmission that is independent of testing or healthcare-seeking behavior.</li>
         <li>Data are refreshed periodically; see the "Data updated" badge above for the most recent refresh date.</li>
         <li>This dashboard is for general public health situational awareness and should not be used for individual medical decision-making.</li>
       </ul>
