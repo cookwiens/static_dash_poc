@@ -74,12 +74,27 @@
     .then(([edData, wwData, narrativeData]) => {
       renderLastUpdated(edData, wwData, narrativeData);
       renderNarrative(narrativeData);
+
+      // Reads the "illnesses" array (renamed from "pathogens") in both
+      // ed_visits.json and wastewater.json.
       Object.keys(PATHOGEN_META).forEach((key) => {
         const edSeries = findPathogen(edData.illnesses, key);
         const wwSeries = findPathogen(wwData.illnesses, key);
         if (!edSeries || !wwSeries) return;
 
-        const shared = computeSharedXAxis(edSeries.dates, wwSeries.points.map((p) => p.date));
+        // Optional prior-year wastewater support: if wwSeries.previous_points
+        // exists, those dates get shifted forward a year so they land on the
+        // same "point in the season" x-position as this year's data, and are
+        // included in the shared axis range. If it doesn't exist, this is a
+        // no-op and behaves exactly like a single-series wastewater chart.
+        const wwCurrentPoints = wwSeries.points || [];
+        const wwPreviousPoints = wwSeries.previous_points || [];
+        const wwDatesForAxis = [
+          ...wwCurrentPoints.map((p) => p.date),
+          ...wwPreviousPoints.map((p) => shiftToCurrentYear(p.date)),
+        ];
+
+        const shared = computeSharedXAxis(edSeries.dates, wwDatesForAxis);
         renderEdChart(key, edSeries, edData.unit, shared);
         renderWastewaterChart(key, wwSeries, wwData.unit, shared);
       });
@@ -108,23 +123,19 @@
     template.innerHTML = raw;
 
     function walk(node) {
-      // Snapshot childNodes first since we mutate the tree while iterating.
       Array.from(node.childNodes).forEach((child) => {
         if (child.nodeType === Node.ELEMENT_NODE) {
           const tag = child.tagName.toLowerCase();
-          walk(child); // sanitize children before deciding this node's fate
+          walk(child);
           if (tag === "script" || tag === "style") {
-            child.remove(); // drop disallowed + inherently unsafe tags entirely
+            child.remove();
           } else if (!allowedTags.includes(tag)) {
-            // Unwrap: keep the text/children, discard the tag itself
             while (child.firstChild) node.insertBefore(child.firstChild, child);
             node.removeChild(child);
           } else {
-            // Allowed tag — strip all attributes (blocks onclick=, href=javascript:, etc.)
             Array.from(child.attributes).forEach((attr) => child.removeAttribute(attr.name));
           }
         }
-        // text nodes pass through untouched
       });
     }
 
@@ -209,37 +220,65 @@
     });
   }
 
-  // ---- Wastewater chart: same shared date axis, irregular sample spacing ----
+  // ---- Wastewater chart: same shared date axis, irregular sample spacing.
+  //      Optionally overlays a prior-year series (previous_points), same
+  //      visual convention as ED (solid = current, dashed = prior year). ----
   function renderWastewaterChart(key, series, unit, shared) {
     const canvas = document.getElementById(`chart-${key}-ww`);
     if (!canvas) return;
     const meta = PATHOGEN_META[key];
 
-    const points = series.points.map((p) => ({ x: dateToEpochDay(p.date), y: p.value }));
+    const currentPoints = series.points || [];
+    const previousPoints = series.previous_points || [];
+
+    const datasets = [
+      {
+        label: series.current_label || meta.label,
+        data: currentPoints.map((p) => ({ x: dateToEpochDay(p.date), y: p.value, actualDate: p.date })),
+        borderColor: meta.strong,
+        backgroundColor: hexToRgba(meta.strong, 0.15),
+        fill: true,
+        tension: 0.25,
+        pointRadius: 0,
+        pointHoverRadius: 4,
+        borderWidth: 2.5,
+        spanGaps: true,
+      },
+    ];
+
+    if (previousPoints.length) {
+      datasets.push({
+        label: series.previous_label || "Prior year",
+        data: previousPoints.map((p) => ({
+          x: dateToEpochDay(shiftToCurrentYear(p.date)),
+          y: p.value,
+          actualDate: p.date, // keep the REAL prior-year date for the tooltip
+        })),
+        borderColor: meta.soft,
+        borderDash: [6, 4],
+        fill: false,
+        tension: 0.25,
+        pointRadius: 0,
+        pointHoverRadius: 4,
+        borderWidth: 2,
+        spanGaps: true,
+        isPriorYear: true,
+      });
+    }
 
     new Chart(canvas.getContext("2d"), {
       type: "line",
-      data: {
-        datasets: [
-          {
-            label: meta.label,
-            data: points,
-            borderColor: meta.strong,
-            backgroundColor: hexToRgba(meta.strong, 0.15),
-            fill: true,
-            tension: 0.25,
-            pointRadius: 0,
-            pointHoverRadius: 4,
-            borderWidth: 2.5,
-          },
-        ],
-      },
-      options: baseLineOptions(unit, shared, { titleFromEpoch: true }),
+      data: { datasets },
+      options: baseLineOptions(unit, shared),
     });
   }
 
-  function baseLineOptions(unit, shared, opts) {
-    opts = opts || {};
+  // Shared by BOTH chart types — both use the same linear epoch-day x-axis,
+  // so the tooltip title is always derived from that axis via formatEpochDay.
+  // (Previously this was conditional on a `titleFromEpoch` flag that was only
+  // passed for the wastewater chart, which is why ED tooltips were showing
+  // the raw epoch-day number, e.g. "20,352", instead of a date.)
+  function baseLineOptions(unit, shared) {
     return {
       responsive: true,
       maintainAspectRatio: false,
@@ -253,9 +292,16 @@
           backgroundColor: "#26292c",
           padding: 10,
           cornerRadius: 8,
-          callbacks: opts.titleFromEpoch
-            ? { title: (items) => formatEpochDay(items[0].parsed.x) }
-            : undefined,
+          callbacks: {
+            title: (items) => formatEpochDay(items[0].parsed.x),
+            label: (item) => {
+              const base = `${item.dataset.label}: ${item.parsed.y}`;
+              if (item.dataset.isPriorYear && item.raw && item.raw.actualDate) {
+                return `${base} (sampled ${formatDate(item.raw.actualDate)})`;
+              }
+              return base;
+            },
+          },
         },
       },
       scales: {
@@ -273,8 +319,18 @@
   function findPathogen(list, key) {
     return (list || []).find((p) => p.key === key);
   }
-  function dateToEpochDay(dateStr) {
-    return Math.floor(new Date(dateStr + "T00:00:00").getTime() / 86400000);
+  function dateToEpochDay(dateOrStr) {
+    const ms =
+      typeof dateOrStr === "string"
+        ? new Date(dateOrStr + "T00:00:00").getTime()
+        : dateOrStr.getTime();
+    return Math.floor(ms / 86400000);
+  }
+  function shiftToCurrentYear(dateStr, years) {
+    years = years || 1;
+    const d = new Date(dateStr + "T00:00:00");
+    d.setFullYear(d.getFullYear() + years);
+    return d;
   }
   function formatEpochDay(epochDay) {
     const d = new Date(epochDay * 86400000);
