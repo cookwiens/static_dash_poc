@@ -36,10 +36,10 @@
   <section class="hero">
     <div class="container">
       <h1>Respiratory Illness Surveillance Dashboard</h1>
-      <p>Weekly emergency department visit rates and wastewater trends for COVID-19, influenza, and RSV across Lawrence &amp; Douglas County, Kansas.</p>
+      <p>Weekly emergency department (ED) visits and wastewater trends for COVID-19, influenza, and Respiratory Syncitial Virus (RSV) among residents of Douglas County, Kansas.</p>
       <div class="hero__meta">
         <span class="badge"><span class="badge__dot"></span> Data updated <span id="lastUpdated">—</span></span>
-        <span class="badge">Sources: local ED syndromic surveillance &middot; wastewater sampling</span>
+        <span class="badge">Sources: ESSENCE Syndromic Surveillance Data System &middot; WastewaterSCAN public data</span>
       </div>
     </div>
   </section>
@@ -47,7 +47,7 @@
   <section class="section" id="summary">
     <div class="container">
       <h2 class="section-title">Current Situation</h2>
-      <p class="section-sub">A short narrative update from LDCPH staff, reflecting the latest interpretation of the data below.</p>
+      <!-- <p class="section-sub">A short narrative update from LDCPH staff, reflecting the latest interpretation of the data below.</p> -->
       <div class="narrative-box" id="narrativeBox">
         <p class="state-msg">Loading current summary…</p>
       </div>
@@ -57,13 +57,13 @@
   <section class="section" id="covid">
     <div class="container">
       <h2 class="section-title">COVID-19</h2>
-      <p class="section-sub">Emergency department visit rate compared with the same weeks last year, alongside wastewater trends.</p>
+      <p class="section-sub">Percentage of weekly ED visits due to COVID compared with the same weeks last year, alongside wastewater trends.</p>
       <div class="pathogen-card" data-pathogen="covid" style="--tone:var(--covid-strong)">
         <div class="pathogen-card__head">
           <span class="pathogen-card__dot"></span>
           <h3 class="pathogen-card__title">COVID-19 Trends</h3>
         </div>
-        <p class="pathogen-card__desc">ED visit rate (per 100,000 visits) and wastewater viral activity level. Both charts share the same date range and tick marks for easy side-by-side reading.</p>
+        <p class="pathogen-card__desc">ED visit rate (as a percentage of all ED visits) and wastewater viral activity level. Both charts share the same date range and tick marks for easy side-by-side reading.</p>
         <div class="chart-grid">
           <div class="chart-box">
             <h3>ED Visit Rate — This Year vs. Last Year</h3>
@@ -73,7 +73,7 @@
           <div class="chart-box">
             <h3>Wastewater Surveillance</h3>
             <div class="chart-wrap"><canvas id="chart-covid-ww"></canvas></div>
-            <p class="legend-note">Sampled levels over time across monitored sites</p>
+            <p class="legend-note">DNA is sampled from municipal water treatment facilities. Samples are analyzed and available publicly from <a href="https://data.wastewaterscan.org">WastewaterSCAN</a>.</p>
           </div>
         </div>
       </div>
@@ -83,13 +83,13 @@
   <section class="section" id="influenza">
     <div class="container">
       <h2 class="section-title">Influenza</h2>
-      <p class="section-sub">Emergency department visit rate compared with the same weeks last year, alongside wastewater trends.</p>
+      <p class="section-sub">Percentage of weekly ED visits due to Influenza compared with the same weeks last year, alongside wastewater trends.</p>
       <div class="pathogen-card" data-pathogen="influenza" style="--tone:var(--flu-strong)">
         <div class="pathogen-card__head">
           <span class="pathogen-card__dot"></span>
           <h3 class="pathogen-card__title">Influenza Trends</h3>
         </div>
-        <p class="pathogen-card__desc">ED visit rate (per 100,000 visits) and wastewater viral activity level. Both charts share the same date range and tick marks for easy side-by-side reading.</p>
+        <p class="pathogen-card__desc">ED visit rate (as a percentage of all ED visits) and wastewater viral activity level. Both charts share the same date range and tick marks for easy side-by-side reading.</p>
         <div class="chart-grid">
           <div class="chart-box">
             <h3>ED Visit Rate — This Year vs. Last Year</h3>
@@ -99,7 +99,7 @@
           <div class="chart-box">
             <h3>Wastewater Surveillance</h3>
             <div class="chart-wrap"><canvas id="chart-influenza-ww"></canvas></div>
-            <p class="legend-note">Sampled levels over time across monitored sites</p>
+            <p class="legend-note">DNA is sampled from municipal water treatment facilities. Samples are analyzed and available publicly from <a href="https://data.wastewaterscan.org">WastewaterSCAN</a>.</p>
           </div>
         </div>
       </div>
@@ -109,13 +109,13 @@
   <section class="section" id="rsv">
     <div class="container">
       <h2 class="section-title">RSV</h2>
-      <p class="section-sub">Emergency department visit rate compared with the same weeks last year, alongside wastewater trends.</p>
+      <p class="section-sub">Percentage of weekly ED visits due to RSV compared with the same weeks last year, alongside wastewater trends.</p>
       <div class="pathogen-card" data-pathogen="rsv" style="--tone:var(--rsv-strong)">
         <div class="pathogen-card__head">
           <span class="pathogen-card__dot"></span>
           <h3 class="pathogen-card__title">RSV Trends</h3>
         </div>
-        <p class="pathogen-card__desc">ED visit rate (per 100,000 visits) and wastewater viral activity level. Both charts share the same date range and tick marks for easy side-by-side reading.</p>
+        <p class="pathogen-card__desc">ED visit rate (as a percentage of all ED visits) and wastewater viral activity level. Both charts share the same date range and tick marks for easy side-by-side reading.</p>
         <div class="chart-grid">
           <div class="chart-box">
             <h3>ED Visit Rate — This Year vs. Last Year</h3>
@@ -125,7 +125,7 @@
           <div class="chart-box">
             <h3>Wastewater Surveillance</h3>
             <div class="chart-wrap"><canvas id="chart-rsv-ww"></canvas></div>
-            <p class="legend-note">Sampled levels over time across monitored sites</p>
+            <p class="legend-note">DNA is sampled from municipal water treatment facilities. Samples are analyzed and available publicly from <a href="https://data.wastewaterscan.org">WastewaterSCAN</a>.</p>
           </div>
         </div>
       </div>
