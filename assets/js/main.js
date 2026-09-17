@@ -75,8 +75,8 @@
       renderLastUpdated(edData, wwData, narrativeData);
       renderNarrative(narrativeData);
       Object.keys(PATHOGEN_META).forEach((key) => {
-        const edSeries = findPathogen(edData.pathogens, key);
-        const wwSeries = findPathogen(wwData.pathogens, key);
+        const edSeries = findPathogen(edData.illnesses, key);
+        const wwSeries = findPathogen(wwData.illnesses, key);
         if (!edSeries || !wwSeries) return;
 
         const shared = computeSharedXAxis(edSeries.dates, wwSeries.points.map((p) => p.date));
