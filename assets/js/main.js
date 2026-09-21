@@ -171,7 +171,7 @@
       max: shared.max,
       ticks: {
         stepSize: shared.stepSize,
-        callback: (val) => formatEpochDay(val),
+        callback: (val, index, ticks) => formatAxisTick(val, index, ticks),
         maxRotation: 0,
         autoSkip: false,
       },
@@ -293,10 +293,10 @@
           padding: 10,
           cornerRadius: 8,
           callbacks: {
-            title: (items) => formatEpochDay(items[0].parsed.x),
+            title: (items) => formatFullEpochDay(items[0].parsed.x),
             label: (item) => {
               const base = `${item.dataset.label}: ${item.parsed.y}`;
-              if (item.dataset.isPriorYear && item.raw && item.raw.actualDate) {
+              if (item.raw && item.raw.actualDate) {
                 return `${base} (sampled ${formatDate(item.raw.actualDate)})`;
               }
               return base;
@@ -334,7 +334,28 @@
   }
   function formatEpochDay(epochDay) {
     const d = new Date(epochDay * 86400000);
-    return d.toLocaleDateString(undefined, { month: "short", day: "numeric" });
+    return d.toLocaleDateString(undefined, { month: "short", day: "numeric", timeZone: "UTC" });
+  }
+  function formatFullEpochDay(epochDay) {
+    const d = new Date(epochDay * 86400000);
+    return d.toLocaleDateString(undefined, {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      timeZone: "UTC",
+    });
+  }
+  function formatAxisTick(epochDay, index, ticks) {
+    const d = new Date(epochDay * 86400000);
+    const year = d.getUTCFullYear();
+    const previousYear = index > 0
+      ? new Date(ticks[index - 1].value * 86400000).getUTCFullYear()
+      : null;
+    const showYear = index === 0 || year !== previousYear;
+
+    // Chart.js renders array values on separate lines, creating a compact
+    // second tier for the year without changing the shared tick positions.
+    return [formatEpochDay(epochDay), showYear ? String(year) : ""];
   }
   function formatDate(dateStr) {
     const d = new Date(dateStr + "T00:00:00");
